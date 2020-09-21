@@ -1,7 +1,15 @@
-let app = require('express')();
-let http = require('http').createServer(app);
-let io = require('socket.io')(http);
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const path = require('path');
+const serveStatic = require('serve-static');
 
+
+// set public folder for serving static content
+app.use(serveStatic(path.join(__dirname, 'public')));
+
+// serve up index.html
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
