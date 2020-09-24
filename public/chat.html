@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>FawkesChat App</title>
+</head>
+<body>
+<div id="dashboard">
+    <dashboard>
+        <dashtitle>
+        <h3 class="dash-title">Dashboard</h3>
+        <a class="dash-close" onclick="closeDash()"><i class="fas fa-window-close fa-lg"></i></a>
+        </dashtitle>
+        <hr/>
+        <dashmenu>
+            <view>
+                <h4>View</h4>
+                <hr/>
+            </view>
+            <room>
+                <h4>Room</h4>
+                <p id="room-name">JavaScript</p>
+                <button onclick="logout()" class="btn leave-room">Leave Room</button>
+                <hr/>
+            </room>
+
+            <users>
+                <h4>Users</h4>
+                <ul id="users"></ul>
+            </users>
+        </dashmenu>
+    </dashboard>
+</div>
+<div id="page">
+    <header class="chat-header">
+        <headermenu>
+            <img class="logo" src="images/fawkes-icon.svg"/>
+            <div class="site-title"><h1> FawkesChat</h1></div>
+            <div class="site-menu"><i class="fas fa-th fa-lg"></i></div>
+        </headermenu>
+    </header>
+
+    <div id="main">
+        <chat>
+
+
+            <messages class="chat-messages">
+            </messages>
+
+            <form id="chat-form">
+                <div class="flexbox-row">
+                    <textarea
+                            id="msg"
+                            type="text"
+                            placeholder="Enter Message"
+                            required
+                            autocomplete="off"
+                    ></textarea>
+                    <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </form>
+        </chat>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js" integrity="sha512-BHtomM5XDcUy7tDNcrcX1Eh0RogdWiMdXl3wJcKB3PFekXb3l5aDzymaTher61u6vEZySnoC/SAj2Y/p918Y3w==" crossorigin="anonymous"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
