@@ -9,11 +9,11 @@
     <title>FawkesChat App</title>
 </head>
 <body>
-<div id="dashboard">
-    <dashboard>
+<div>
+    <dashboard id="dashboard">
         <dashtitle>
         <h3 class="dash-title">Dashboard</h3>
-        <a class="dash-close" onclick="closeDash()"><i class="fas fa-window-close fa-lg"></i></a>
+        <a id="hide-dash" class="dash-close" ><i class="fas fa-window-close fa-lg"></i></a>
         </dashtitle>
         <hr/>
         <dashmenu>
@@ -39,8 +39,8 @@
     <header class="chat-header">
         <headermenu>
             <img class="logo" src="images/fawkes-icon.svg"/>
-            <div class="site-title"><h1> FawkesChat</h1></div>
-            <div class="site-menu"><i class="fas fa-th fa-lg"></i></div>
+            <div class="site-title"><h1><b>Fawkes</b>Chat</h1></div>
+            <a id="show-dash" class="site-menu"><i class="fas fa-th fa-lg"></i></a>
         </headermenu>
     </header>
 
@@ -56,11 +56,12 @@
                     <textarea
                             id="msg"
                             type="text"
+                            rows="1"
                             placeholder="Enter Message"
                             required
                             autocomplete="off"
                     ></textarea>
-                    <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+                    <button class="btn"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </form>
         </chat>

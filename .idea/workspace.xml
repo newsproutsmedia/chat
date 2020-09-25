@@ -24,12 +24,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="swapped port order in server.js, Port Env var should come first">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="deleted index.js. updated package.json">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/chat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/users.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +181,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601044760411</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="deleted index.js. updated package.json">
+      <created>1601060238653</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1601060238653</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,7 +214,8 @@
     <MESSAGE value="updated package-lock.json" />
     <MESSAGE value="updated package.json" />
     <MESSAGE value="swapped port order in server.js, Port Env var should come first" />
-    <option name="LAST_COMMIT_MESSAGE" value="swapped port order in server.js, Port Env var should come first" />
+    <MESSAGE value="deleted index.js. updated package.json" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleted index.js. updated package.json" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
@@ -217,10 +226,10 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="469" y="190" key="SettingsEditor/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1600713825104" />
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1600992194942">
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1601060262424">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1600992194942" />
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601060262424" />
     <state x="729" y="273" key="git4idea.branch.GitSmartOperationDialog" timestamp="1600705378715">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>

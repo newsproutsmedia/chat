@@ -20,19 +20,21 @@ io.on('connection', socket => {
 
     // Get username and room when user joins room
     socket.on('joinRoom', ({ username, room}) => {
+        let isAdmin = false;
 
         // create new room value
         if(!room) {
             room = createRoom();
             socket.emit('roomCreated', room);
             console.log(room);
+            isAdmin = true;
         }
 
         // check if roomID is valid
         if(!validateRoom(room)) socket.emit('invalidRoom', room);
 
         // create user object, get id from socket and pass username and room from URL
-        const user = userJoin(socket.id, username, room);
+        const user = userJoin(socket.id, username, room, isAdmin);
 
         //TODO check whether the room is full, then if user is already logged in, if YES to either -- deny entry
 
