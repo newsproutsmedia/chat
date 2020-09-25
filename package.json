@@ -1,5 +1,5 @@
 {
-  "name": "chatcord",
+  "name": "fawkeschat",
   "version": "1.0.0",
   "description": "Socket.IO-based chat app",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "engines": {
     "node": "12.18.3"
   },
-  "author": "Brad Traversy",
+  "author": "New Sprouts Media, LLC",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
