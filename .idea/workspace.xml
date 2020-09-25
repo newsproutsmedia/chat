@@ -24,8 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="workspace updated">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="updated package.json">
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600992361470</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="updated package.json">
+      <created>1600992612659</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1600992612660</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,7 +142,8 @@
     <MESSAGE value="Initial setup" />
     <MESSAGE value="Added index.html and set up app to serve it up" />
     <MESSAGE value="workspace updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="workspace updated" />
+    <MESSAGE value="updated package.json" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated package.json" />
   </component>
   <component name="WindowStateProjectService">
     <state x="469" y="190" key="SettingsEditor" timestamp="1600713825104">
