@@ -2,7 +2,7 @@
   "name": "fawkeschat",
   "version": "1.0.0",
   "description": "Socket.IO-based chat app",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "jest",
     "start": "node server",
