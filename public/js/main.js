@@ -1,4 +1,6 @@
 const chatForm = document.getElementById('chat-form');
+const showDash = document.getElementById('show-dash');
+const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
 const userList = document.getElementById('users');
 const roomName = document.getElementById('room-name');
@@ -45,6 +47,24 @@ socket.on('message', message => {
 
 });
 
+// Show Dashboard
+showDash.addEventListener('click', function () {
+    console.log('showing dash...');
+    document.getElementById('dashboard').style.display = 'block';
+});
+
+// Hide Dashboard
+hideDash.addEventListener('click', function () {
+    console.log('hiding dash...');
+    document.getElementById('dashboard').style.display = 'none';
+});
+
+// Autogrow message box
+document.getElementById('msg').addEventListener('keyup', function () {
+    this.style.height = 0;
+    this.style.height = this.scrollHeight + 'px';
+}, false);
+
 // on sending message
 chatForm.addEventListener('submit', (e) => {
    e.preventDefault(); // prevents automatic saving to file
@@ -67,10 +87,11 @@ function outputMessage(message) {
     const div = document.createElement('div');
     div.classList.add('message');
     if(message.username === "Me") div.classList.add('own');
-    div.innerHTML = `<p class="meta">${message.username}<span style="float: right">${message.time}</span></p>
+    div.innerHTML = `<p class="meta">${message.username}<span class="timestamp">${message.time}</span></p>
                 <p class="text">
                     ${message.text}
-                </p>`;
+                </p>
+`;
     document.querySelector('.chat-messages').appendChild(div);
 }
 
@@ -86,7 +107,11 @@ function outputUsers(users) {
     `;
 }
 
-// Create a new room
+// Logout
 function logout() {
     window.location.replace("/index.html");
 }
+
+
+
+
