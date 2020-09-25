@@ -8,6 +8,9 @@
     "start": "node server",
     "dev": "nodemon server"
   },
+  "engines": {
+    "node": "12.18.3"
+  },
   "author": "Brad Traversy",
   "license": "ISC",
   "dependencies": {
