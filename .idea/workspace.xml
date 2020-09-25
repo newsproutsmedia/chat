@@ -24,8 +24,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="updated package.json">
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="swapped port order in server.js, Port Env var should come first">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +164,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601008937704</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="updated package.json">
+      <created>1601009055469</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1601009055469</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,7 +196,8 @@
     <MESSAGE value="changed default port" />
     <MESSAGE value="updated package-lock.json" />
     <MESSAGE value="updated package.json" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated package.json" />
+    <MESSAGE value="swapped port order in server.js, Port Env var should come first" />
+    <option name="LAST_COMMIT_MESSAGE" value="swapped port order in server.js, Port Env var should come first" />
   </component>
   <component name="WindowStateProjectService">
     <state x="469" y="190" key="SettingsEditor" timestamp="1600713825104">
