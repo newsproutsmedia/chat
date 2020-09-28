@@ -46,6 +46,8 @@ html, input {
 html, body {
     background-color: #282C34;
     color: var(--light-color);
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Elements */
@@ -91,8 +93,9 @@ ul {
 /* FLEX LAYOUT */
 
 body {
-    min-height: 100vh;
+    height: 100vh;
     margin: 0;
+    overflow: hidden;
 }
 
 /* DASHBOARD */
@@ -144,6 +147,8 @@ body > dashboard > button.leave-room {
 #page {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    max-height: 100vh;
 }
 
 header {
@@ -186,28 +191,27 @@ headermenu .site-menu li {
 
 #main {
     display: flex;
-    flex: 1;
-    padding: 5vh 5vw 5vh 5vw;
+    flex-grow: 0;
+    min-height: 100vh;
+    max-height: 100vh;
 }
 
 /* CHAT */
 
 #main > chat {
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    min-height: 80vh;
-    max-height: 80vh;
+    height: 91vh;
     width: 100%;
+    padding: 1vh 1vw 0 1vw;
 }
 
 chat > messages {
-    min-height: 70vh;
-    max-height: 70vh;
-    height: 70vh;
     overflow: auto;
-
+    flex-grow: 7;
+    padding: 0 2vw 2vh 2vw;
+    height: 80vh;
 }
 
 chat > messages::-webkit-scrollbar {
@@ -253,44 +257,53 @@ messages .message .timestamp {
     color: var(--lightest);
 }
 
-chat > form {
-    flex: 1;
-    align-self: end;
-    width: 100%;
-    margin-top: 20px;
-    justify-content: space-between;
-    align-items: center;
+messages .bot-message {
+    font-size: 12px;
+    text-align: center;
+    padding: 4px 0px 4px 0px;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    margin: 10px 0 10px 0;
 }
 
-chat > form textarea {
-    flex: 1;
+#msg {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid #fff;
     outline: none;
-    padding-bottom: 6px;
     text-align: left;
     letter-spacing: 2px;
     color: #fff;
     font-size: 150%;
     font-weight: 100;
-    width: 70vw;
-    position: absolute;
-    bottom: 5vh;
+    width: 80%;
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    clear: right;
+    padding-bottom: 4px;
 }
 
-chat > form button {
+#msg[contenteditable]:empty::before {
+    content: "Enter Message";
+    color: gray;
+}
+
+button.submit-message {
     margin-left: auto;
-    width: 20%;
-    height: 20%;
     font-size: 150% !important;
     background-color: var(--light-blue) !important;
+    float: right;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .flexbox-row {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-end;
+    flex-grow: 1;
+    width: 100%;
+    background-color: var(--dark-color-b);
+    padding: 3vh 2vw 0 2vw;
 }
 
 /* Login Page */
@@ -397,8 +410,8 @@ chat > form button {
     }
 
     chat > messages {
-        flex: 1;
-        height: 94vh;
+        flex-grow: 5;
+        height: 80vh;
         overflow: auto;
     }
 

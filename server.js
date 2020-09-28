@@ -42,10 +42,10 @@ io.on('connection', socket => {
         socket.join(user.room);
 
         // Welcome current user
-        socket.emit('message', formatMessage(botName, `Welcome to ChatCord! Socket ID: ${socket.id}`));
+        socket.emit('message', formatMessage(botName, false, 'Welcome to FawkesChat!'));
 
         // Broadcast to everyone (except user) when user connects
-        socket.broadcast.to(user.room).emit('message', formatMessage(botName, `${user.username} has joined the chat`));
+        socket.broadcast.to(user.room).emit('message', formatMessage(botName, false, `${user.username} has joined the chat`));
 
         // Send users and room info
         io.to(user.room).emit('roomUsers', {
@@ -59,10 +59,10 @@ io.on('connection', socket => {
         const user = getCurrentUser(socket.id);
 
         // send message to you
-        socket.emit('message', formatMessage("Me", msg));
+        socket.emit('message', formatMessage("Me", true, msg));
 
         // send message to everyone else
-        socket.broadcast.to(user.room).emit('message', formatMessage(user.username, msg));
+        socket.broadcast.to(user.room).emit('message', formatMessage(user.username, true, msg));
     });
 
     // Runs when client disconnects
@@ -72,9 +72,9 @@ io.on('connection', socket => {
         const user = userLeave(socket.id);
         if(user) {
             // notify other chat participants that user has left
-            io.to(user.room).emit('message', formatMessage(botName, `${user.username} has left the chat`));
+            io.to(user.room).emit('message', formatMessage(botName, false, `${user.username} has left the chat`));
 
-            // Send updatd users and room info
+            // Send updated users and room info
             io.to(user.room).emit('roomUsers', {
                 room: user.room,
                 users: getRoomUsers(user.room)

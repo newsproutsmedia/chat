@@ -1,4 +1,4 @@
-const chatForm = document.getElementById('chat-form');
+const messageSubmit = document.getElementById('message-submit');
 const showDash = document.getElementById('show-dash');
 const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
@@ -59,31 +59,27 @@ hideDash.addEventListener('click', function () {
     document.getElementById('dashboard').style.display = 'none';
 });
 
-// Autogrow message box
-document.getElementById('msg').addEventListener('keyup', function () {
-    this.style.height = 0;
-    this.style.height = this.scrollHeight + 'px';
-}, false);
-
 // on sending message
-chatForm.addEventListener('submit', (e) => {
+messageSubmit.addEventListener('click', (e) => {
    e.preventDefault(); // prevents automatic saving to file
 
     // get message from "chat-form"
     // form has an id of "msg", so we're getting the value of that input
-    const msg = e.target.elements.msg.value;
+    let msg = document.getElementById('msg').innerHTML;
 
     // Emit message to server
     socket.emit('chatMessage', msg);
 
     // Clear input
-    e.target.elements.msg.value = '';
+    document.getElementById('msg').innerHTML = '';
+    document.getElementById('msg').style.content = 'Enter Message';
     // Set focus to message input
-    e.target.elements.msg.focus();
+    document.getElementById('msg').focus();
 });
 
 // output message to DOM
 function outputMessage(message) {
+    if(message.isUser === false) return outputBotMessage(message); // if bot, send bot-style message
     const div = document.createElement('div');
     div.classList.add('message');
     if(message.username === "Me") div.classList.add('own');
@@ -92,6 +88,13 @@ function outputMessage(message) {
                     ${message.text}
                 </p>
 `;
+    document.querySelector('.chat-messages').appendChild(div);
+}
+
+function outputBotMessage(message) {
+    const div = document.createElement('div');
+    div.classList.add('bot-message');
+    div.innerHTML = `<b>${message.username}: </b>${message.text}`;
     document.querySelector('.chat-messages').appendChild(div);
 }
 

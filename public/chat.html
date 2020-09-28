@@ -51,19 +51,15 @@
             <messages class="chat-messages">
             </messages>
 
-            <form id="chat-form">
-                <div class="flexbox-row">
-                    <textarea
-                            id="msg"
-                            type="text"
-                            rows="1"
-                            placeholder="Enter Message"
-                            required
-                            autocomplete="off"
-                    ></textarea>
-                    <button class="btn"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </form>
+            <div class="flexbox-row">
+                <span
+                        contenteditable="true"
+                        id="msg"
+                        role="textbox"
+                ></span>
+                <button id="message-submit" class="btn submit-message"><i class="fas fa-paper-plane"></i></button>
+            </div>
+
         </chat>
     </div>
 </div>
