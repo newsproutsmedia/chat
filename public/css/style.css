@@ -202,7 +202,7 @@ headermenu .site-menu li {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    height: 91vh;
+    height: 90vh;
     width: 100%;
     padding: 1vh 1vw 0 1vw;
 }
@@ -211,7 +211,6 @@ chat > messages {
     overflow: auto;
     flex-grow: 7;
     padding: 0 2vw 2vh 2vw;
-    height: 80vh;
 }
 
 chat > messages::-webkit-scrollbar {
