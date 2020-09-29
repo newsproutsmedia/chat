@@ -1,4 +1,5 @@
 const messageSubmit = document.getElementById('message-submit');
+const messageInput = document.getElementById('msg');
 const showDash = document.getElementById('show-dash');
 const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
@@ -74,8 +75,15 @@ messageSubmit.addEventListener('click', (e) => {
     document.getElementById('msg').innerHTML = '';
     document.getElementById('msg').style.content = 'Enter Message';
     // Set focus to message input
-    document.getElementById('msg').focus();
+    // document.getElementById('msg').focus();
+
+    // Scroll to top of page
+    window.scrollTo(0, 0);
 });
+
+messageInput.addEventListener('focus', () => {
+    window.scrollTo(0, document.body.scrollHeight);
+})
 
 // output message to DOM
 function outputMessage(message) {
