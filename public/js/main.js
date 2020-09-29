@@ -5,6 +5,7 @@ const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
 const userList = document.getElementById('users');
 const roomName = document.getElementById('room-name');
+const initHeight = window.innerHeight;
 
 
 // Get username and room from URL
@@ -86,7 +87,8 @@ messageInput.addEventListener('blur', () => {
 })
 
 messageInput.addEventListener('focus', () => {
-    window.scrollTo(0, window.innerHeight);
+    let diffHeight = initHeight - window.innerHeight;
+    window.scrollTo(0, diffHeight);
 })
 
 // output message to DOM
