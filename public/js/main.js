@@ -1,7 +1,6 @@
 const messageSubmit = document.getElementById('message-submit');
 const messageInput = document.getElementById('msg');
 const messageForm = document.getElementById('msgForm');
-const messageRow = document.getElementById('messageRow');
 const showDash = document.getElementById('show-dash');
 const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
@@ -79,20 +78,17 @@ messageForm.addEventListener('submit', (e) => {
     document.getElementById('msg').style.content = 'Enter Message';
     // Set focus to message input
     // document.getElementById('msg').focus();
-    messageRow.classList.remove('ios-hostile-menu-fix');
 
     // Scroll to top of page
     window.scrollTo(0, 0);
 });
 
 messageInput.addEventListener('blur', () => {
-    messageRow.classList.remove('ios-hostile-menu-fix');
     window.scrollTo(0, 0);
 });
 
 messageInput.addEventListener('focus', () => {
     setTimeout(() => {
-        messageRow.classList.add('ios-hostile-menu-fix');
         let diffHeight = initHeight - window.innerHeight;
         document.getElementById('msg').style.content = diffHeight.toString();
         window.scrollTo(0, diffHeight);

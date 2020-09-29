@@ -24,7 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="added form around message button and changed listener to submit" />
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="added hostile-menu-fix class (just to see if it works)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -272,7 +272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601413715365</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="added hostile-menu-fix class (just to see if it works)">
+      <created>1601415368911</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1601415368911</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +319,8 @@
     <MESSAGE value="moved &quot;hover&quot; button effect into desktop css to see if it would resolve button double-tap issue" />
     <MESSAGE value="removed button hover effect completely" />
     <MESSAGE value="added form around message button and changed listener to submit" />
-    <option name="LAST_COMMIT_MESSAGE" value="added form around message button and changed listener to submit" />
+    <MESSAGE value="added hostile-menu-fix class (just to see if it works)" />
+    <option name="LAST_COMMIT_MESSAGE" value="added hostile-menu-fix class (just to see if it works)" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
