@@ -24,7 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="changed input focus listener to scroll window to difference between initial and current innerHeight">
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="added &quot;log&quot; to show diffHeight in input box">
       <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -225,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601410488292</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="added &quot;log&quot; to show diffHeight in input box">
+      <created>1601410980096</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1601410980096</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,7 +265,8 @@
     <MESSAGE value="Added event listener for if messageInput loses focus" />
     <MESSAGE value="changed input focus listener to scroll window to innerHeight" />
     <MESSAGE value="changed input focus listener to scroll window to difference between initial and current innerHeight" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed input focus listener to scroll window to difference between initial and current innerHeight" />
+    <MESSAGE value="added &quot;log&quot; to show diffHeight in input box" />
+    <option name="LAST_COMMIT_MESSAGE" value="added &quot;log&quot; to show diffHeight in input box" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">

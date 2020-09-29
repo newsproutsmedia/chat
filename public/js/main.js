@@ -88,7 +88,7 @@ messageInput.addEventListener('blur', () => {
 
 messageInput.addEventListener('focus', () => {
     let diffHeight = initHeight - window.innerHeight;
-    document.getElementById('msg').style.content = diffHeight;
+    document.getElementById('msg').style.content = diffHeight.toString();
     window.scrollTo(0, diffHeight);
 })
 
