@@ -26,7 +26,6 @@ io.on('connection', socket => {
         if(!room) {
             room = createRoom();
             socket.emit('roomCreated', room);
-            console.log(room);
             isAdmin = true;
         }
 
