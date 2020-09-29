@@ -86,7 +86,7 @@ messageInput.addEventListener('blur', () => {
 })
 
 messageInput.addEventListener('focus', () => {
-    window.scrollTo(0, document.body.scrollHeight);
+    window.scrollTo(0, window.innerHeight);
 })
 
 // output message to DOM
