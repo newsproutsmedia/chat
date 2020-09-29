@@ -81,6 +81,10 @@ messageSubmit.addEventListener('click', (e) => {
     window.scrollTo(0, 0);
 });
 
+messageInput.addEventListener('blur', () => {
+    window.scrollTo(0, 0);
+})
+
 messageInput.addEventListener('focus', () => {
     window.scrollTo(0, document.body.scrollHeight);
 })

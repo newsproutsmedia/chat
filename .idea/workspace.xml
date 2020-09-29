@@ -24,10 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Slight adjustment of chat message input position for mobile devices.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Adjustment for positioning input box at bottom on mobile devices.">
       <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -200,7 +197,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601329697691</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Adjustment for positioning input box at bottom on mobile devices.">
+      <created>1601406533337</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1601406533337</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,7 +233,8 @@
     <MESSAGE value="deleted index.js. updated package.json" />
     <MESSAGE value="Fixed alignment of message input on mobile. Fixes #22." />
     <MESSAGE value="Slight adjustment of chat message input position for mobile devices." />
-    <option name="LAST_COMMIT_MESSAGE" value="Slight adjustment of chat message input position for mobile devices." />
+    <MESSAGE value="Adjustment for positioning input box at bottom on mobile devices." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjustment for positioning input box at bottom on mobile devices." />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
