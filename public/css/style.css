@@ -66,10 +66,7 @@ body {
     font-size: 100%;
 }
 
-.btn:hover {
-    background-color: #ffffff;
-    color: #000000;
-}
+
 
 .hidden {
     display: none;
@@ -402,6 +399,11 @@ button.submit-message {
 /* Responsive */
 
 @media screen and (min-width: 1000px) {
+    .btn:hover {
+        background-color: #ffffff;
+        color: #000000;
+    }
+
     dashboard {
         display: block;
         max-width: 400px;
