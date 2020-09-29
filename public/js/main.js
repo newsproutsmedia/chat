@@ -63,8 +63,28 @@ hideDash.addEventListener('click', function () {
 });
 
 // on sending message
-messageForm.addEventListener('submit', (e) => {
-   e.preventDefault(); // prevents automatic saving to file
+// messageForm.addEventListener('submit', (e) => {
+//    e.preventDefault(); // prevents automatic saving to file
+//
+//     // get message from "chat-form"
+//     // form has an id of "msg", so we're getting the value of that input
+//     let msg = document.getElementById('msg').innerHTML;
+//
+//     // Emit message to server
+//     socket.emit('chatMessage', msg);
+//
+//     // Clear input
+//     document.getElementById('msg').innerHTML = '';
+//     document.getElementById('msg').style.content = 'Enter Message';
+//     // Set focus to message input
+//     // document.getElementById('msg').focus();
+//
+//     // Scroll to top of page
+//     window.scrollTo(0, 0);
+// });
+
+// add message to list
+function addMessage() {
 
     // get message from "chat-form"
     // form has an id of "msg", so we're getting the value of that input
@@ -81,7 +101,7 @@ messageForm.addEventListener('submit', (e) => {
 
     // Scroll to top of page
     window.scrollTo(0, 0);
-});
+}
 
 messageInput.addEventListener('blur', () => {
     window.scrollTo(0, 0);
