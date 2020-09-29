@@ -24,7 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="changed submit to button onclick">
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="test: removed onclick from button">
       <change beforePath="$PROJECT_DIR$/public/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/chat.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -302,7 +302,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601420156887</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="test: removed onclick from button">
+      <created>1601420721039</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1601420721039</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -321,7 +328,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Initial setup" />
     <MESSAGE value="Added index.html and set up app to serve it up" />
     <MESSAGE value="workspace updated" />
     <MESSAGE value="changed default port" />
@@ -346,7 +352,8 @@
     <MESSAGE value="removed hostile-menu-fix css class" />
     <MESSAGE value="added action to form" />
     <MESSAGE value="changed submit to button onclick" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed submit to button onclick" />
+    <MESSAGE value="test: removed onclick from button" />
+    <option name="LAST_COMMIT_MESSAGE" value="test: removed onclick from button" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
