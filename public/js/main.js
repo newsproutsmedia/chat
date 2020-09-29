@@ -1,5 +1,6 @@
 const messageSubmit = document.getElementById('message-submit');
 const messageInput = document.getElementById('msg');
+const messageForm = document.getElementById('msgForm');
 const showDash = document.getElementById('show-dash');
 const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
@@ -62,7 +63,7 @@ hideDash.addEventListener('click', function () {
 });
 
 // on sending message
-messageSubmit.addEventListener('click', (e) => {
+messageForm.addEventListener('submit', (e) => {
    e.preventDefault(); // prevents automatic saving to file
 
     // get message from "chat-form"
