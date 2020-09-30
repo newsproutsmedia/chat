@@ -269,6 +269,10 @@ messages .bot-message {
     margin: 10px 0 10px 0;
 }
 
+messages .message > p.text {
+    margin-bottom: 2px;
+}
+
 #msg {
     background-color: transparent;
     border: none;
@@ -497,10 +501,6 @@ button[disabled]{
 
     messages .message .meta {
         font-size: 12px;
-    }
-
-    messages .message > p.text {
-        margin-bottom: 2px;
     }
 
     chat > form textarea {

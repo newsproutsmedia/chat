@@ -24,8 +24,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="fixed css button icon classes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Adjusted margin-bottom of message text">
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -359,7 +358,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601489513522</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Adjusted margin-bottom of message text">
+      <created>1601489830522</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1601489830522</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -378,7 +384,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed alignment of message input on mobile. Fixes #22." />
     <MESSAGE value="Slight adjustment of chat message input position for mobile devices." />
     <MESSAGE value="Adjustment for positioning input box at bottom on mobile devices." />
     <MESSAGE value="Added event listener for if messageInput loses focus" />
@@ -403,7 +408,8 @@
     <MESSAGE value="Added setButtonState functionality" />
     <MESSAGE value="Refactored setButtonState functionality" />
     <MESSAGE value="fixed css button icon classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed css button icon classes" />
+    <MESSAGE value="Adjusted margin-bottom of message text" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjusted margin-bottom of message text" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
