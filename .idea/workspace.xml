@@ -24,11 +24,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Added setButtonState functionality">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Refactored setButtonState functionality">
       <change beforePath="$PROJECT_DIR$/public/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/chat.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -347,7 +345,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601478955227</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Refactored setButtonState functionality">
+      <created>1601488192925</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1601488192925</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,7 +371,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="swapped port order in server.js, Port Env var should come first" />
     <MESSAGE value="deleted index.js. updated package.json" />
     <MESSAGE value="Fixed alignment of message input on mobile. Fixes #22." />
     <MESSAGE value="Slight adjustment of chat message input position for mobile devices." />
@@ -391,7 +395,8 @@
     <MESSAGE value="removed console.log(room) from server.js" />
     <MESSAGE value="Added conditional logic to swap send icon" />
     <MESSAGE value="Added setButtonState functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added setButtonState functionality" />
+    <MESSAGE value="Refactored setButtonState functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored setButtonState functionality" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
