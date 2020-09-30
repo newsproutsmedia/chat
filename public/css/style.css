@@ -295,11 +295,9 @@ messages .bot-message {
 button.submit-message {
     margin-left: auto;
     font-size: 100% !important;
-    background-color: var(--light-blue) !important;
     float: right;
     align-self: flex-end;
     margin-bottom: 8px;
-
 }
 
 .flexbox-row {
@@ -406,15 +404,28 @@ button.submit-message {
 
 .ok-message-btn:before {
     content: "\f14a";
+}
+
+.btn-default {
+    background-color: var(--light-color-b);
+    color: #ffffff;
+}
+
+.btn-ok {
     background-color: #ffffff;
     color: #333333;
+}
+
+.btn-send {
+    background-color: var(--light-color-b);
+    color: #ffffff;
 }
 
 button:disabled,
 button[disabled]{
     background-color: #333333;
-    color: #ffffff;
-    opacity: 0.5;
+    color: #666666;
+    opacity: 0.3;
 }
 
 /* Responsive */
@@ -434,6 +445,21 @@ button[disabled]{
 
     .ok-message-btn:before {
         content: "\f1d8";
+    }
+
+    .btn-default {
+        background-color: var(--light-color-b);
+        color: #ffffff;
+    }
+
+    .btn-ok {
+        background-color: var(--light-color-b);
+        color: #ffffff;
+    }
+
+    .btn-send {
+        background-color: var(--light-color-b);
+        color: #ffffff;
     }
 
     dashboard {

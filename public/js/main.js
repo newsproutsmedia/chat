@@ -1,6 +1,4 @@
-const messageSubmit = document.getElementById('message-submit');
 const messageInput = document.getElementById('msg');
-const messageForm = document.getElementById('msgForm');
 const showDash = document.getElementById('show-dash');
 const hideDash = document.getElementById('hide-dash');
 const chatMessages = document.querySelector('.chat-messages');
@@ -8,10 +6,11 @@ const userList = document.getElementById('users');
 const roomName = document.getElementById('room-name');
 const initHeight = window.innerHeight;
 
-const messageBtnDefaultClass = 'default-message-btn';
-const messageBtnSendClass = 'send-message-btn';
-const messageBtnOkClass = 'ok-message-btn';
-
+const messageBtnId = 'messageSubmitBtn';
+const messageBtnIconId = 'messageBtnIcon';
+const messageBtnDefault = {id: messageBtnId, style: 'btn-default', icon: {id: messageBtnIconId, style: 'default-message-btn-icon'}};
+const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: messageBtnIconId, style: 'send-message-btn-icon'}};
+const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
 
 // Get username and room from URL
 let { username, room } = Qs.parse(location.search, {
@@ -106,24 +105,24 @@ function addMessage() {
     // Scroll to top of page
     window.scrollTo(0, 0);
     // disable button
-    setButtonState('messageBtnIcon', messageBtnDefaultClass, true, [messageBtnSendClass, messageBtnOkClass]);
+    setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
     // activeSendDefault();
     // setSendButtonDisabled(true);
 }
 
 messageInput.addEventListener('blur', () => {
     window.scrollTo(0, 0);
-    if(document.getElementById('msg').innerHTML !== '') {
-        return setButtonState('messageBtnIcon', messageBtnSendClass, false, [messageBtnDefaultClass, messageBtnOkClass]);
+    if(document.getElementById('msg').innerHTML != "") {
+        return setButtonState(messageBtnId, messageBtnSend,[messageBtnDefault, messageBtnOk], false);
         // setSendButtonDisabled(false);
         // return activeSendButton();
     }
-    setButtonState('messageBtnIcon', messageBtnDefaultClass, false, [messageBtnSendClass, messageBtnOkClass]);
+    setButtonState(messageBtnId, messageBtnDefault,[messageBtnSend, messageBtnOk], true);
 });
 
 messageInput.addEventListener('focus', () => {
     setTimeout(() => {
-        setButtonState('messageBtnIcon', messageBtnOkClass, false, [messageBtnDefaultClass, messageBtnSendClass]);
+        setButtonState(messageBtnId, messageBtnOk,[messageBtnDefault, messageBtnSend], false);
         // activeOkButton();
         // setSendButtonDisabled(false);
         let diffHeight = initHeight - window.innerHeight;
@@ -132,32 +131,27 @@ messageInput.addEventListener('focus', () => {
     }, 200);
 });
 
-function activeSendButton() {
-    document.getElementById('messageBtnIcon').classList.remove('default-message-btn');
-    document.getElementById('messageBtnIcon').classList.add('send-message-btn');
+function addButtonState(state) {
+    // add button style
+        document.getElementById(state.id).classList.add(state.style);
+    // add icon
+        document.getElementById(state.icon.id).classList.add(state.icon.style);
 }
 
-function activeOkButton() {
-    document.getElementById('messageBtnIcon').classList.remove('default-message-btn');
-    document.getElementById('messageBtnIcon').classList.add('ok-message-btn');
+function removeButtonState(state) {
+    // remove button style
+    document.getElementById(state.id).classList.remove(state.style);
+    // remove icon
+    document.getElementById(state.icon.id).classList.remove(state.icon.style);
 }
 
-function activeSendDefault() {
-    document.getElementById('messageBtnIcon').classList.remove('ok-message-btn');
-    document.getElementById('messageBtnIcon').classList.remove('send-message-btn');
-    document.getElementById('messageBtnIcon').classList.add('default-message-btn');
-}
-
-function setSendButtonDisabled(isDisabled) {
-    document.getElementById("message-submit").disabled = isDisabled;
-}
-
-function setButtonState(id, addClass, isDisabled, removeClasses) {
+function setButtonState(id, state, removeStates, isDisabled) {
     document.getElementById(id).disabled = isDisabled;
-    for (let removeClass of removeClasses) {
-        document.getElementById(id).classList.remove(removeClass);
+    for(let remove of removeStates) {
+        removeButtonState(remove);
     }
-    document.getElementById(id).classList.add(addClass);
+    addButtonState(state);
+
 }
 
 // output message to DOM
