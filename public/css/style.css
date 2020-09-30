@@ -231,7 +231,7 @@ chat > messages::-webkit-scrollbar-thumb {
 }
 
 messages .message {
-    padding: 10px 20px 10px 20px;
+    padding: 10px 20px 10px 10px;
     margin-bottom: 15px;
     background-color: var(--dark-lighter);
     border-radius: 5px;
@@ -497,6 +497,10 @@ button[disabled]{
 
     messages .message .meta {
         font-size: 12px;
+    }
+
+    messages .message > p.text {
+        margin-bottom: 2px;
     }
 
     chat > form textarea {
