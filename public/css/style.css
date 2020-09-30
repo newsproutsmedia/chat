@@ -320,6 +320,18 @@ button.submit-message {
     background-color: #000;
 }
 
+#usernameField {
+
+}
+
+#roomField {
+    display: none;
+}
+
+#emailField {
+    display: none;
+}
+
 .login.page .form-control {
     background-color: transparent;
     border: transparent;
@@ -348,7 +360,7 @@ button.submit-message {
     font-weight: 100;
 }
 
-.login.page .form-control #usernameInput {
+.login.page .form-control input {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid #fff;

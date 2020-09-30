@@ -24,8 +24,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Adjusted margin-bottom of message text">
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Adjusted margin-bottom of message text in mobile">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/interactive.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/interactive.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +46,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dynamic-message-input" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -365,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601489830522</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Adjusted margin-bottom of message text in mobile">
+      <created>1601489937806</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1601489937806</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,7 +394,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Slight adjustment of chat message input position for mobile devices." />
     <MESSAGE value="Adjustment for positioning input box at bottom on mobile devices." />
     <MESSAGE value="Added event listener for if messageInput loses focus" />
     <MESSAGE value="changed input focus listener to scroll window to innerHeight" />
@@ -409,7 +418,8 @@
     <MESSAGE value="Refactored setButtonState functionality" />
     <MESSAGE value="fixed css button icon classes" />
     <MESSAGE value="Adjusted margin-bottom of message text" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adjusted margin-bottom of message text" />
+    <MESSAGE value="Adjusted margin-bottom of message text in mobile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjusted margin-bottom of message text in mobile" />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
@@ -420,10 +430,10 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="469" y="190" key="SettingsEditor/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1600713825104" />
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1601328038141">
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1601494626934">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601328038141" />
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601494626934" />
     <state x="729" y="273" key="git4idea.branch.GitSmartOperationDialog" timestamp="1600705378715">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
@@ -432,5 +442,13 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="777" y="453" key="git4idea.ui.GitResetDialog/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1600472149086" />
+    <state x="624" y="256" key="run.anything.popup" timestamp="1601496080017">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="624" y="256" key="run.anything.popup/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601496080017" />
+    <state x="624" y="260" width="670" height="676" key="search.everywhere.popup" timestamp="1601500734378">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state x="624" y="260" width="670" height="676" key="search.everywhere.popup/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601500734378" />
   </component>
 </project>
