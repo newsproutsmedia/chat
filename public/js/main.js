@@ -8,6 +8,10 @@ const userList = document.getElementById('users');
 const roomName = document.getElementById('room-name');
 const initHeight = window.innerHeight;
 
+const messageBtnDefaultClass = 'default-message-btn';
+const messageBtnSendClass = 'send-message-btn';
+const messageBtnOkClass = 'ok-message-btn';
+
 
 // Get username and room from URL
 let { username, room } = Qs.parse(location.search, {
@@ -102,27 +106,59 @@ function addMessage() {
     // Scroll to top of page
     window.scrollTo(0, 0);
     // disable button
-    document.getElementById("message-submit").disabled = true;
+    setButtonState('messageBtnIcon', messageBtnDefaultClass, true, [messageBtnSendClass, messageBtnOkClass]);
+    // activeSendDefault();
+    // setSendButtonDisabled(true);
 }
 
 messageInput.addEventListener('blur', () => {
     window.scrollTo(0, 0);
     if(document.getElementById('msg').innerHTML !== '') {
-        document.getElementById("message-submit").disabled = false;
-        document.getElementById('messageBtnIcon').classList.remove('message-btn');
-        document.getElementById('messageBtnIcon').classList.add('fa-paper-plane');
+        return setButtonState('messageBtnIcon', messageBtnSendClass, false, [messageBtnDefaultClass, messageBtnOkClass]);
+        // setSendButtonDisabled(false);
+        // return activeSendButton();
     }
+    setButtonState('messageBtnIcon', messageBtnDefaultClass, false, [messageBtnSendClass, messageBtnOkClass]);
 });
 
 messageInput.addEventListener('focus', () => {
     setTimeout(() => {
-        document.getElementById('messageBtnIcon').classList.add('fa-paper-plane');
-        document.getElementById("message-submit").disabled = false;
+        setButtonState('messageBtnIcon', messageBtnOkClass, false, [messageBtnDefaultClass, messageBtnSendClass]);
+        // activeOkButton();
+        // setSendButtonDisabled(false);
         let diffHeight = initHeight - window.innerHeight;
         document.getElementById('msg').style.content = diffHeight.toString();
         window.scrollTo(0, diffHeight);
     }, 200);
 });
+
+function activeSendButton() {
+    document.getElementById('messageBtnIcon').classList.remove('default-message-btn');
+    document.getElementById('messageBtnIcon').classList.add('send-message-btn');
+}
+
+function activeOkButton() {
+    document.getElementById('messageBtnIcon').classList.remove('default-message-btn');
+    document.getElementById('messageBtnIcon').classList.add('ok-message-btn');
+}
+
+function activeSendDefault() {
+    document.getElementById('messageBtnIcon').classList.remove('ok-message-btn');
+    document.getElementById('messageBtnIcon').classList.remove('send-message-btn');
+    document.getElementById('messageBtnIcon').classList.add('default-message-btn');
+}
+
+function setSendButtonDisabled(isDisabled) {
+    document.getElementById("message-submit").disabled = isDisabled;
+}
+
+function setButtonState(id, addClass, isDisabled, removeClasses) {
+    document.getElementById(id).disabled = isDisabled;
+    for (let removeClass of removeClasses) {
+        document.getElementById(id).classList.remove(removeClass);
+    }
+    document.getElementById(id).classList.add(addClass);
+}
 
 // output message to DOM
 function outputMessage(message) {

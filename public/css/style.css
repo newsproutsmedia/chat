@@ -396,14 +396,25 @@ button.submit-message {
     text-align: right;
 }
 
-.message-btn:before {
+.default-message-btn:before {
     content: "\f14a";
+}
+
+.send-message-btn:before {
+    content: "\f1d8";
+}
+
+.ok-message-btn:before {
+    content: "\f14a";
+    background-color: #ffffff;
+    color: #333333;
 }
 
 button:disabled,
 button[disabled]{
-    background-color: #cccccc;
-    color: #666666;
+    background-color: #333333;
+    color: #ffffff;
+    opacity: 0.5;
 }
 
 /* Responsive */
@@ -413,7 +424,15 @@ button[disabled]{
     /*    background-color: #ffffff;*/
     /*    color: #000000;*/
     /*}*/
-    .message-btn:before {
+    .default-message-btn:before {
+        content: "\f1d8";
+    }
+
+    .send-message-btn:before {
+        content: "\f1d8";
+    }
+
+    .ok-message-btn:before {
         content: "\f1d8";
     }
 
