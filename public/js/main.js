@@ -101,14 +101,23 @@ function addMessage() {
 
     // Scroll to top of page
     window.scrollTo(0, 0);
+    // disable button
+    document.getElementById("message-submit").disabled = true;
 }
 
 messageInput.addEventListener('blur', () => {
     window.scrollTo(0, 0);
+    if(document.getElementById('msg').innerHTML !== '') {
+        document.getElementById("message-submit").disabled = false;
+        document.getElementById('messageBtnIcon').classList.remove('message-btn');
+        document.getElementById('messageBtnIcon').classList.add('fa-paper-plane');
+    }
 });
 
 messageInput.addEventListener('focus', () => {
     setTimeout(() => {
+        document.getElementById('messageBtnIcon').classList.add('fa-paper-plane');
+        document.getElementById("message-submit").disabled = false;
         let diffHeight = initHeight - window.innerHeight;
         document.getElementById('msg').style.content = diffHeight.toString();
         window.scrollTo(0, diffHeight);

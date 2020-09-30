@@ -396,6 +396,16 @@ button.submit-message {
     text-align: right;
 }
 
+.message-btn:before {
+    content: "\f14a";
+}
+
+button:disabled,
+button[disabled]{
+    background-color: #cccccc;
+    color: #666666;
+}
+
 /* Responsive */
 
 @media screen and (min-width: 1000px) {
@@ -403,26 +413,30 @@ button.submit-message {
     /*    background-color: #ffffff;*/
     /*    color: #000000;*/
     /*}*/
+    .message-btn:before {
+        content: "\f1d8";
+    }
 
     dashboard {
         display: block;
         max-width: 400px;
         padding: 2vh 1vw 2vh 1vw;
     }
+
+    #main {
+        width: 65%;
+    }
+
     #main > chat {
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        min-height: 88vh;
-        max-height: 88vh;
-        width: 70vw;
-        max-width: 80%;
     }
 
     chat > messages {
         flex-grow: 40;
-        height: 80vh;
+        height: 80%;
         overflow: auto;
     }
 
