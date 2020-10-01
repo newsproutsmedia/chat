@@ -129,6 +129,16 @@ dashboard hr {
     width: 100%;
 }
 
+users > .user {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+users > .user span {
+    margin-right: 8px;
+}
+
 .dash-close {
     color: #000000;
     margin-right: 6px;
@@ -326,6 +336,16 @@ button.submit-message {
 
 #roomField {
     display: none;
+}
+
+#roomInput {
+    font-size: 94%;
+    margin-top: 24px;
+}
+
+#emailInput {
+    font-size: 100%;
+    margin-top: 22px;
 }
 
 #emailField {

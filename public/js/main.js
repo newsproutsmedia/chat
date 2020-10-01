@@ -13,7 +13,7 @@ const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: messageB
 const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
 
 // Get username and room from URL
-let { username, room } = Qs.parse(location.search, {
+let { username, email, room } = Qs.parse(location.search, {
     ignoreQueryPrefix: true // ignores non key/value data
 });
 
@@ -24,7 +24,7 @@ socket.on('invalidRoom', room => {
 });
 
 // Join chatroom
-socket.emit('joinRoom', { username, room });
+socket.emit('joinRoom', { username, email, room });
 
 // listen for roomCreated, set new room value
 socket.on('roomCreated', room => {
@@ -38,7 +38,6 @@ socket.on('roomCreated', room => {
 socket.on('roomUsers', ({ room, users }) => {
     outputRoomName(room);
     outputUsers(users);
-    console.log(users);
 });
 
 // catch 'message' emitted in server.js
@@ -49,8 +48,11 @@ socket.on('message', message => {
     // Scrolls down automatically
     //TODO instead of scrolling automatically, bring up a clickable arrow at bottom of message window that says "New Messages"
     chatMessages.scrollTop = chatMessages.scrollHeight;
+});
 
-
+socket.on('updated-message-count', messageCount => {
+    console.log('updated-message-count:', messageCount);
+    updateMessageCount(messageCount);
 });
 
 // Show Dashboard
@@ -106,8 +108,10 @@ function addMessage() {
     window.scrollTo(0, 0);
     // disable button
     setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
-    // activeSendDefault();
-    // setSendButtonDisabled(true);
+
+    // update user message count
+
+
 }
 
 messageInput.addEventListener('blur', () => {
@@ -156,22 +160,22 @@ function setButtonState(id, state, removeStates, isDisabled) {
 
 // output message to DOM
 function outputMessage(message) {
-    if(message.isUser === false) return outputBotMessage(message); // if bot, send bot-style message
+    if(message.user.type === 'bot') return outputBotMessage(message); // if bot, send bot-style message
     const div = document.createElement('div');
     div.classList.add('message');
-    if(message.username === "Me") div.classList.add('own');
-    div.innerHTML = `<p class="meta">${message.username}<span class="timestamp">${message.time}</span></p>
+    if(message.user.username === username) div.classList.add('own');
+    div.innerHTML = `<p class="meta">${message.user.username}<span class="timestamp">${message.time}</span></p>
                 <p class="text">
                     ${message.text}
-                </p>
-`;
+                </p>`;
     document.querySelector('.chat-messages').appendChild(div);
+    socket.emit('increment-message-count', message.user.id);
 }
 
 function outputBotMessage(message) {
     const div = document.createElement('div');
     div.classList.add('bot-message');
-    div.innerHTML = `<b>${message.username}: </b>${message.text}`;
+    div.innerHTML = `<b>${message.user.username}: </b>${message.text}`;
     document.querySelector('.chat-messages').appendChild(div);
 }
 
@@ -183,8 +187,15 @@ function outputRoomName(room) {
 // Add users to DOM
 function outputUsers(users) {
     userList.innerHTML = `
-    ${users.map(user => `<li>${user.username}</li>`).join('')}
-    `;
+    <h4>Users</h4>
+    ${users.map(user => `<div class="user"><span id="${user.id}-count" class="badge badge-secondary">${user.messageCount.toString()}</span>${user.username}</div>`).join('')}
+    <hr/>    
+`;
+}
+
+// Update user message count
+function updateMessageCount(messageCount) {
+    document.getElementById(`${messageCount.userId}-count`).innerHTML = messageCount.count;
 }
 
 // Logout
