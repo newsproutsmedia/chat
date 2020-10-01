@@ -4,7 +4,7 @@ const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
 const { validateRoom, createRoom } = require('./utils/rooms');
-const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+const { userJoin, getCurrentUser, getUserMessageCount, incrementUserMessageCount, userLeave, getRoomUsers } = require('./utils/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -13,27 +13,27 @@ const io = socketio(server);
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-const botName = 'FawkesChat';
+const bot = { username: 'FawkesChat', type: 'bot' };
 
 // Run when client connects
 io.on('connection', socket => {
 
     // Get username and room when user joins room
     socket.on('joinRoom', ({ username, room}) => {
-        let isAdmin = false;
+        let type = 'user';
 
         // create new room value
         if(!room) {
             room = createRoom();
             socket.emit('roomCreated', room);
-            isAdmin = true;
+            type = 'admin';
         }
 
         // check if roomID is valid
         if(!validateRoom(room)) socket.emit('invalidRoom', room);
 
         // create user object, get id from socket and pass username and room from URL
-        const user = userJoin(socket.id, username, room, isAdmin);
+        const user = userJoin(socket.id, username, room, type);
 
         //TODO check whether the room is full, then if user is already logged in, if YES to either -- deny entry
 
@@ -41,10 +41,10 @@ io.on('connection', socket => {
         socket.join(user.room);
 
         // Welcome current user
-        socket.emit('message', formatMessage(botName, false, 'Welcome to FawkesChat!'));
+        socket.emit('message', formatMessage(bot, 'Welcome to FawkesChat!'));
 
         // Broadcast to everyone (except user) when user connects
-        socket.broadcast.to(user.room).emit('message', formatMessage(botName, false, `${user.username} has joined the chat`));
+        socket.broadcast.to(user.room).emit('message', formatMessage(bot, `${user.username} has joined the chat`));
 
         // Send users and room info
         io.to(user.room).emit('roomUsers', {
@@ -56,12 +56,17 @@ io.on('connection', socket => {
     // listen for chatMessage
     socket.on('chatMessage', (msg) => {
         const user = getCurrentUser(socket.id);
+        const messageCount = incrementUserMessageCount(user.id);
+
 
         // send message to you
-        socket.emit('message', formatMessage("Me", true, msg));
+        socket.emit('message', formatMessage(user, msg));
 
         // send message to everyone else
-        socket.broadcast.to(user.room).emit('message', formatMessage(user.username, true, msg));
+        socket.broadcast.to(user.room).emit('message', formatMessage(user, msg));
+
+        // update message count for everyone
+        io.to(user.room).emit('updated-message-count', messageCount);
     });
 
     // Runs when client disconnects
@@ -71,7 +76,7 @@ io.on('connection', socket => {
         const user = userLeave(socket.id);
         if(user) {
             // notify other chat participants that user has left
-            io.to(user.room).emit('message', formatMessage(botName, false, `${user.username} has left the chat`));
+            io.to(user.room).emit('message', formatMessage(bot, `${user.username} has left the chat`));
 
             // Send updated users and room info
             io.to(user.room).emit('roomUsers', {
