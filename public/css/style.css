@@ -136,8 +136,57 @@ users > .user {
     margin-bottom: 10px;
 }
 
+users > .user.inactive {
+    opacity: 0.5;
+}
+
 users > .user span {
     margin-right: 8px;
+}
+
+invite {
+    display: flex;
+    flex-direction: column;
+    justify-items: baseline;
+}
+
+#addMember a {
+    color: var(--light-blue) !important;
+}
+
+.fa-plus-circle {
+    margin-right: 0.2em;
+}
+
+#recipients {
+    display: flex;
+    flex-direction: column;
+}
+
+#recipients > input {
+    color: #ffffff;
+    font-size: 80%;
+    width: 80%;
+    margin-bottom: 1em;
+    background-color: transparent;
+    border: 1px solid white;
+    height: 2.5em;
+    padding-left: 1em;
+}
+
+input[type="email"]::-webkit-input-placeholder {
+    color: #ffffff;
+}
+
+invite > button.send-invitations-btn {
+    width: 50%;
+    background-color: var(--light-blue);
+}
+
+.flex-align-middle {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
 }
 
 .dash-close {
@@ -156,7 +205,7 @@ body > dashboard > button.leave-room {
     height: 80px;
     font-size: 150%;
     text-align: center;
-    background-color: steelblue;
+    background-color: var(--light-blue);
 }
 
 #page {

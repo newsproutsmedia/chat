@@ -18,13 +18,21 @@ let { username, email, room } = Qs.parse(location.search, {
 });
 
 const socket = io();
+let maxUsers = 1;
+let addedUsers = 0;
+let emailAddresses = [];
+let currentUser = {
+    username,
+    email,
+    room
+}
 
 socket.on('invalidRoom', room => {
     window.location.replace("/index.html");
 });
 
 // Join chatroom
-socket.emit('joinRoom', { username, email, room });
+socket.emit('joinRoom', currentUser);
 
 // listen for roomCreated, set new room value
 socket.on('roomCreated', room => {
@@ -38,6 +46,7 @@ socket.on('roomCreated', room => {
 socket.on('roomUsers', ({ room, users }) => {
     outputRoomName(room);
     outputUsers(users);
+    if(emailAddresses.length !== 0) updateInvitedList(users);
 });
 
 // catch 'message' emitted in server.js
@@ -50,12 +59,96 @@ socket.on('message', message => {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
-socket.on('updated-message-count', messageCount => {
-    console.log('updated-message-count:', messageCount);
+socket.on('updatedMessageCount', messageCount => {
+    console.log('updatedMessageCount:', messageCount);
     updateMessageCount(messageCount);
 });
 
-// Show Dashboard
+socket.on('setupAdmin', user => {
+    // add "invite" section to DOM
+    const inviteSection = document.createElement('invite');
+    inviteSection.innerHTML = `<h4>Invite To Join</h4>
+                            <div id="recipients"></div>
+                <div class="flex-align-middle"><a id="addMember" onclick="addChatMember()"><i class="fas fa-plus-circle fa-lg"></i> Add Email Input</a></div>
+                <hr>
+                <button id="sendInvitations" class="btn send-invitations-btn" onclick="sendInvitations()">Send Invites</button>
+`;
+    document.querySelector('#dashMenu').appendChild(inviteSection);
+});
+
+// Mail events
+socket.on('inviteNotAllowed', () => {
+    console.log("inviteNotAllowed");
+    // remove invite section
+    // display message saying that user must be the chat admin to invite members
+});
+
+socket.on('inviteSendSuccess', () => {
+    console.log("inviteSendSuccess");
+    // remove invite fields
+    clearElements("recipients");
+    // if admin, show invited users, greyed out (or with "not joined" badge), in users section
+    outputInvitedUsers(emailAddresses);
+    // adjust users list
+    maxUsers = maxUsers + addedUsers;
+    addedUsers = 0;
+});
+
+socket.on('inviteSendFailure', () => {
+    console.log("inviteSendFailure");
+    // display "there was a problem" message
+    // tell admin to wait a minute and try again
+});
+
+function clearElements(id) {
+    const myNode = document.getElementById(id);
+    myNode.innerHTML = '';
+}
+
+
+// send invites onclick event
+function sendInvitations() {
+    console.log("sendInvitations");
+
+    // forEach input item (use addedUsers for iteration) get the value and add to an array
+    for (let i = 1; i <= addedUsers; i++) {
+        let address = document.getElementById(`invite${i}`).value;
+        emailAddresses.push(address);
+    }
+    // form "invite" object containing an array of "recipients"
+    let invite = {
+        recipients: emailAddresses
+    }
+    console.log(invite);
+
+    // emit "emailInvite" with "invite" object
+    socket.emit('emailInvite', invite);
+}
+
+
+// add chat member onclick event
+function addChatMember() {
+    console.log("Add Chat Member Clicked");
+    addedUsers = addedUsers + 1;
+    let recipient = document.createElement('input');
+    recipient.type = "email";
+    recipient.id = `invite${addedUsers}`;
+    recipient.name = `invite${addedUsers}`;
+    recipient.class = "emailField";
+    recipient.placeholder = "Enter email address";
+    document.querySelector('#recipients').appendChild(recipient);
+
+    // set focus to this field
+    document.getElementById(`invite${addedUsers}`).focus();
+
+    // add typing listener
+};
+
+// recipient email field typing listener
+/// when typing stops, perform email validation
+/// if email is valid, activate "Send Invitations" button
+
+// Dashboard Events
 showDash.addEventListener('click', function () {
     console.log('showing dash...');
     document.getElementById('dashboard').style.display = 'block';
@@ -66,27 +159,6 @@ hideDash.addEventListener('click', function () {
     console.log('hiding dash...');
     document.getElementById('dashboard').style.display = 'none';
 });
-
-// on sending message
-// messageForm.addEventListener('submit', (e) => {
-//    e.preventDefault(); // prevents automatic saving to file
-//
-//     // get message from "chat-form"
-//     // form has an id of "msg", so we're getting the value of that input
-//     let msg = document.getElementById('msg').innerHTML;
-//
-//     // Emit message to server
-//     socket.emit('chatMessage', msg);
-//
-//     // Clear input
-//     document.getElementById('msg').innerHTML = '';
-//     document.getElementById('msg').style.content = 'Enter Message';
-//     // Set focus to message input
-//     // document.getElementById('msg').focus();
-//
-//     // Scroll to top of page
-//     window.scrollTo(0, 0);
-// });
 
 // add message to list
 function addMessage() {
@@ -191,6 +263,49 @@ function outputUsers(users) {
     ${users.map(user => `<div class="user"><span id="${user.id}-count" class="badge badge-secondary">${user.messageCount.toString()}</span>${user.username}</div>`).join('')}
     <hr/>    
 `;
+
+}
+
+// Add pending users to DOM
+function outputInvitedUsers(emails) {
+    let invited = document.createElement("div");
+    invited.id = "invited";
+    invited.innerHTML = "<h4>Pending Invites</h4>";
+    userList.parentNode.insertBefore(invited, userList.nextSibling); // insert after "users" section
+
+    for (let email of emails) {
+        let user = document.createElement("div");
+        user.id = email;
+        user.classList.add("user");
+        user.classList.add("inactive");
+        user.innerHTML = `<span class="badge badge-warning">*</span>${email}`;
+        invited.appendChild(user);
+    }
+}
+
+function updateInvitedList(users) {
+    console.log(users);
+    for(let user in users) {
+        console.log("user in users:", users[user].email);
+        if(emailAddresses.includes(users[user].email)) {
+            let thisChildId = users[user].email;
+            console.log("removing child: ", thisChildId);
+            document.getElementById(thisChildId).remove();
+            emailAddresses = emailAddresses.filter(a => a !== users[user].email);
+        }
+    }
+    if(emailAddresses.length === 0) document.getElementById("invited").remove();
+    console.log(emailAddresses);
+}
+
+// Activate user
+function activateUser(id) {
+    document.getElementById(id).classList.remove("inactive");
+}
+
+// Deactivate user
+function deactivateUser(id) {
+    document.getElementById(id).classList.add("inactive");
 }
 
 // Update user message count

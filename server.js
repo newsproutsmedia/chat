@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
+const mail = require('./utils/mail');
 const formatMessage = require('./utils/messages');
 const { validateRoom, createRoom } = require('./utils/rooms');
 const { userJoin, getCurrentUser, getUserMessageCount, incrementUserMessageCount, userLeave, getRoomUsers } = require('./utils/users');
@@ -19,25 +20,29 @@ const bot = { username: 'FawkesChat', type: 'bot' };
 io.on('connection', socket => {
 
     // Get username and room when user joins room
-    socket.on('joinRoom', ({ username, room}) => {
-        let type = 'user';
+    socket.on('joinRoom', currentUser => {
+        currentUser.type = 'user';
+
 
         // create new room value
-        if(!room) {
-            room = createRoom();
-            socket.emit('roomCreated', room);
-            type = 'admin';
+        if(!currentUser.room) {
+            console.log("Room is blank, creating a new room");
+            currentUser.room = createRoom();
+            socket.emit('roomCreated', currentUser.room);
+            currentUser.type = 'admin';
         }
 
         // check if roomID is valid
-        if(!validateRoom(room)) socket.emit('invalidRoom', room);
+        if(!validateRoom(currentUser.room)) socket.emit('invalidRoom', currentUser.room);
+        currentUser.id = socket.id;
 
         // create user object, get id from socket and pass username and room from URL
-        const user = userJoin(socket.id, username, room, type);
+        const user = userJoin(currentUser);
 
         //TODO check whether the room is full, then if user is already logged in, if YES to either -- deny entry
 
         // actually join the user to the room
+        console.log("joining user:", user);
         socket.join(user.room);
 
         // Welcome current user
@@ -51,6 +56,9 @@ io.on('connection', socket => {
             room: user.room,
             users: getRoomUsers(user.room)
         });
+
+        // If admin, set up admin tools
+        if(user.type === 'admin') socket.emit('setupAdmin', user);
     });
 
     // listen for chatMessage
@@ -58,15 +66,36 @@ io.on('connection', socket => {
         const user = getCurrentUser(socket.id);
         const messageCount = incrementUserMessageCount(user.id);
 
-
-        // send message to you
+        // send message to user
         socket.emit('message', formatMessage(user, msg));
 
         // send message to everyone else
         socket.broadcast.to(user.room).emit('message', formatMessage(user, msg));
 
         // update message count for everyone
-        io.to(user.room).emit('updated-message-count', messageCount);
+        io.to(user.room).emit('updatedMessageCount', messageCount);
+    });
+
+    // listen for email invitations
+    socket.on('emailInvite', async invite => {
+        console.log("Attempting to email invite");
+        //TODO pass encryption key using invite.key
+        const user = getCurrentUser(socket.id);
+        if(user.type !== 'admin') return socket.emit('inviteNotAllowed');
+        let sender = {
+            username: user.username,
+            email: user.email,
+            recipients: invite.recipients,
+            room: user.room
+        }
+        await mail(sender)
+            .then(result => {
+                return socket.emit('inviteSendSuccess');
+            })
+            .catch(error => {
+                console.log(error);
+                return socket.emit('inviteSendFailure');
+            });
     });
 
     // Runs when client disconnects

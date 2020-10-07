@@ -21,12 +21,26 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:add-email-server" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Adjusted margin-bottom of message text">
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Increased spacing between user list items. Closes #31.">
+      <change afterPath="$PROJECT_DIR$/utils/mail.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/chat.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/messages.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/messages.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/users.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +58,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="fix-users-alignment" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -85,6 +99,7 @@
       <workItem from="1600471433104" duration="1695000" />
       <workItem from="1600473222485" duration="848000" />
       <workItem from="1600984361589" duration="1717000" />
+      <workItem from="1602004083511" duration="23069000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup">
       <created>1600472172815</created>
@@ -373,7 +388,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601489937806</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Increased spacing between user list items. Closes #31.">
+      <created>1601583246208</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1601583246208</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,7 +406,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="add-email-server" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -392,8 +426,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adjustment for positioning input box at bottom on mobile devices." />
-    <MESSAGE value="Added event listener for if messageInput loses focus" />
     <MESSAGE value="changed input focus listener to scroll window to innerHeight" />
     <MESSAGE value="changed input focus listener to scroll window to difference between initial and current innerHeight" />
     <MESSAGE value="added &quot;log&quot; to show diffHeight in input box" />
@@ -417,7 +449,9 @@
     <MESSAGE value="fixed css button icon classes" />
     <MESSAGE value="Adjusted margin-bottom of message text" />
     <MESSAGE value="Adjusted margin-bottom of message text in mobile" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adjusted margin-bottom of message text in mobile" />
+    <MESSAGE value="Fixed user alignment issue. Also, added badge next to user name for tracking number of comments from each user." />
+    <MESSAGE value="Increased spacing between user list items. Closes #31." />
+    <option name="LAST_COMMIT_MESSAGE" value="Increased spacing between user list items. Closes #31." />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
@@ -428,10 +462,10 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="469" y="190" key="SettingsEditor/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1600713825104" />
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1601494626934">
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1601583247803">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601494626934" />
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601583247803" />
     <state x="729" y="273" key="git4idea.branch.GitSmartOperationDialog" timestamp="1600705378715">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
@@ -444,9 +478,9 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="624" y="256" key="run.anything.popup/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601496080017" />
-    <state x="624" y="260" width="670" height="676" key="search.everywhere.popup" timestamp="1601500734378">
+    <state x="624" y="260" width="670" height="676" key="search.everywhere.popup" timestamp="1602007523952">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="624" y="260" width="670" height="676" key="search.everywhere.popup/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1601500734378" />
+    <state x="624" y="260" width="670" height="676" key="search.everywhere.popup/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1602007523952" />
   </component>
 </project>
