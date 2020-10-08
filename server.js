@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-const mail = require('./utils/mail');
+const mailer = require('./utils/mail');
 const formatMessage = require('./utils/messages');
 const { validateRoom, createRoom } = require('./utils/rooms');
 const { userJoin, getCurrentUser, getUserMessageCount, incrementUserMessageCount, userLeave, getRoomUsers } = require('./utils/users');
@@ -80,22 +80,8 @@ io.on('connection', socket => {
     socket.on('emailInvite', async invite => {
         console.log("Attempting to email invite");
         //TODO pass encryption key using invite.key
-        const user = getCurrentUser(socket.id);
-        if(user.type !== 'admin') return socket.emit('inviteNotAllowed');
-        let sender = {
-            username: user.username,
-            email: user.email,
-            recipients: invite.recipients,
-            room: user.room
-        }
-        await mail(sender)
-            .then(result => {
-                return socket.emit('inviteSendSuccess');
-            })
-            .catch(error => {
-                console.log(error);
-                return socket.emit('inviteSendFailure');
-            });
+
+        await mailer(invite, socket);
     });
 
     // Runs when client disconnects

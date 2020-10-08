@@ -1,14 +1,56 @@
 "use strict";
 const nodemailer = require('nodemailer');
+const { getCurrentUser } = require('../utils/users');
 
 // async..await is not allowed in global scope, must use a wrapper
-async function mailer(sender) {
+async function mailer(invite, socket) {
+
+    const user = getCurrentUser(socket.id);
+    if(user.type !== 'admin') return socket.emit('inviteNotAllowed');
+
+    const transporter = await getMailTransporter();
+
+    let sender = {
+        username: user.username,
+        email: user.email,
+        room: user.room
+    }
+
+    invite.recipients.forEach(email => {
+        console.log(email);
+        sender.to = email;
+        let formattedMessage = formatMail(sender);
+        transporter.sendMail(formattedMessage, (err, info) => {
+            if(err) {
+                console.log(err);
+                return socket.emit('inviteSendError', err);
+            }
+
+            console.log("Message sent: %s", info.messageId);
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+            // Preview only available when sending through an Ethereal account
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+            if(info.accepted.length > 0) return socket.emit('inviteSendSuccess', email);
+            if(info.rejected.length > 0) {
+                console.log(info.response);
+                socket.emit('inviteSendFailure', email);
+            }
+
+
+        });
+    });
+}
+
+async function getMailTransporter() {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     let testAccount = await nodemailer.createTestAccount();
 
     // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
+    return nodemailer.createTransport({
         host: "smtp.ethereal.email",
         port: 587,
         secure: false, // true for 465, false for other ports
@@ -17,25 +59,14 @@ async function mailer(sender) {
             pass: testAccount.pass, // generated ethereal password
         },
     });
-
-    let formattedMessage = formatMail(sender);
-
-    // send mail with defined transport object
-    let info = await transporter.sendMail(formattedMessage);
-
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
 function formatMail(sender) {
     //let recipients = sender.recipients.join(', ');
-    let formattedMail = {
+    return {
+       // from: `"${sender.username}" <${sender.email}>`, // sender address
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
-            to: sender.recipients, // list of receivers
+            to: sender.to, // message recipient (could be an array)
         subject: "Sasquatch Chat Invite", // Subject line
         //text: "Hello world?", // plain text body
         html: //TODO Add Sasquatch Chat logo to top of email
@@ -47,8 +78,6 @@ function formatMail(sender) {
         //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
         //TODO Create Option to Decline Invitation
     }
-
-    return formattedMail;
 }
 
 module.exports = mailer;

@@ -20,7 +20,7 @@ let { username, email, room } = Qs.parse(location.search, {
 const socket = io();
 let maxUsers = 1;
 let addedUsers = 0;
-let emailAddresses = [];
+let invitedUserEmails = [];
 let currentUser = {
     username,
     email,
@@ -46,7 +46,7 @@ socket.on('roomCreated', room => {
 socket.on('roomUsers', ({ room, users }) => {
     outputRoomName(room);
     outputUsers(users);
-    if(emailAddresses.length !== 0) updateInvitedList(users);
+    if(invitedUserEmails.length !== 0) updateInvitedList(users);
 });
 
 // catch 'message' emitted in server.js
@@ -83,19 +83,25 @@ socket.on('inviteNotAllowed', () => {
     // display message saying that user must be the chat admin to invite members
 });
 
-socket.on('inviteSendSuccess', () => {
+socket.on('inviteSendSuccess', email => {
     console.log("inviteSendSuccess");
     // remove invite fields
     clearElements("recipients");
     // if admin, show invited users, greyed out (or with "not joined" badge), in users section
-    outputInvitedUsers(emailAddresses);
+    outputInvitedUser(email);
     // adjust users list
     maxUsers = maxUsers + addedUsers;
     addedUsers = 0;
 });
 
-socket.on('inviteSendFailure', () => {
+socket.on('inviteSendFailure', email => {
     console.log("inviteSendFailure");
+    // display "there was a problem" message
+    // tell admin to wait a minute and try again
+});
+
+socket.on('inviteSendError', email => {
+    console.log("inviteSendError");
     // display "there was a problem" message
     // tell admin to wait a minute and try again
 });
@@ -109,15 +115,19 @@ function clearElements(id) {
 // send invites onclick event
 function sendInvitations() {
     console.log("sendInvitations");
-
+    let newInviteEmails = [];
     // forEach input item (use addedUsers for iteration) get the value and add to an array
     for (let i = 1; i <= addedUsers; i++) {
         let address = document.getElementById(`invite${i}`).value;
-        emailAddresses.push(address);
+        if(address !== "") {
+            invitedUserEmails.push(address);
+            newInviteEmails.push(address);
+        }
+        
     }
     // form "invite" object containing an array of "recipients"
     let invite = {
-        recipients: emailAddresses
+        recipients: newInviteEmails
     }
     console.log(invite);
 
@@ -267,35 +277,37 @@ function outputUsers(users) {
 }
 
 // Add pending users to DOM
-function outputInvitedUsers(emails) {
+function outputInvitedUser(email) {
+    if(!document.getElementById("invited")) outputInviteDiv();
+    
+    let user = document.createElement("div");
+    user.id = email;
+    user.classList.add("user");
+    user.classList.add("inactive");
+    user.innerHTML = `<span class="badge badge-warning">*</span>${email}`;
+    document.getElementById("invited").appendChild(user);
+}
+
+function outputInviteDiv() {
     let invited = document.createElement("div");
     invited.id = "invited";
     invited.innerHTML = "<h4>Pending Invites</h4>";
     userList.parentNode.insertBefore(invited, userList.nextSibling); // insert after "users" section
-
-    for (let email of emails) {
-        let user = document.createElement("div");
-        user.id = email;
-        user.classList.add("user");
-        user.classList.add("inactive");
-        user.innerHTML = `<span class="badge badge-warning">*</span>${email}`;
-        invited.appendChild(user);
-    }
 }
 
 function updateInvitedList(users) {
     console.log(users);
     for(let user in users) {
         console.log("user in users:", users[user].email);
-        if(emailAddresses.includes(users[user].email)) {
+        if(invitedUserEmails.includes(users[user].email)) {
             let thisChildId = users[user].email;
             console.log("removing child: ", thisChildId);
             document.getElementById(thisChildId).remove();
-            emailAddresses = emailAddresses.filter(a => a !== users[user].email);
+            invitedUserEmails = invitedUserEmails.filter(a => a !== users[user].email);
         }
     }
-    if(emailAddresses.length === 0) document.getElementById("invited").remove();
-    console.log(emailAddresses);
+    if(invitedUserEmails.length === 0) document.getElementById("invited").remove();
+    console.log(invitedUserEmails);
 }
 
 // Activate user
