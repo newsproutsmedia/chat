@@ -14,16 +14,17 @@ async function mailer(invite, socket) {
         username: user.username,
         email: user.email,
         room: user.room
-    }
+    };
 
-    invite.recipients.forEach(email => {
-        console.log(email);
-        sender.to = email;
+    invite.recipients.forEach(recipient => {
+        let inviteInput = {id: recipient.id, email: recipient.email};
+        console.log(recipient.email);
+        sender.to = recipient.email;
         let formattedMessage = formatMail(sender);
         transporter.sendMail(formattedMessage, (err, info) => {
             if(err) {
                 console.log(err);
-                return socket.emit('inviteSendError', err);
+                return socket.emit('inviteSendFailure', inviteInput);
             }
 
             console.log("Message sent: %s", info.messageId);
@@ -33,10 +34,10 @@ async function mailer(invite, socket) {
             console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
             // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-            if(info.accepted.length > 0) return socket.emit('inviteSendSuccess', email);
+            if(info.accepted.length > 0) return socket.emit('inviteSendSuccess', inviteInput);
             if(info.rejected.length > 0) {
                 console.log(info.response);
-                socket.emit('inviteSendFailure', email);
+                socket.emit('inviteSendFailure', inviteInput);
             }
 
 

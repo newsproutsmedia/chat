@@ -67,9 +67,9 @@ socket.on('updatedMessageCount', messageCount => {
 socket.on('setupAdmin', user => {
     // add "invite" section to DOM
     const inviteSection = document.createElement('invite');
-    inviteSection.innerHTML = `<h4>Invite To Join</h4>
+    inviteSection.innerHTML = `<h4>Invite</h4>
                             <div id="recipients"></div>
-                <div class="flex-align-middle"><a id="addMember" onclick="addChatMember()"><i class="fas fa-plus-circle fa-lg"></i> Add Email Input</a></div>
+                <div class="flex-align-middle"><a id="addMember" onclick="addChatMember()"><i class="fas fa-plus-circle fa-lg"></i> Invite Someone</a></div>
                 <hr>
                 <button id="sendInvitations" class="btn send-invitations-btn" onclick="sendInvitations()">Send Invites</button>
 `;
@@ -83,45 +83,101 @@ socket.on('inviteNotAllowed', () => {
     // display message saying that user must be the chat admin to invite members
 });
 
-socket.on('inviteSendSuccess', email => {
+socket.on('inviteSendSuccess', inviteInput => {
     console.log("inviteSendSuccess");
-    // remove invite fields
-    clearElements("recipients");
     // if admin, show invited users, greyed out (or with "not joined" badge), in users section
-    outputInvitedUser(email);
+    outputInvitedUser(inviteInput);
     // adjust users list
-    maxUsers = maxUsers + addedUsers;
-    addedUsers = 0;
+    maxUsers = maxUsers + 1;
 });
 
-socket.on('inviteSendFailure', email => {
+socket.on('inviteSendFailure', inviteInput => {
     console.log("inviteSendFailure");
     // display "there was a problem" message
-    // tell admin to wait a minute and try again
+    outputSendFailureMessage(`${inviteInput.id}`);
 });
 
-socket.on('inviteSendError', email => {
+socket.on('inviteSendError', inviteInput => {
     console.log("inviteSendError");
     // display "there was a problem" message
-    // tell admin to wait a minute and try again
+    outputSendErrorMessage(`${inviteInput.id}`);
 });
 
-function clearElements(id) {
-    const myNode = document.getElementById(id);
-    myNode.innerHTML = '';
+function clearParentElement(id) {
+    console.log(id);
+    document.getElementById(id).parentElement.remove();
 }
 
+function outputSendFailureMessage(id) {
+    let badge = document.getElementById(id);
+    errorBadge(badge);
+    document.getElementById(id).parentElement.classList.add("send-failure");
+    let message = document.createElement('p');
+    message.className =  "send-failure-message";
+    message.innerHTML = "There was a problem sending this invite. Please check to make sure the email address is valid and try again.";
+    document.getElementById(id).parentNode.appendChild(message);
+}
+
+function outputSendErrorMessage(id) {
+    document.getElementById(id).parentElement.classList.add("send-failure");
+    let message = document.createElement('p');
+    message.className =  "send-failure-message";
+    message.innerHTML = "An error occurred while sending this invite. Please check to make sure the email address is valid and try again.";
+    document.getElementById(id).parentNode.appendChild(message);
+}
+
+function countChildInputs(id) {
+    return document.getElementById(id).getElementsByTagName('input').length;
+}
+
+function getChildInputIds(id) {
+    return document.getElementById(id).querySelectorAll('input');
+}
+
+function addPendingBadge(element) {
+    if(document.getElementById(`${element.id}_badge`)) {
+        let existingBadge = document.getElementById(`${element.id}_badge`);
+        existingBadge.classList.add("badge-warning");
+        existingBadge.classList.remove("badge-danger");
+        existingBadge.innerHTML = "PENDING";
+        return;
+    }
+    let badge = document.createElement("span");
+    badge.id = element.id + "_badge";
+    badge.classList.add("badge");
+    badge.classList.add("badge-warning");
+    badge.innerHTML = "PENDING";
+    element.parentNode.prepend(badge);
+}
+
+function errorBadge(element) {
+    let badge = document.getElementById(`${element.id}_badge`);
+    badge.classList.remove("badge-warning");
+    badge.classList.add("badge-danger");
+    badge.innerHTML = "ERROR";
+}
+
+function addErrorBadge(element) {
+
+}
 
 // send invites onclick event
 function sendInvitations() {
     console.log("sendInvitations");
     let newInviteEmails = [];
-    // forEach input item (use addedUsers for iteration) get the value and add to an array
-    for (let i = 1; i <= addedUsers; i++) {
-        let address = document.getElementById(`invite${i}`).value;
-        if(address !== "") {
-            invitedUserEmails.push(address);
-            newInviteEmails.push(address);
+    let newInviteChildren = getChildInputIds("recipients");
+    console.log(newInviteChildren);
+    for (let i = 0; i < newInviteChildren.length; i++) {
+        let inviteInputId = newInviteChildren[i].id;
+        let inviteEmailInput = document.getElementById(inviteInputId);
+        addPendingBadge(inviteEmailInput);
+        let inviteEmailAddress = inviteEmailInput.value;
+        if(inviteEmailAddress !== "") {
+            invitedUserEmails.push(inviteEmailAddress);
+            newInviteEmails.push({
+                id: inviteInputId,
+                email: inviteEmailAddress
+            });
         }
         
     }
@@ -139,19 +195,24 @@ function sendInvitations() {
 // add chat member onclick event
 function addChatMember() {
     console.log("Add Chat Member Clicked");
-    addedUsers = addedUsers + 1;
-    let recipient = document.createElement('input');
-    recipient.type = "email";
-    recipient.id = `invite${addedUsers}`;
-    recipient.name = `invite${addedUsers}`;
-    recipient.class = "emailField";
-    recipient.placeholder = "Enter email address";
+    let recipient = document.createElement('div');
+    let randId = generateShortId();
+    recipient.id = "inviteWrapper_" + randId;
+    recipient.className = "inviteWrapper";
+    recipient.innerHTML = `
+        <input 
+        type="email" 
+        id="inviteInput_${randId}"
+        name="inviteInput_${randId}"
+        class="emailField"
+        placeholder="Enter email address"
+        >`;
     document.querySelector('#recipients').appendChild(recipient);
 
     // set focus to this field
-    document.getElementById(`invite${addedUsers}`).focus();
+    document.getElementById(`inviteInput_${randId}`).focus();
 
-    // add typing listener
+    addedUsers = addedUsers + 1;
 };
 
 // recipient email field typing listener
@@ -277,21 +338,18 @@ function outputUsers(users) {
 }
 
 // Add pending users to DOM
-function outputInvitedUser(email) {
-    if(!document.getElementById("invited")) outputInviteDiv();
+function outputInvitedUser(inviteInput) {
     
-    let user = document.createElement("div");
-    user.id = email;
-    user.classList.add("user");
-    user.classList.add("inactive");
-    user.innerHTML = `<span class="badge badge-warning">*</span>${email}`;
-    document.getElementById("invited").appendChild(user);
+    let invite = document.getElementById(inviteInput.id).parentNode;
+    invite.innerHTML = `<span class="badge badge-success">SENT</span>${inviteInput.email}`;
+    invite.className = "user";
+    invite.setAttribute("id", inviteInput.email);
 }
 
 function outputInviteDiv() {
     let invited = document.createElement("div");
     invited.id = "invited";
-    invited.innerHTML = "<h4>Pending Invites</h4>";
+    invited.innerHTML = "<h4>Invite</h4>";
     userList.parentNode.insertBefore(invited, userList.nextSibling); // insert after "users" section
 }
 
@@ -330,6 +388,15 @@ function logout() {
     window.location.replace("/index.html");
 }
 
+function generateShortId(length) {
+    const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const ID_LENGTH = length || 8;
 
+    let newId = '';
+    for(let i=0; i < ID_LENGTH; i++) {
+        newId += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+    }
+    return newId;
+}
 
 

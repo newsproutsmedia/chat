@@ -30,10 +30,10 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Added email server and invite functionality">
+    <list default="true" id="f294c095-01d7-4bbb-aed0-f1608ac6e1a7" name="Default Changelist" comment="Refactored invite email send functionality. Fixed pending invites bug regarding duplicate pending invites on sequential submits.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/mail.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/mail.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +93,7 @@
       <workItem from="1600471433104" duration="1695000" />
       <workItem from="1600473222485" duration="848000" />
       <workItem from="1600984361589" duration="1717000" />
-      <workItem from="1602004083511" duration="34116000" />
+      <workItem from="1602004083511" duration="50698000" />
     </task>
     <task id="LOCAL-00001" summary="Initial setup">
       <created>1600472172815</created>
@@ -396,7 +396,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602096977198</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Refactored invite email send functionality. Fixed pending invites bug regarding duplicate pending invites on sequential submits.">
+      <created>1602190022880</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1602190022880</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -427,7 +434,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="changed input focus listener to scroll window to difference between initial and current innerHeight" />
     <MESSAGE value="added &quot;log&quot; to show diffHeight in input box" />
     <MESSAGE value="added toString method" />
     <MESSAGE value="changed event listener to detect innerHeight change" />
@@ -452,7 +458,8 @@
     <MESSAGE value="Fixed user alignment issue. Also, added badge next to user name for tracking number of comments from each user." />
     <MESSAGE value="Increased spacing between user list items. Closes #31." />
     <MESSAGE value="Added email server and invite functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added email server and invite functionality" />
+    <MESSAGE value="Refactored invite email send functionality. Fixed pending invites bug regarding duplicate pending invites on sequential submits." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored invite email send functionality. Fixed pending invites bug regarding duplicate pending invites on sequential submits." />
   </component>
   <component name="WindowStateProjectService">
     <state x="699" y="305" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601060161805">
@@ -463,10 +470,10 @@
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
     <state x="469" y="190" key="SettingsEditor/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1600713825104" />
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1602096979708">
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2" timestamp="1602190024793">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
-    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1602096979708" />
+    <state x="560" y="278" key="Vcs.Push.Dialog.v2/1920.23.1920.1057/0.-1057.1920.1057/0.23.1920.1057@0.23.1920.1057" timestamp="1602190024793" />
     <state x="729" y="273" key="git4idea.branch.GitSmartOperationDialog" timestamp="1600705378715">
       <screen x="0" y="23" width="1920" height="1057" />
     </state>
