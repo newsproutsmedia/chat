@@ -1,15 +1,18 @@
 const users = [];
 
 // Join user to chat
-function userJoin(id, username, room, type) {
+function userJoin(newUser) {
     let messageCount = 0;
+    let status = "LOGGED_IN";
     // ES6 object, so id: id ,etc.
     const user = {
-        id,
-        username,
-        room,
+        id: newUser.id,
+        username: newUser.username,
+        room: newUser.room,
+        email: newUser.email,
         messageCount,
-        type
+        status,
+        type: newUser.type
     }
     users.push(user);
 

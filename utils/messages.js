@@ -5,7 +5,6 @@ function formatMessage(user, text) {
         user,
         text,
         time: moment().format('h:mm a')
-
     }
 };
 
