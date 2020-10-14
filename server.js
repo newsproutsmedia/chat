@@ -8,13 +8,14 @@ const { validateRoom, createRoom } = require('./utils/rooms');
 const { userJoin, getCurrentUser, getUserMessageCount, incrementUserMessageCount, userLeave, getRoomUsers } = require('./utils/users');
 
 const app = express();
-const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
+const server = exports.server = http.createServer(app).listen(PORT, () => console.log(`Server running on port ${PORT}`));;
 const io = socketio(server);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-const bot = { username: 'FawkesChat', type: 'bot' };
+const bot = { username: 'ChatApp', type: 'bot' };
 
 // Run when client connects
 io.on('connection', socket => {
@@ -30,6 +31,7 @@ io.on('connection', socket => {
             currentUser.room = createRoom();
             socket.emit('roomCreated', currentUser.room);
             currentUser.type = 'admin';
+            bot.room = currentUser.room;
         }
 
         // check if roomID is valid
@@ -46,7 +48,7 @@ io.on('connection', socket => {
         socket.join(user.room);
 
         // Welcome current user
-        socket.emit('message', formatMessage(bot, 'Welcome to FawkesChat!'));
+        socket.emit('message', formatMessage(bot, 'Welcome to Chat!'));
 
         // Broadcast to everyone (except user) when user connects
         socket.broadcast.to(user.room).emit('message', formatMessage(bot, `${user.username} has joined the chat`));
@@ -101,7 +103,3 @@ io.on('connection', socket => {
         }
     });
 });
-
-const PORT = process.env.PORT || 3000;
-
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
