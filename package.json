@@ -1,5 +1,5 @@
 {
-  "name": "fawkeschat",
+  "name": "chatapp",
   "version": "1.0.0",
   "description": "Socket.IO-based chat app",
   "main": "server.js",
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "helmet": "^4.1.1",
     "moment": "^2.29.0",
     "nodemailer": "^6.4.13",
     "socket.io": "^2.3.0",
