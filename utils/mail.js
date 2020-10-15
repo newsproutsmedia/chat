@@ -6,7 +6,7 @@ const { getCurrentUser } = require('../utils/users');
 async function mailer(invite, socket) {
 
     const user = getCurrentUser(socket.id);
-    if(user.type !== 'admin') return socket.emit('inviteNotAllowed');
+    if(user.type !== 'admin') return socket.emit('inviteNotAllowed', user.type);
 
     const transporter = await getMailTransporter();
 
@@ -23,7 +23,7 @@ async function mailer(invite, socket) {
         let formattedMessage = formatMail(sender);
         transporter.sendMail(formattedMessage, (err, info) => {
             if(err) {
-                console.log(err);
+                console.log("inviteSendError:", err);
                 return socket.emit('inviteSendFailure', inviteInput);
             }
 
@@ -36,7 +36,7 @@ async function mailer(invite, socket) {
             // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
             if(info.accepted.length > 0) return socket.emit('inviteSendSuccess', inviteInput);
             if(info.rejected.length > 0) {
-                console.log(info.response);
+                console.log("inviteSendFailure", info.response);
                 socket.emit('inviteSendFailure', inviteInput);
             }
 
