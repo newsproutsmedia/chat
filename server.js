@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const path = require('path');
 const http = require('http');
 const express = require('express');
@@ -21,8 +22,9 @@ app.use(helmet());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+const appName = process.env.APP_NAME || "ChatApp";
 
-const bot = { username: 'ChatApp', type: 'bot' };
+const bot = { username: appName, type: 'bot' };
 
 // Run when client connects
 io.on('connection', socket => {
