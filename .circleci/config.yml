@@ -44,15 +44,3 @@ jobs:
           # When running Jest tests, please use the --runInBand flag: https://circleci.com/docs/2.0/collect-test-data/#jest
           command: npm test -- --runInBand --forceExit
 
-      # Workflows allow you to define the order of execution of jobs.
-      # For a single job, like in this example, the workflows section can be omitted
-      # Learn [more about workflows](https://circleci.com/docs/2.0/concepts/#section=getting-started){:target="_blank"}
-      #workflows:
-      # The workflow version
-      #version: 2.1
-      # A unique name for the workflow
-      #run_build:
-      # The jobs to run in this workflow
-      #jobs:
-      #- build
-
