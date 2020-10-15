@@ -1,5 +1,5 @@
 {
-  "name": "fawkeschat",
+  "name": "chatapp",
   "version": "1.0.0",
   "description": "Socket.IO-based chat app",
   "main": "server.js",
