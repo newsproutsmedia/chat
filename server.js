@@ -1,16 +1,22 @@
 const path = require('path');
 const http = require('http');
 const express = require('express');
+const helmet = require('helmet');
 const socketio = require('socket.io');
 const mailer = require('./utils/mail');
 const formatMessage = require('./utils/messages');
 const { validateRoom, createRoom } = require('./utils/rooms');
-const { userJoin, getCurrentUser, getUserMessageCount, incrementUserMessageCount, userLeave, getRoomUsers } = require('./utils/users');
+const { userJoin, getCurrentUser, incrementUserMessageCount, userLeave, getRoomUsers } = require('./utils/users');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const server = exports.server = http.createServer(app).listen(PORT, () => console.log(`Server running on port ${PORT}`));;
+const server = exports.server = http.createServer(app).listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+});;
 const io = socketio(server);
+
+// use helmet
+app.use(helmet());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
