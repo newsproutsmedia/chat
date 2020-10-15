@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const {validate: validateUUID, v4: uuid} = require('uuid');
-
+const logger = require('winston');
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
 
@@ -62,7 +62,7 @@ describe("Socket.IO Server-Side Events", () => {
                 client2 = io.connect(socketURL, options);
                 client2.on('connect', data => {
                     chatUser2.room = room;
-                    console.log("chatUser2 room:", chatUser2.room);
+                    logger.info("chatUser2 room:", chatUser2.room);
                     client1.once('message', message => {
                         expect(message.text).toBe(`${chatUser2.username} has joined the chat`);
                         client1.disconnect();
@@ -183,7 +183,7 @@ describe("Socket.IO Server-Side Events", () => {
                 client2 = io.connect(socketURL, options);
                 client2.on('connect', data => {
                     chatUser2.room = room;
-                    console.log("chatUser2 room:", chatUser2.room);
+                    logger.info("chatUser2 room:", chatUser2.room);
                     client2.once('message', message => {
                         client2.once('message', message => {
                             expect(message.text).toBe("Hello, World!");

@@ -1,3 +1,4 @@
+const logger = require('./logging');
 const users = [];
 
 // Join user to chat
