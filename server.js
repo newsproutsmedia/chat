@@ -22,8 +22,9 @@ app.use(helmet());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+const appName = process.env.APP_NAME || "ChatApp";
 
-const bot = { username: process.env.APP_NAME, type: 'bot' };
+const bot = { username: appName, type: 'bot' };
 
 // Run when client connects
 io.on('connection', socket => {

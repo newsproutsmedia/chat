@@ -3,6 +3,7 @@ const {validate: validateUUID, v4: uuid} = require('uuid');
 const logger = require('winston');
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
+const appName = process.env.PORT || "ChatApp";
 
 let server,
     options ={
@@ -36,7 +37,7 @@ describe("Socket.IO Server-Side Events", () => {
 
             client1.once('connect', () => {
                 client1.once('message', message => {
-                    expect(message.user.username).toBe("ChatApp");
+                    expect(message.user.username).toBe(appName);
                     expect(validateRoom(message.user.room)).toBeTruthy();
                     expect(message.user.type).toBe("bot");
                     expect(message.text).toBeTruthy();
