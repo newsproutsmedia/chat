@@ -6,16 +6,12 @@ const logger = require('../utils/logging');
 const appName = process.env.APP_NAME || "ChatApp";
 let bot = { username: appName, type: 'bot' };
 
-export class Room {
-    constructor(socket) {
-        this.socket = socket;
-    }
-
+module.exports = class Room {
     /**
      * @desc initialize a new or existing room for the current user
      * @param currentUser object -
      */
-    static initialize({username, email, room}) {
+    constructor({username, email, room}) {
         let type = 'user';
         logger.info("service.room.initialize", {username, email, room});
 
