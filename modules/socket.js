@@ -18,7 +18,9 @@ module.exports = function(server) {
 
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
-            const room1 = () => { new Room(socket); Room.initialize(currentUser) };
+            // Set socket for Room instance
+            Room.socket = socket;
+            let chatRoom = new Room(currentUser);
         });
 
         // listen for chatMessage
