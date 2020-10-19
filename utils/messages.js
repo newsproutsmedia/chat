@@ -1,4 +1,5 @@
 const moment = require('moment');
+const logger = require('../utils/logging');
 
 function formatMessage(user, text) {
     return {
