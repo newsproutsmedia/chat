@@ -2,8 +2,8 @@ const socketio = require('socket.io');
 const mailer = require('../utils/mail');
 const formatMessage = require('../utils/messages');
 const Room = require('../services/room');
-const { validateRoom, createRoom } = require('../services/room');
-const { userJoin, getCurrentUser, incrementUserMessageCount, userLeave, getRoomUsers } = require('../utils/users');
+const Message = require('../services/message');
+const { userLeave, getRoomUsers } = require('../utils/users');
 const logger = require('../utils/logging');
 
 
@@ -17,25 +17,20 @@ module.exports = function(server) {
 
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
-            // Set socket for Room instance
+            // set socket params for currentUser object
             currentUser.socket = socket;
             currentUser.io = io;
+
             new Room(currentUser);
         });
 
         // listen for chatMessage
-        socket.on('chatMessage', (msg) => {
-            const user = getCurrentUser(socket.id);
-            const messageCount = incrementUserMessageCount(user.id);
+        socket.on('chatMessage', message => {
+            // set socket params for message object
+            message.socket = socket;
+            message.io = io;
 
-            // send message to user
-            socket.emit('message', formatMessage(user, msg));
-
-            // send message to everyone else
-            socket.broadcast.to(user.room).emit('message', formatMessage(user, msg));
-
-            // update message count for everyone
-            io.to(user.room).emit('updatedMessageCount', messageCount);
+            new Message(message);
         });
 
         // listen for email invitations

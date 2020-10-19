@@ -236,10 +236,10 @@ function addMessage() {
 
     // get message from "chat-form"
     // form has an id of "msg", so we're getting the value of that input
-    let msg = document.getElementById('msg').innerHTML;
+    let message = {text: document.getElementById('msg').innerHTML};
 
     // Emit message to server
-    socket.emit('chatMessage', msg);
+    socket.emit('chatMessage', message);
 
     // Clear input
     document.getElementById('msg').innerHTML = '';

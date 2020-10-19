@@ -159,7 +159,7 @@ describe("Socket.IO Server-Side Events", () => {
                         done();
                     });
 
-                    client1.emit('chatMessage', "Hello, World!");
+                    client1.emit('chatMessage', {text: "Hello, World!"});
                 });
 
                 client1.emit('joinRoom', chatUser1);
@@ -187,7 +187,7 @@ describe("Socket.IO Server-Side Events", () => {
                             client2.disconnect();
                             done();
                         });
-                        client1.emit('chatMessage', "Hello, World!");
+                        client1.emit('chatMessage', {text: "Hello, World!"});
                     });
                     client2.emit('joinRoom', chatUser2);
                 });
@@ -204,7 +204,7 @@ describe("Socket.IO Server-Side Events", () => {
                         done();
                     });
 
-                    client1.emit('chatMessage', "Hello, World!");
+                    client1.emit('chatMessage', {text:"Hello, World!"});
                 });
 
                 client1.emit('joinRoom', chatUser1);
