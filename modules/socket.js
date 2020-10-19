@@ -1,6 +1,5 @@
 const socketio = require('socket.io');
 const mailer = require('../utils/mail');
-const formatMessage = require('../utils/messages');
 const Room = require('../services/room');
 const Message = require('../services/message');
 const { userLeave, getRoomUsers } = require('../utils/users');
@@ -48,11 +47,11 @@ module.exports = function(server) {
             logger.info("socket.disconnect: User is leaving", {user});
             if(user) {
                 // notify other chat participants that user has left
-                io.to(user.room).emit('message', formatMessage(bot, `${user.username} has left the chat`));
+                io.in(user.room).emit('message', Message.formatMessage(bot, `${user.username} has left the chat`));
 
                 logger.info("socket.disconnect: User left", {user});
                 // Send updated users and room info
-                io.to(user.room).emit('roomUsers', {
+                io.in(user.room).emit('roomUsers', {
                     room: user.room,
                     users: getRoomUsers(user.room)
                 });

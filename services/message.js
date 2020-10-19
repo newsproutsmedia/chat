@@ -1,8 +1,8 @@
 const { getCurrentUser, incrementUserMessageCount } = require('../utils/users');
-const formatMessage = require('../utils/messages');
+const moment = require('moment');
 const logger = require('../utils/logging');
 
-module.exports = class Room {
+module.exports = class Message {
 
     constructor({socket, io, text}) {
         logger.info("SERVICE.MESSAGE.CONSTRUCTOR");
@@ -53,17 +53,25 @@ module.exports = class Room {
 
     emitToCurrentUser({socket, user, text}) {
         logger.info("service.message.emitToCurrentUser", {info: "Emit Message To Current Users", text});
-        socket.emit('message', formatMessage(user, text));
+        socket.emit('message', Message.formatMessage(user, text));
     }
 
     emitToRoomUsers({socket, user, text}) {
         logger.info("service.message.emitToRoomUsers", {info: "Emit Message To All Other Users", text});
-        socket.to(user.room).emit('message', formatMessage(user, text));
+        socket.to(user.room).emit('message', Message.formatMessage(user, text));
     }
 
     sendUpdatedMessageCount({io, user, messageCount}) {
         logger.info("service.message.sendUpdatedMessageCount", {info: "Send Updated Message Count To All Users", messageCount});
         io.in(user.room).emit('updatedMessageCount', messageCount);
+    }
+
+    static formatMessage(user, text) {
+        return {
+            user,
+            text,
+            time: moment().format('h:mm a')
+        }
     }
 
 }
