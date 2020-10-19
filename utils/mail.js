@@ -1,6 +1,6 @@
 "use strict";
 const nodemailer = require('nodemailer');
-const logger = require('./logging');
+const logger = require('../utils/logging');
 const { getCurrentUser } = require('../utils/users');
 
 // async..await is not allowed in global scope, must use a wrapper
@@ -19,25 +19,25 @@ async function mailer(invite, socket) {
 
     invite.recipients.forEach(recipient => {
         let inviteInput = {id: recipient.id, email: recipient.email};
-        logger.info(`service.mail.mailer.forEach.recipient`, recipient.email);
+        logger.info(`service.mail.mailer.forEach.recipient`, {email: recipient.email});
         sender.to = recipient.email;
         let formattedMessage = formatMail(sender);
         transporter.sendMail(formattedMessage, (err, info) => {
             if(err) {
-                logger.info("service.mail.mailer.forEach.recipient.sendMail.inviteSendError:", err);
+                logger.info("service.mail.mailer.forEach.recipient.sendMail.inviteSendError:", {error: err});
                 return socket.emit('inviteSendFailure', inviteInput);
             }
 
-            logger.info("service.mail.mailer.forEach.recipient.sendMail.success: Message sent: %s", info.messageId);
+            logger.info("service.mail.mailer.forEach.recipient.sendMail.success: Message sent: %s", {info: info.messageId});
             // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
             // Preview only available when sending through an Ethereal account
-            logger.info("service.mail.mailer.forEach.recipient.sendMail.success: Preview URL: %s", nodemailer.getTestMessageUrl(info));
+            logger.info("service.mail.mailer.forEach.recipient.sendMail.success: Preview URL: %s", {info: nodemailer.getTestMessageUrl(info)});
 
             // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
             if(info.accepted.length > 0) return socket.emit('inviteSendSuccess', inviteInput);
             if(info.rejected.length > 0) {
-                logger.info("service.mail.mailer.forEach.recipient.sendMail.inviteSendFailure:", info.response);
+                logger.info("service.mail.mailer.forEach.recipient.sendMail.inviteSendFailure:", {info: info.response});
                 socket.emit('inviteSendFailure', inviteInput);
             }
 
