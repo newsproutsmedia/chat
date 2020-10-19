@@ -1,5 +1,5 @@
 const {validate: validateUUID, v4: uuid} = require('uuid');
-const { userJoin, getCurrentUser, incrementUserMessageCount, userLeave, getRoomUsers } = require('../utils/users');
+const { userJoin, getRoomUsers } = require('../utils/users');
 const formatMessage = require('../utils/messages');
 const logger = require('../utils/logging');
 
