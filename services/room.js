@@ -1,6 +1,6 @@
 const {validate: validateUUID, v4: uuid} = require('uuid');
 const { userJoin, getRoomUsers } = require('../utils/users');
-const formatMessage = require('../utils/messages');
+const Message = require('./message');
 const logger = require('../utils/logging');
 
 const appName = process.env.APP_NAME || "ChatApp";
@@ -51,7 +51,7 @@ module.exports = class Room {
 
     /**
      * @desc validates that the param value is a valid UUID
-     * @param string room - UUID string to be evaluated
+     * @param {string} room - UUID string to be evaluated
      * @returns {*}
      */
     validate(room) {
@@ -90,14 +90,14 @@ module.exports = class Room {
         let message = 'Welcome to Chat!';
         logger.info("service.room.emitWelcome", {id, email, room});
         // TODO: Put all socket emits and broadcasts into a separate utility
-        this.socket.emit('message', formatMessage(user, message));
+        this.socket.emit('message', Message.formatMessage(user, message));
     }
 
     emitJoinedMessage({id, username, email, room}) {
         let user = bot;
         let message = `${username} has joined the chat`;
         logger.info("service.room.emitJoinedMessage", {id, username, email, room});
-        this.socket.to(room).emit('message', formatMessage(user, message));
+        this.socket.to(room).emit('message', Message.formatMessage(user, message));
     }
 
     sendRoomUsers(room) {
