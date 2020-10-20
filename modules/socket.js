@@ -1,7 +1,7 @@
 const socketio = require('socket.io');
-const mailer = require('../utils/mail');
 const Room = require('../services/room');
 const Message = require('../services/message');
+const Mail = require('../services/mail');
 const { userLeave, getRoomUsers } = require('../utils/users');
 const logger = require('../utils/logging');
 
@@ -35,9 +35,10 @@ module.exports = function(server) {
         // listen for email invitations
         socket.on('emailInvite', async invite => {
             logger.info("socket.connection.emailInvite: Attempting to email invite", {invite});
-            //TODO pass encryption key using invite.key
-
-            await mailer(invite, socket);
+            invite.socket = socket;
+            invite.io = io;
+            let mail = new Mail(invite);
+            await mail.sendAll();
         });
 
         // Runs when client disconnects
