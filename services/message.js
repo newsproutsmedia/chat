@@ -18,17 +18,17 @@ module.exports = class Message {
             messageCount: this.currentUserMessageCount
         }
         logger.info("service.message.constructor", {currentUser: this.currentUser.username, currentMessage: this.currentMessage.text})
-        this.sendMessage();
+        this._sendMessage();
     }
 
-    sendMessage() {
+    _sendMessage() {
         logger.info("service.message.sendMessage", {info: "Sending Message"})
         // send message to user
-        this.emitToCurrentUser(this.currentMessage);
+        this._emitToCurrentUser(this.currentMessage);
         // send message to everyone else
-        this.emitToRoomUsers(this.currentMessage);
+        this._emitToRoomUsers(this.currentMessage);
         // update message count for everyone
-        this.sendUpdatedMessageCount(this.currentMessage);
+        this._sendUpdatedMessageCount(this.currentMessage);
     }
 
     set currentUser(socketId) {
@@ -51,17 +51,17 @@ module.exports = class Message {
         return this.messageCount;
     }
 
-    emitToCurrentUser({socket, user, text}) {
+    _emitToCurrentUser({socket, user, text}) {
         logger.info("service.message.emitToCurrentUser", {info: "Emit Message To Current Users", text});
         socket.emit('message', Message.formatMessage(user, text));
     }
 
-    emitToRoomUsers({socket, user, text}) {
+    _emitToRoomUsers({socket, user, text}) {
         logger.info("service.message.emitToRoomUsers", {info: "Emit Message To All Other Users", text});
         socket.to(user.room).emit('message', Message.formatMessage(user, text));
     }
 
-    sendUpdatedMessageCount({io, user, messageCount}) {
+    _sendUpdatedMessageCount({io, user, messageCount}) {
         logger.info("service.message.sendUpdatedMessageCount", {info: "Send Updated Message Count To All Users", messageCount});
         io.in(user.room).emit('updatedMessageCount', messageCount);
     }

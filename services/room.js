@@ -19,32 +19,32 @@ module.exports = class Room {
 
         // if room value is not set, create a new room
         if (!room) {
-            room = this.create();
-            this.emitRoomCreated(room);
-            this.type = this.setUserType('admin');
+            room = this._create();
+            this._emitRoomCreated(room);
+            this.type = this._setUserType('admin');
             bot.room = room;
         }
 
         // check if roomID is valid
-        if(!this.validate(room)) this.emitInvalidRoom(room);
+        if(!this._validate(room)) this._emitInvalidRoom(room);
 
         // create user object
         const user = userJoin({id: this.socket.id, username, email, room, type: this.type});
 
         // join user to room
-        this.joinRoom(room);
+        this._joinRoom(room);
 
         // welcome current user
-        this.emitWelcome(user);
+        this._emitWelcome(user);
         // broadcast to everyone (except user) when user connects
-        this.emitJoinedMessage(user);
+        this._emitJoinedMessage(user);
         // send users and room info to front end
-        this.sendRoomUsers(room);
+        this._sendRoomUsers(room);
         // set up admin tools
-        if(this.type === 'admin') this.emitSetupAdmin(user);
+        if(this.type === 'admin') this._emitSetupAdmin(user);
     }
 
-    setUserType(type) {
+    _setUserType(type) {
         logger.info("service.room.setUserType", {type});
         return type;
     }
@@ -54,7 +54,7 @@ module.exports = class Room {
      * @param {string} room - UUID string to be evaluated
      * @returns {*}
      */
-    validate(room) {
+    _validate(room) {
         let isValidRoomId = validateUUID(room);
         logger.info("service.room.validate", {room:room, isValid:isValidRoomId});
         return validateUUID(room);
@@ -64,28 +64,28 @@ module.exports = class Room {
      * @desc creates a unique room identifier
      * @returns {string}
      */
-    create() {
+    _create() {
         let uniqueRoomId = uuid();
         logger.info("service.room.create", {uniqueRoomId});
         return uniqueRoomId;
     }
 
-    emitRoomCreated(uniqueRoomId) {
+    _emitRoomCreated(uniqueRoomId) {
         logger.info("service.room.emitRoomCreated", {uniqueRoomId});
         this.socket.emit('roomCreated', uniqueRoomId);
     }
 
-    emitInvalidRoom(room) {
+    _emitInvalidRoom(room) {
         logger.info("service.room.emitInvalidRoom", {room});
         this.socket.emit('invalidRoom', room);
     }
 
-    joinRoom(room) {
+    _joinRoom(room) {
         logger.info("service.room.joinRoom", {room});
         this.socket.join(room);
     }
 
-    emitWelcome({id, email, room}) {
+    _emitWelcome({id, email, room}) {
         let user = bot;
         let message = 'Welcome to Chat!';
         logger.info("service.room.emitWelcome", {id, email, room});
@@ -93,14 +93,14 @@ module.exports = class Room {
         this.socket.emit('message', Message.formatMessage(user, message));
     }
 
-    emitJoinedMessage({id, username, email, room}) {
+    _emitJoinedMessage({id, username, email, room}) {
         let user = bot;
         let message = `${username} has joined the chat`;
         logger.info("service.room.emitJoinedMessage", {id, username, email, room});
         this.socket.to(room).emit('message', Message.formatMessage(user, message));
     }
 
-    sendRoomUsers(room) {
+    _sendRoomUsers(room) {
         let roomUsers = {
             room: room,
             users: getRoomUsers(room)
@@ -109,7 +109,7 @@ module.exports = class Room {
         this.io.in(room).emit('roomUsers', roomUsers);
     }
 
-    emitSetupAdmin(user) {
+    _emitSetupAdmin(user) {
         logger.info("service.room.emitSetupAdmin", {user});
         this.socket.emit('setupAdmin', user);
     }
