@@ -5,11 +5,9 @@ const Mail = require('../services/mail');
 const User = require('../services/user');
 const logger = require('../services/logger');
 
-
 module.exports = function(server) {
     const io = socketio(server);
-    const appName = process.env.APP_NAME || "ChatApp";
-    const bot = { username: appName, type: 'bot' };
+
 
 // Run when client connects
     io.on('connection', socket => {

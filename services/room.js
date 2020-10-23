@@ -3,9 +3,7 @@ const User = require('./user');
 const Message = require('./message');
 const logger = require('./logger');
 const formatMessage = require('../utils/formatting');
-
-const appName = process.env.APP_NAME || "ChatApp";
-let bot = { username: appName, type: 'bot' };
+let {appName, bot} = require('../config/globals');
 
 module.exports = class Room {
     /**
