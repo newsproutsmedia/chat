@@ -1,7 +1,8 @@
 const {validate: validateUUID, v4: uuid} = require('uuid');
-const { userJoin, getRoomUsers } = require('../utils/users');
+const User = require('./user');
 const Message = require('./message');
-const logger = require('../utils/logging');
+const logger = require('./logger');
+const formatMessage = require('../utils/formatting');
 
 const appName = process.env.APP_NAME || "ChatApp";
 let bot = { username: appName, type: 'bot' };
@@ -29,7 +30,7 @@ module.exports = class Room {
         if(!this._validate(room)) this._emitInvalidRoom(room);
 
         // create user object
-        const user = userJoin({id: this.socket.id, username, email, room, type: this.type});
+        const user = new User({id: this.socket.id, username, email, room, type: this.type}).addUser();
 
         // join user to room
         this._joinRoom(room);
@@ -39,7 +40,7 @@ module.exports = class Room {
         // broadcast to everyone (except user) when user connects
         this._emitJoinedMessage(user);
         // send users and room info to front end
-        this._sendRoomUsers(room);
+        User.sendRoomUsers({room, io: this.io});
         // set up admin tools
         if(this.type === 'admin') this._emitSetupAdmin(user);
     }
@@ -90,23 +91,14 @@ module.exports = class Room {
         let message = 'Welcome to Chat!';
         logger.info("service.room.emitWelcome", {id, email, room});
         // TODO: Put all socket emits and broadcasts into a separate utility
-        this.socket.emit('message', Message.formatMessage(user, message));
+        this.socket.emit('message', formatMessage(user, message));
     }
 
     _emitJoinedMessage({id, username, email, room}) {
         let user = bot;
         let message = `${username} has joined the chat`;
         logger.info("service.room.emitJoinedMessage", {id, username, email, room});
-        this.socket.to(room).emit('message', Message.formatMessage(user, message));
-    }
-
-    _sendRoomUsers(room) {
-        let roomUsers = {
-            room: room,
-            users: getRoomUsers(room)
-        };
-        logger.info("service.room.sendRoomUsers", {room, roomUsers});
-        this.io.in(room).emit('roomUsers', roomUsers);
+        this.socket.to(room).emit('message', formatMessage(user, message));
     }
 
     _emitSetupAdmin(user) {

@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 
 // Logging
-const logger = require('./utils/logging');
+const logger = require('./services/logger');
 
 // Server
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,6 +1,6 @@
-const logger = require('../utils/logging');
+const logger = require('./logger');
 const nodemailer = require('nodemailer');
-const { getCurrentUser } = require('../utils/users');
+const User = require('./user');
 
 module.exports = class Mail {
 
@@ -8,7 +8,7 @@ module.exports = class Mail {
         this.socket = socket;
         this.io = io;
         this.recipients = recipients;
-        this.user = getCurrentUser(this.socket.id);
+        this.user = User.getCurrentUser(this.socket.id);
         this.sender = {
             username: this.user.username,
             email: this.user.email,

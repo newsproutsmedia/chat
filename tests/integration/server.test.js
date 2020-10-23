@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const {validate: validateUUID, v4: uuid} = require('uuid');
-const logger = require('../../utils/logging');
+const logger = require('../../services/logger');
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
 const appName = process.env.PORT || "ChatApp";
