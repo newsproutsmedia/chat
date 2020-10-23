@@ -2,8 +2,8 @@ const socketio = require('socket.io');
 const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
-const { userLeave, getRoomUsers } = require('../utils/users');
-const logger = require('../utils/logging');
+const User = require('../services/user');
+const logger = require('../services/logger');
 
 
 module.exports = function(server) {
@@ -29,7 +29,7 @@ module.exports = function(server) {
             message.socket = socket;
             message.io = io;
 
-            new Message(message);
+            new Message(message).sendMessage();
         });
 
         // listen for email invitations
@@ -43,20 +43,7 @@ module.exports = function(server) {
 
         // Runs when client disconnects
         socket.on('disconnect', () => {
-            // pass current user's id to leave function and return current user
-            const user = userLeave(socket.id);
-            logger.info("socket.disconnect: User is leaving", {user});
-            if(user) {
-                // notify other chat participants that user has left
-                io.in(user.room).emit('message', Message.formatMessage(bot, `${user.username} has left the chat`));
-
-                logger.info("socket.disconnect: User left", {user});
-                // Send updated users and room info
-                io.in(user.room).emit('roomUsers', {
-                    room: user.room,
-                    users: getRoomUsers(user.room)
-                });
-            }
+            User.userLeave({socket, io});
         });
     });
 }
