@@ -38,7 +38,7 @@ describe("Socket.IO Server-Side Events", () => {
             client1.once('connect', () => {
                 client1.once('message', message => {
                     expect(message.user.username).toBe(appName);
-                    expect(validateRoom(message.user.room)).toBeTruthy();
+                    expect(validateRoom(message.user.room)).toBeTruthy(); // why do I need this?
                     expect(message.user.type).toBe("bot");
                     expect(message.text).toBeTruthy();
                     expect(message.time).toBeTruthy();

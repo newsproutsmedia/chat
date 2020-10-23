@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 
+
 // Initialize App
 const app = express();
 
@@ -16,11 +17,14 @@ const server = exports.server = http.createServer(app).listen(PORT, () => {
     logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
 });
 
+// Globals
+require('./config/globals');
+
 // Socket
-require('./modules/socket')(server);
+require('./loader/socket')(server);
 
 // Production Modules
-require('./modules/production')(app);
+require('./loader/production')(app);
 
 
 
