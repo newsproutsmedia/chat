@@ -6,6 +6,6 @@ function formatMessage(user, text) {
         text,
         time: moment().format('h:mm a')
     }
-};
+}
 
 module.exports = formatMessage;

@@ -56,7 +56,7 @@ class Logger {
 }
 
 // We want our logger to have a name, like 'logging-tutorial'
-module.exports = new Logger(process.env.APP_NAME);
+module.exports = new Logger(process.env.APP_NAME || "System");
 
 // We will also expose a function if we want
 // to use the logger with custom parameters
