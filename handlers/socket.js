@@ -6,42 +6,36 @@ const User = require('../services/user');
 const logger = require('../services/logger');
 
 module.exports = function(server) {
-    const io = socketio(server);
-
+const io = socketio(server);
 
 // Run when client connects
     io.on('connection', socket => {
+        const socketIO = {socket, io};
 
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
-            // set socket params for currentUser object
-            currentUser.socket = socket;
-            currentUser.io = io;
-
-            new Room(currentUser);
+            logger.info("socket.connection.joinRoom: Attempting to join room", {currentUser});
+            new Room({...currentUser, ...socketIO}).join();
         });
 
         // listen for chatMessage
         socket.on('chatMessage', message => {
-            // set socket params for message object
-            message.socket = socket;
-            message.io = io;
-
-            new Message(message).sendMessage();
+            logger.info("socket.connection.chatMessage: Attempting to email invite", {message});
+            new Message({...message, ...socketIO}).send();
         });
 
         // listen for email invitations
         socket.on('emailInvite', async invite => {
             logger.info("socket.connection.emailInvite: Attempting to email invite", {invite});
-            invite.socket = socket;
-            invite.io = io;
-            let mail = new Mail(invite);
+
+            let mail = new Mail({...invite, ...socketIO});
             await mail.sendAll();
         });
 
         // Runs when client disconnects
         socket.on('disconnect', () => {
-            User.userLeave({socket, io});
+            logger.info("socket.connection.disconnect: User attempting to disconnect");
+            User.userLeave(socketIO);
         });
     });
 }

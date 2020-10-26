@@ -1,8 +1,8 @@
 const logger = require('./logger');
-const users = [];
-const appName = process.env.APP_NAME || "ChatApp";
-const bot = { username: appName, type: 'bot' };
+let {appName, bot, userTypes} = require('../loaders/globals');
 const formatMessage = require('../utils/formatting');
+
+const users = [];
 
 module.exports = class User {
 

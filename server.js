@@ -18,13 +18,13 @@ const server = exports.server = http.createServer(app).listen(PORT, () => {
 });
 
 // Globals
-require('./config/globals');
+require('./loaders/globals');
 
 // Socket
-require('./loader/socket')(server);
+require('./handlers/socket')(server);
 
 // Production Modules
-require('./loader/production')(app);
+require('./loaders/production')(app);
 
 
 

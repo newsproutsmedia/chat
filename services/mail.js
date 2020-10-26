@@ -4,7 +4,7 @@ const User = require('./user');
 
 module.exports = class Mail {
 
-    constructor({socket, io, recipients}) {
+    constructor({recipients, socket, io}) {
         this.socket = socket;
         this.io = io;
         this.recipients = recipients;

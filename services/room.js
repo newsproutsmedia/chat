@@ -3,42 +3,49 @@ const User = require('./user');
 const Message = require('./message');
 const logger = require('./logger');
 const formatMessage = require('../utils/formatting');
-let {appName, bot} = require('../config/globals');
+let {bot} = require('../loaders/globals');
 
+/**
+ * @desc construct a new or existing room for the current user
+ * @param {username, email, room, socket, io} Obj
+ */
 module.exports = class Room {
-    /**
-     * @desc initialize a new or existing room for the current user
-     * @param currentUser object -
-     */
-    constructor({socket, io, username, email, room}) {
-        this.type = 'user';
+
+    constructor({username, email, room, socket, io}) {
+        this.username = username;
+        this.email = email;
+        this.room = room;
         this.socket = socket;
         this.io = io;
+        this.type = this._setUserType('user');
+
         logger.info("service.room.constructor", {socket: this.socket.id, username: username, email: email, room: room});
 
         // if room value is not set, create a new room
         if (!room) {
-            room = this._create();
-            this._emitRoomCreated(room);
+            this.room = this._create();
+            this._emitRoomCreated(this.room);
             this.type = this._setUserType('admin');
-            bot.room = room;
         }
 
+    }
+
+    join() {
         // check if roomID is valid
-        if(!this._validate(room)) this._emitInvalidRoom(room);
+        if(!this._validate(this.room)) return this._emitInvalidRoom(this.room);
 
         // create user object
-        const user = new User({id: this.socket.id, username, email, room, type: this.type}).addUser();
+        const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type}).addUser();
 
-        // join user to room
-        this._joinRoom(room);
+        logger.info("service.room.joinRoom", {room: this.room});
+        this.socket.join(this.room);
 
         // welcome current user
         this._emitWelcome(user);
         // broadcast to everyone (except user) when user connects
         this._emitJoinedMessage(user);
         // send users and room info to front end
-        User.sendRoomUsers({room, io: this.io});
+        User.sendRoomUsers({room: this.room, io: this.io});
         // set up admin tools
         if(this.type === 'admin') this._emitSetupAdmin(user);
     }
@@ -77,11 +84,6 @@ module.exports = class Room {
     _emitInvalidRoom(room) {
         logger.info("service.room.emitInvalidRoom", {room});
         this.socket.emit('invalidRoom', room);
-    }
-
-    _joinRoom(room) {
-        logger.info("service.room.joinRoom", {room});
-        this.socket.join(room);
     }
 
     _emitWelcome({id, email, room}) {

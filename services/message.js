@@ -4,7 +4,7 @@ const formatMessage = require('../utils/formatting');
 
 module.exports = class Message {
 
-    constructor({socket, io, text}) {
+    constructor({text, socket, io}) {
         this.socket = socket;
         this.io = io;
         this.text = text;
@@ -22,7 +22,7 @@ module.exports = class Message {
         logger.info("service.message.constructor", {currentUser: this.user.username, currentMessage: this.currentMessage.text});
     }
 
-    sendMessage() {
+    send() {
         logger.info("service.message.sendMessage", {info: "Sending Message"})
         // send message to user
         this._emitToCurrentUser(this.currentMessage);
