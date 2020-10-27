@@ -8,7 +8,7 @@ const express = require('express');
 const app = express();
 
 // Logging
-const logger = require('./services/logger');
+const logger = require('./loaders/logger');
 
 // Server
 app.use(express.static(path.join(__dirname, 'public')));

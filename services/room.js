@@ -1,7 +1,7 @@
 const {validate: validateUUID, v4: uuid} = require('uuid');
 const User = require('./user');
 const Message = require('./message');
-const logger = require('./logger');
+const logger = require('../loaders/logger');
 const formatMessage = require('../utils/formatting');
 let {bot} = require('../loaders/globals');
 

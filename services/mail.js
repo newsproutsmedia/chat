@@ -1,4 +1,4 @@
-const logger = require('./logger');
+const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const User = require('./user');
 
@@ -29,21 +29,13 @@ module.exports = class Mail {
             let formattedMessage = this._formatMail(this.sender);
             transporter.sendMail(formattedMessage, (err, info) => {
 
-                if(err) {
-                    logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendError:", {"error": err});
+                if(err || info.rejected.length > 0) {
+                    logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem", {"id": mailRecipient.id, "email": mailRecipient.email});
                     return this._emitInviteSendFailure(mailRecipient);
                 }
 
-                if(info.accepted.length > 0) {
-                    logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
-                    return this._emitInviteSendSuccess(mailRecipient);
-                }
-                if(info.rejected.length > 0) {
-                    logger.warn("service.mail.sendAll.forEach.recipient.sendMail.inviteSendFailure:", {"info": info.response});
-                    return this._emitInviteSendFailure(mailRecipient);
-                }
-
-
+                logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
+                return this._emitInviteSendSuccess(mailRecipient);
             });
         });
 

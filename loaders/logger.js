@@ -38,9 +38,9 @@ class Logger {
         this.logger.info(log, metadata);
     }
 
-    warn(log, metadata) {
+/*    warn(log, metadata) {
         this.logger.warn(log, metadata);
-    }
+    }*/
 
     error(log, metadata) {
         this.logger.error(log, metadata);
@@ -55,11 +55,10 @@ class Logger {
 }
 
 // Logger has a name
-module.exports = new Logger(process.env.APP_NAME || "System");
+module.exports = new Logger(process.env.APP_NAME || "ChatApp!");
 
 // Uncomment to expose a function if we want
 // to use the logger with custom parameters
-/*
-module.getLogger = (name) => {
+/*module.getLogger = (name) => {
     return new Logger(name);
 }*/
