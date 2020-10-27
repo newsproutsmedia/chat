@@ -83,24 +83,24 @@ socket.on('inviteNotAllowed', () => {
     // display message saying that user must be the chat admin to invite members
 });
 
-socket.on('inviteSendSuccess', inviteInput => {
+socket.on('inviteSendSuccess', ({id, email}) => {
     console.log("inviteSendSuccess");
     // if admin, show invited users, greyed out (or with "not joined" badge), in users section
-    outputInvitedUser(inviteInput);
+    outputInvitedUser({id, email});
     // adjust users list
     maxUsers = maxUsers + 1;
 });
 
-socket.on('inviteSendFailure', inviteInput => {
+socket.on('inviteSendFailure', ({id}) => {
     console.log("inviteSendFailure");
     // display "there was a problem" message
-    outputSendFailureMessage(`${inviteInput.id}`);
+    outputSendFailureMessage(id);
 });
 
-socket.on('inviteSendError', inviteInput => {
+socket.on('inviteSendError', ({id}) => {
     console.log("inviteSendError");
     // display "there was a problem" message
-    outputSendErrorMessage(`${inviteInput.id}`);
+    outputSendErrorMessage(id);
 });
 
 function clearParentElement(id) {
@@ -338,12 +338,12 @@ function outputUsers(users) {
 }
 
 // Add pending users to DOM
-function outputInvitedUser(inviteInput) {
+function outputInvitedUser({id, email}) {
     
-    let invite = document.getElementById(inviteInput.id).parentNode;
+    let invite = document.getElementById(id).parentNode;
     invite.innerHTML = `<span class="badge badge-success">SENT</span>${inviteInput.email}`;
     invite.className = "user";
-    invite.setAttribute("id", inviteInput.email);
+    invite.setAttribute("id", email);
 }
 
 function outputInviteDiv() {
