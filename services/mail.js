@@ -1,4 +1,4 @@
-const logger = require('./logger');
+const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const User = require('./user');
 
@@ -28,28 +28,14 @@ module.exports = class Mail {
             this.sender.to = recipient.email;
             let formattedMessage = this._formatMail(this.sender);
             transporter.sendMail(formattedMessage, (err, info) => {
-                if(err) {
-                    logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendError:", {error: err});
+
+                if(err || info.rejected.length > 0) {
+                    logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem", {"id": mailRecipient.id, "email": mailRecipient.email});
                     return this._emitInviteSendFailure(mailRecipient);
                 }
 
-                logger.info("service.mail.sendAll.forEach.recipient.sendMail.success: Message sent: %s", {info: info.messageId});
-                // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-                // Preview only available when sending through an Ethereal account
-                logger.info("service.mail.sendAll.forEach.recipient.sendMail.success: Preview URL: %s", {info: nodemailer.getTestMessageUrl(info)});
-
-                // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-                if(info.accepted.length > 0) {
-                    logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {info: info.response});
-                    return this._emitInviteSendSuccess(mailRecipient);
-                }
-                if(info.rejected.length > 0) {
-                    logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendFailure:", {info: info.response});
-                    return this._emitInviteSendFailure(mailRecipient);
-                }
-
-
+                logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
+                return this._emitInviteSendSuccess(mailRecipient);
             });
         });
 
@@ -64,6 +50,7 @@ module.exports = class Mail {
     }
 
     _emitInviteSendSuccess(recipient) {
+        logger.info("service.mail.emitInviteSendSuccess", {"message": "send successful"});
         this.socket.emit('inviteSendSuccess', recipient);
     }
 

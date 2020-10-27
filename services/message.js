@@ -1,4 +1,4 @@
-const logger = require('./logger');
+const logger = require('../loaders/logger');
 const User = require('./user');
 const formatMessage = require('../utils/formatting');
 

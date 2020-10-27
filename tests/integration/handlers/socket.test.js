@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const uuid = require('uuid');
-const logger = require('../../../services/logger');
+const logger = require('../../../loaders/logger');
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
 const appName = process.env.PORT || "ChatApp";
@@ -254,13 +254,12 @@ describe("Socket.IO Server-Side Events", () => {
         it('should emit inviteSendFailure if there was a problem sending an email', done => {
             // Bad email address
             let invite = {
-                recipients: [{id: "id", email: "test"}]
+                recipients: [{id: "id", email: "test-error"}]
             }
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('inviteSendFailure', inviteInput => {
                     expect(inviteInput.id).toBe("id");
-                    expect(inviteInput.email).toBe("test");
                     client1.disconnect();
                     done();
                 });
@@ -271,15 +270,16 @@ describe("Socket.IO Server-Side Events", () => {
                 client1.emit('joinRoom', chatUser1);
             });
         }, 10000);
+
         it('should emit inviteSendSuccess email was successfully sent', done => {
             let invite = {
-                recipients: [{id: "id", email: "test@test.com"}]
+                recipients: [{id: "id", email: "test-success@test.com"}]
             }
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('inviteSendSuccess', inviteInput => {
                     expect(inviteInput.id).toBe("id");
-                    expect(inviteInput.email).toBe("test@test.com");
+                    expect(inviteInput.email).toBe("test-success@test.com");
                     client1.disconnect();
                     done();
                 });
@@ -290,6 +290,35 @@ describe("Socket.IO Server-Side Events", () => {
                 client1.emit('joinRoom', chatUser1);
             });
         }, 10000);
+
+        /*it('should emit inviteSendFailure if email was rejected by SMTP server', done => {
+
+            // figure out how to implement test to check for SMTP rejected
+            const mockReturn = {"info": {"rejected": ["test-rejected@test.com"]}};
+            const {sendMail} = require('nodemailer/lib/mailer/index');
+            jest.mock('nodemailer/lib/mailer/index', () => ({
+                ...jest.requireActual("nodemailer/lib/mailer/index"),
+                sendMail: jest.fn()
+            }));
+            sendMail.mockReturnValueOnce(mockReturn);
+            let invite = {
+                recipients: [{id: "id", email: "test-rejected@test.com"}]
+            }
+
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('inviteSendFailure', ({id}) => {
+                    expect(id).toBeTruthy();
+                    client1.disconnect();
+                    done();
+                });
+                client1.once('message', message => {
+                    client1.emit('emailInvite', invite);
+                });
+
+                client1.emit('joinRoom', chatUser1);
+            });
+        }, 10000);*/
     });
 
     describe('disconnect', () => {

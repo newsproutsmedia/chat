@@ -1,4 +1,4 @@
-const logger = require('./logger');
+const logger = require('../loaders/logger');
 let {appName, bot, userTypes} = require('../loaders/globals');
 const formatMessage = require('../utils/formatting');
 

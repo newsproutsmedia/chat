@@ -3,7 +3,7 @@ const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
 const User = require('../services/user');
-const logger = require('../services/logger');
+const logger = require('../loaders/logger');
 
 module.exports = function(server) {
 const io = socketio(server);

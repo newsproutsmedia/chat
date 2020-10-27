@@ -29,37 +29,36 @@ class Logger {
         })
     }
 
-    // We expose four levels of logging for this tutorial
-
-    debug(log, metadata) {
+    // Uncomment to implement various log levels
+/*    debug(log, metadata) {
         this.logger.debug(log, metadata);
-    }
+    }*/
 
     info(log, metadata) {
         this.logger.info(log, metadata);
     }
 
-    warn(log, metadata) {
+/*    warn(log, metadata) {
         this.logger.warn(log, metadata);
-    }
+    }*/
 
     error(log, metadata) {
         this.logger.error(log, metadata);
     }
 
-    log(level, log, metadata) {
+/*    log(level, log, metadata) {
         const metadataObject = {}
         if (metadata) metadataObject.metadata = metadata
 
         this.logger[level](log, metadataObject)
-    }
+    }*/
 }
 
-// We want our logger to have a name, like 'logging-tutorial'
-module.exports = new Logger(process.env.APP_NAME || "System");
+// Logger has a name
+module.exports = new Logger(process.env.APP_NAME || "ChatApp");
 
-// We will also expose a function if we want
+// Uncomment to expose a function if we want
 // to use the logger with custom parameters
-module.getLogger = (name) => {
+/*module.getLogger = (name) => {
     return new Logger(name);
-}
+}*/
