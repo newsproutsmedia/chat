@@ -55,7 +55,7 @@ class Logger {
 }
 
 // Logger has a name
-module.exports = new Logger(process.env.APP_NAME || "ChatApp!");
+module.exports = new Logger(process.env.APP_NAME || "ChatApp");
 
 // Uncomment to expose a function if we want
 // to use the logger with custom parameters
