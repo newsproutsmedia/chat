@@ -1,6 +1,6 @@
 const logger = require('../loaders/logger');
 const User = require('./user');
-const formatMessage = require('../utils/formatting');
+const addCurrentTime = require('../utils/time');
 
 /**
  * @desc construct a chat message
@@ -38,12 +38,12 @@ module.exports = class Message {
 
     _emitToCurrentUser({socket, user, text}) {
         logger.info("service.message.emitToCurrentUser", {info: "Emit Message To Current Users", text});
-        socket.emit('message', formatMessage(user, text));
+        socket.emit('message', addCurrentTime({user, text}));
     }
 
     _emitToRoomUsers({socket, user, text}) {
         logger.info("service.message.emitToRoomUsers", {info: "Emit Message To All Other Users", text});
-        socket.to(user.room).emit('message', formatMessage(user, text));
+        socket.to(user.room).emit('message', addCurrentTime({user, text}));
     }
 
     _sendUpdatedMessageCount({io, user, messageCount}) {

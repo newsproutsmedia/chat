@@ -2,7 +2,7 @@ const {validate: validateUUID, v4: uuid} = require('uuid');
 const User = require('./user');
 const Message = require('./message');
 const logger = require('../loaders/logger');
-const formatMessage = require('../utils/formatting');
+const addCurrentTime = require('../utils/time');
 let {bot} = require('../loaders/globals');
 
 /**
@@ -73,18 +73,18 @@ module.exports = class Room {
     }
 
     _emitWelcome({id, email, room}) {
-        let user = bot;
-        let message = 'Welcome to Chat!';
+        const user = bot;
+        const text = 'Welcome to Chat!';
         logger.info("service.room.emitWelcome", {id, email, room});
         // TODO: Put all socket emits and broadcasts into a separate utility
-        this.socket.emit('message', formatMessage(user, message));
+        this.socket.emit('message', addCurrentTime({user, text}));
     }
 
     _emitJoinedMessage({id, username, email, room}) {
-        let user = bot;
-        let message = `${username} has joined the chat`;
+        const user = bot;
+        const text = `${username} has joined the chat`;
         logger.info("service.room.emitJoinedMessage", {id, username, email, room});
-        this.socket.to(room).emit('message', formatMessage(user, message));
+        this.socket.to(room).emit('message', addCurrentTime({user, text}));
     }
 
     _emitSetupAdmin(user) {
