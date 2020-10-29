@@ -1,6 +1,6 @@
 const logger = require('../loaders/logger');
 let {appName, bot, userTypes} = require('../loaders/globals');
-const formatMessage = require('../utils/formatting');
+const addCurrentTime = require('../utils/time');
 
 const users = [];
 
@@ -75,11 +75,11 @@ module.exports = class User {
 
     /**
      * @desc sends "*username* has left the chat" message to all users
-     * @param user, io Obj
+     * @param user Obj, io Obj
      * @emits message
      */
     static emitUserHasLeft(user, io) {
-        io.in(user.room).emit('message', formatMessage(bot, `${user.username} has left the chat`));
+        io.in(user.room).emit('message', addCurrentTime({user: bot, text: `${user.username} has left the chat`}));
     }
 
     /**

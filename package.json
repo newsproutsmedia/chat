@@ -4,7 +4,7 @@
   "description": "Socket.IO-based chat app",
   "main": "server.js",
   "scripts": {
-    "test": "jest --runInBand --verbose --coverage --forceExit",
+    "test": "jest --runInBand --verbose --forceExit",
     "start": "node server",
     "dev": "nodemon server"
   },
