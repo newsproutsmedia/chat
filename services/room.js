@@ -1,13 +1,12 @@
 const {validate: validateUUID, v4: uuid} = require('uuid');
 const User = require('./user');
-const Message = require('./message');
+const MessageEmitter = require('../emitters/message.emitter');
 const logger = require('../loaders/logger');
-const addCurrentTime = require('../utils/time');
 let {bot} = require('../loaders/globals');
 
 /**
  * @desc construct a new or existing room for the current user
- * @param {username, email, room, socket, io} Obj
+ * @param {Object} - Object containing username, email, room, socket, io
  */
 module.exports = class Room {
 
@@ -17,6 +16,7 @@ module.exports = class Room {
         this.room = room;
         this.socket = socket;
         this.io = io;
+        this.socketIO = {socket, io};
         this.type = User.setUserType('user');
 
         logger.info("service.room.constructor", {socket: this.socket.id, username: username, email: email, room: room});
@@ -45,7 +45,7 @@ module.exports = class Room {
         // broadcast to everyone (except user) when user connects
         this._emitJoinedMessage(user);
         // send users and room info to front end
-        User.sendRoomUsers({room: this.room, io: this.io});
+        User.sendRoomUsers(this.room, this.socketIO);
         // set up admin tools
         if(this.type === 'admin') this._emitSetupAdmin(user);
     }
@@ -64,31 +64,30 @@ module.exports = class Room {
 
     _emitRoomCreated(uniqueRoomId) {
         logger.info("service.room.emitRoomCreated", {uniqueRoomId});
-        this.socket.emit('roomCreated', uniqueRoomId);
+        new MessageEmitter(this.socketIO).emitEventToSender('roomCreated', uniqueRoomId);
     }
 
     _emitInvalidRoom(room) {
         logger.info("service.room.emitInvalidRoom", {room});
-        this.socket.emit('invalidRoom', room);
+        new MessageEmitter(this.socketIO).emitEventToSender('invalidRoom', room);
     }
 
     _emitWelcome({id, email, room}) {
-        const user = bot;
+        const user = {...bot, room};
         const text = 'Welcome to Chat!';
         logger.info("service.room.emitWelcome", {id, email, room});
-        // TODO: Put all socket emits and broadcasts into a separate utility
-        this.socket.emit('message', addCurrentTime({user, text}));
+        new MessageEmitter(this.socketIO).sendMessageToSender(user, text);
     }
 
     _emitJoinedMessage({id, username, email, room}) {
-        const user = bot;
+        const user = {...bot, room};
         const text = `${username} has joined the chat`;
         logger.info("service.room.emitJoinedMessage", {id, username, email, room});
-        this.socket.to(room).emit('message', addCurrentTime({user, text}));
+        new MessageEmitter(this.socketIO).sendMessageToAllOthersInRoom(user, text);
     }
 
     _emitSetupAdmin(user) {
         logger.info("service.room.emitSetupAdmin", {user});
-        this.socket.emit('setupAdmin', user);
+        new MessageEmitter(this.socketIO).emitEventToSender('setupAdmin', user);
     }
 }

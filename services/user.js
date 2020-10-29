@@ -1,12 +1,16 @@
 const logger = require('../loaders/logger');
 let {appName, bot, userTypes} = require('../loaders/globals');
 const addCurrentTime = require('../utils/time');
-
+const MessageEmitter = require('../emitters/message.emitter');
 const users = [];
 
 /**
  * @desc construct a new user
- * @param {id, username, email, room, type} Obj
+ * @param {Object} - User object containing id, username, email, room, type
+ * @requires {string} id
+ * @requires {string} username
+ * @requires {string} room
+ * @requires {string} type
  */
 module.exports = class User {
 
@@ -31,8 +35,8 @@ module.exports = class User {
 
     /**
      * @desc get information about current user from id
-     * @param id string
-     * @return Obj
+     * @param {string} id
+     * @return {Object} user - object containing current user info
      */
     static getCurrentUser(id) {
         return users.find(user => user.id === id);
@@ -40,8 +44,8 @@ module.exports = class User {
 
     /**
      * @desc increases message count by 1
-     * @param id string
-     * @return {userId, count} Obj
+     * @param {string} id
+     * @return {Object} - Object containing user Id and message count
      */
     static incrementUserMessageCount(id) {
         const userIndex = users.findIndex(user => user.id === id);
@@ -54,10 +58,11 @@ module.exports = class User {
 
     /**
      * @desc remove user from users array upon disconnect
-     * @param {socket, io} Obj
+     * @param {Object} socketIO
      * @emits User.emitUserHasLeft, User.sendRoomUsers
      */
     static userLeave({socket, io}) {
+        const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
         logger.info("socket.disconnect: User is leaving", {currentUser});
 
@@ -66,26 +71,33 @@ module.exports = class User {
         // return user
         if (users.splice(index, 1)[0]) {
             // notify other chat participants that user has left
-            User.emitUserHasLeft(currentUser, io);
+            User.emitUserHasLeft(currentUser, socketIO);
             logger.info("socket.disconnect: User left", {currentUser});
             // send updated users and room info
-            User.sendRoomUsers({room: currentUser.room, io: io});
+            User.sendRoomUsers(currentUser.room, socketIO);
         }
     }
 
     /**
      * @desc sends "*username* has left the chat" message to all users
-     * @param user Obj, io Obj
+     * @param {Object} user - user that left room
+     * @requires {string} user.room - room id of user that left
+     * @requires {string} user.username - username of user that left
+     * @param {Object} socketIO  - object containing socket and io params
+     * @requires {Object} socketIO.socket
+     * @requires {Object} socketIO.io
      * @emits message
      */
-    static emitUserHasLeft(user, io) {
-        io.in(user.room).emit('message', addCurrentTime({user: bot, text: `${user.username} has left the chat`}));
+    static emitUserHasLeft(user, socketIO) {
+        const sysUser = {...bot, room: user.room};
+        const text = `${user.username} has left the chat`;
+        new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(sysUser, text);
     }
 
     /**
      * @desc returns array of room user objects
-     * @param room string
-     * @return array of objects
+     * @param {string} room
+     * @return {array} - array of user objects
      */
     static getRoomUsers(room) {
         return users.filter(user => user.room === room);
@@ -93,21 +105,22 @@ module.exports = class User {
 
     /**
      * @desc returns array of room user objects
-     * @param room string
-     * @emits {room, users} Obj
+     * @param {string} room
+     * @param {Object} socketIO
+     * @emits object containing room id and array of users in room
      */
-    static sendRoomUsers({room, io}) {
+    static sendRoomUsers(room, socketIO) {
         let roomUsers = {
             room: room,
             users: User.getRoomUsers(room)
         };
         logger.info("service.room.sendRoomUsers", {room, roomUsers});
-        io.in(room).emit('roomUsers', roomUsers);
+        new MessageEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsers);
     }
 
     /**
      * @desc check if user type exists in global userTypes Set
-     * @param type string
+     * @param {string} type
      * @return boolean
      */
     static validateUserType(type) {
@@ -116,7 +129,7 @@ module.exports = class User {
 
     /**
      * @desc set user type
-     * @param type string
+     * @param {string} type
      * @return string
      */
     static setUserType(type) {
