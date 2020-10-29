@@ -4,7 +4,7 @@ describe('test globals', () => {
         const initAppName = process.env.APP_NAME;
         delete process.env.APP_NAME;
         const {appName} = require('../../../loaders/globals');
-        expect(appName).toBe("ChatApp!");
+        expect(appName).toBe("ChatApp");
         process.env.APP_NAME = initAppName;
         console.log(process.env.APP_NAME);
         done();

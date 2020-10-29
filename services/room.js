@@ -17,7 +17,7 @@ module.exports = class Room {
         this.room = room;
         this.socket = socket;
         this.io = io;
-        this.type = this._setUserType('user');
+        this.type = User.setUserType('user');
 
         logger.info("service.room.constructor", {socket: this.socket.id, username: username, email: email, room: room});
 
@@ -25,7 +25,7 @@ module.exports = class Room {
         if (!room) {
             this.room = this._create();
             this._emitRoomCreated(this.room);
-            this.type = this._setUserType('admin');
+            this.type = User.setUserType('admin');
         }
 
     }
@@ -50,26 +50,12 @@ module.exports = class Room {
         if(this.type === 'admin') this._emitSetupAdmin(user);
     }
 
-    _setUserType(type) {
-        logger.info("service.room.setUserType", {type});
-        return type;
-    }
-
-    /**
-     * @desc validates that the param value is a valid UUID
-     * @param {string} room - UUID string to be evaluated
-     * @returns {*}
-     */
     _validate(room) {
         let isValidRoomId = validateUUID(room);
         logger.info("service.room.validate", {room:room, isValid:isValidRoomId});
         return validateUUID(room);
     }
 
-    /**
-     * @desc creates a unique room identifier
-     * @returns {string}
-     */
     _create() {
         let uniqueRoomId = uuid();
         logger.info("service.room.create", {uniqueRoomId});
