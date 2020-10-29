@@ -1,16 +1,18 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const User = require('./user');
+const MessageEmitter = require('../emitters/message.emitter');
 
 /**
  * @desc takes an array of recipients to construct an email
- * @param {recipients, socket, io} Obj
+ * @param {Object} - object containing recipients, socket, io
  */
 module.exports = class Mail {
 
     constructor({recipients, socket, io}) {
         this.socket = socket;
         this.io = io;
+        this.socketIO = {socket, io};
         this.recipients = recipients;
         this.user = User.getCurrentUser(this.socket.id);
         this.sender = {
@@ -46,16 +48,18 @@ module.exports = class Mail {
     }
 
     _emitMailNotAllowed() {
-        this.socket.emit('inviteNotAllowed', this.user.type);
+        logger.warn("service.mail.emitInviteSendSuccess", {"message": "email not allowed"});
+        new MessageEmitter(this.socketIO).emitEventToSender('inviteNotAllowed', this.user.type);
     }
 
     _emitInviteSendFailure(recipient) {
-        this.socket.emit('inviteSendFailure', recipient);
+        logger.warn("service.mail.emitInviteSendFailure", {"message": "send failed"});
+        new MessageEmitter(this.socketIO).emitEventToSender('inviteSendFailure', recipient);
     }
 
     _emitInviteSendSuccess(recipient) {
         logger.info("service.mail.emitInviteSendSuccess", {"message": "send successful"});
-        this.socket.emit('inviteSendSuccess', recipient);
+        new MessageEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
     }
 
     async _getMailTransporter() {

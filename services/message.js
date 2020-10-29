@@ -1,54 +1,29 @@
 const logger = require('../loaders/logger');
 const User = require('./user');
-const addCurrentTime = require('../utils/time');
-
+const MessageEmitter = require('../emitters/message.emitter');
 /**
  * @desc construct a chat message
- * @param {text, socket, io} Obj
+ * @param {Object} message, socket, io
  */
 module.exports = class Message {
 
     constructor({text, socket, io}) {
         this.socket = socket;
         this.io = io;
+        this.socketIO = {socket, io};
         this.text = text;
         this.user = User.getCurrentUser(this.socket.id);
         this.messageCount = User.incrementUserMessageCount(this.user.id);
-
-        // create message object
-        this.currentMessage = {
-            socket: this.socket,
-            io: this.io,
-            text: this.text,
-            user: this.user,
-            messageCount: this.messageCount
-        }
-        logger.info("service.message.constructor", {currentUser: this.user.username, currentMessage: this.currentMessage.text});
     }
 
     send() {
         logger.info("service.message.sendMessage", {info: "Sending Message"})
         // send message to user
-        this._emitToCurrentUser(this.currentMessage);
+        new MessageEmitter(this.socketIO).sendMessageToSender(this.user, this.text);
         // send message to everyone else
-        this._emitToRoomUsers(this.currentMessage);
+        new MessageEmitter(this.socketIO).sendMessageToAllOthersInRoom(this.user, this.text);
         // update message count for everyone
-        this._sendUpdatedMessageCount(this.currentMessage);
-    }
-
-    _emitToCurrentUser({socket, user, text}) {
-        logger.info("service.message.emitToCurrentUser", {info: "Emit Message To Current Users", text});
-        socket.emit('message', addCurrentTime({user, text}));
-    }
-
-    _emitToRoomUsers({socket, user, text}) {
-        logger.info("service.message.emitToRoomUsers", {info: "Emit Message To All Other Users", text});
-        socket.to(user.room).emit('message', addCurrentTime({user, text}));
-    }
-
-    _sendUpdatedMessageCount({io, user, messageCount}) {
-        logger.info("service.message.sendUpdatedMessageCount", {info: "Send Updated Message Count To All Users", messageCount});
-        io.in(user.room).emit('updatedMessageCount', messageCount);
+        new MessageEmitter(this.socketIO).emitToAllInRoom('updatedMessageCount', this.user.room, this.messageCount);
     }
 
 }

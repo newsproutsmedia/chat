@@ -291,34 +291,6 @@ describe("Socket.IO Server-Side Events", () => {
             });
         }, 10000);
 
-        /*it('should emit inviteSendFailure if email was rejected by SMTP server', done => {
-
-            // figure out how to implement test to check for SMTP rejected
-            const mockReturn = {"info": {"rejected": ["test-rejected@test.com"]}};
-            const {sendMail} = require('nodemailer/lib/mailer/index');
-            jest.mock('nodemailer/lib/mailer/index', () => ({
-                ...jest.requireActual("nodemailer/lib/mailer/index"),
-                sendMail: jest.fn()
-            }));
-            sendMail.mockReturnValueOnce(mockReturn);
-            let invite = {
-                recipients: [{id: "id", email: "test-rejected@test.com"}]
-            }
-
-            client1 = io.connect(socketURL, options);
-            client1.on('connect', () => {
-                client1.once('inviteSendFailure', ({id}) => {
-                    expect(id).toBeTruthy();
-                    client1.disconnect();
-                    done();
-                });
-                client1.once('message', message => {
-                    client1.emit('emailInvite', invite);
-                });
-
-                client1.emit('joinRoom', chatUser1);
-            });
-        }, 10000);*/
     });
 
     describe('disconnect', () => {

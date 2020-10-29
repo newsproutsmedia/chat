@@ -42,9 +42,9 @@ class Logger {
         this.logger.info(log, metadata);
     }
 
-/*    warn(log, metadata) {
+    warn(log, metadata) {
         this.logger.warn(log, metadata);
-    }*/
+    }
 
     error(log, metadata) {
         this.logger.error(log, metadata);
