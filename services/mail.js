@@ -2,6 +2,10 @@ const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const User = require('./user');
 
+/**
+ * @desc takes an array of recipients to construct an email
+ * @param {recipients, socket, io} Obj
+ */
 module.exports = class Mail {
 
     constructor({recipients, socket, io}) {

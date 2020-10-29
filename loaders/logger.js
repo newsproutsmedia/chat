@@ -1,6 +1,10 @@
 const os = require("os");
 const winston = require('winston');
 
+/**
+ * @desc construct Winston logger
+ * @param name string
+ */
 class Logger {
     constructor(name) {
         this.name = name;

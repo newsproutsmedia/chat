@@ -2,6 +2,10 @@ const logger = require('../loaders/logger');
 const User = require('./user');
 const formatMessage = require('../utils/formatting');
 
+/**
+ * @desc construct a chat message
+ * @param {text, socket, io} Obj
+ */
 module.exports = class Message {
 
     constructor({text, socket, io}) {
