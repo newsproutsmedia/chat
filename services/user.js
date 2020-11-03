@@ -1,7 +1,7 @@
 const logger = require('../loaders/logger');
 let {appName, bot, userTypes} = require('../loaders/globals');
 const addCurrentTime = require('../utils/time');
-const MessageEmitter = require('../emitters/message.emitter');
+const MessageEmitter = require('../emitters/messageEmitter');
 const users = [];
 
 /**

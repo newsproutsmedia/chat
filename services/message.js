@@ -1,6 +1,6 @@
 const logger = require('../loaders/logger');
 const User = require('./user');
-const MessageEmitter = require('../emitters/message.emitter');
+const MessageEmitter = require('../emitters/messageEmitter');
 /**
  * @desc construct a chat message
  * @param {Object} message, socket, io
