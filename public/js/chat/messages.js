@@ -1,5 +1,17 @@
-// output message to DOM
-export function outputMessage(message) {
+const chatMessages = document.querySelector('.chat-messages');
+export const messageBtnId = 'messageSubmitBtn';
+export const messageBtnIconId = 'messageBtnIcon';
+export const messageBtnDefault = {id: messageBtnId, style: 'btn-default', icon: {id: messageBtnIconId, style: 'default-message-btn-icon'}};
+export const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: messageBtnIconId, style: 'send-message-btn-icon'}};
+export const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
+
+
+/**
+ * @description output message to DOM
+ * @param {Object} message - sending user object and text string
+ * @param {string} username - username of current socket
+ */
+export function outputMessage(message, username) {
     if(message.user.type === 'bot') return outputBotMessage(message); // if bot, send bot-style message
     const div = document.createElement('div');
     div.classList.add('message');
@@ -10,15 +22,23 @@ export function outputMessage(message) {
                 </p>`;
     document.querySelector('.chat-messages').appendChild(div);
 
-    scrollMessageWindowToBottom("chatMessages");
+    scrollMessageWindowToBottom(chatMessages);
 }
 
+/**
+ * @description send message window to bottom when new message arrives
+ * @param {Element} messageWindowId
+ */
 export function scrollMessageWindowToBottom(messageWindowId) {
     // Scrolls down automatically
     //TODO instead of scrolling automatically, bring up a clickable arrow at bottom of message window that says "New Messages"
     messageWindowId.scrollTop = messageWindowId.scrollHeight;
 }
 
+/**
+ * @description output message from system (bot)
+ * @param {Object} message - bot object and text string
+ */
 export function outputBotMessage(message) {
     const div = document.createElement('div');
     div.classList.add('bot-message');
@@ -51,9 +71,6 @@ export function addMessage() {
 
 
 }
-
-
-
 
 export function addButtonState(state) {
     // add button style

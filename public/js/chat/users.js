@@ -1,3 +1,5 @@
+let maxUsers = 1;
+
 /**
  * @description output user list to the dom
  * @param {Element} elementId - id of wrapper element
@@ -10,6 +12,10 @@ export function outputUsers(elementId, users) {
     <hr/>    
 `;
 
+}
+
+export function incrementMaxUsers() {
+    maxUsers = maxUsers +1;
 }
 
 // Activate user
