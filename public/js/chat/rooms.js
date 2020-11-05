@@ -1,4 +1,3 @@
-// Add room name to DOM
 /**
  * @description output room name to the dom
  * @param {Element} elementId - id of wrapper element
@@ -8,6 +7,10 @@ export function outputRoomName(elementId, room) {
     elementId.innerText = room;
 }
 
+/**
+ * @description add "room" param to URL
+ * @param {string} room - room id
+ */
 export function updateUrlRoom(room) {
     this.room = room;
     let thisURL = window.location.href;

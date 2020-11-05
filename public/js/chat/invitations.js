@@ -1,4 +1,3 @@
-// add chat member onclick event
 import {generateShortId} from "./utils/generateShortId";
 import {getChildInputIds} from "./utils/getChildInputIds";
 import {emitEmailInvite} from "./emitters/socketEmitters";
@@ -6,7 +5,10 @@ import {emitEmailInvite} from "./emitters/socketEmitters";
 let addedUsers = 0;
 let invitedUserEmails = [];
 
-export function addChatMember() {
+/**
+ * @description listener callback - add a new invitation field to DOM
+ */
+export function outputInviteField() {
     console.log("Add Chat Member Clicked");
     let recipient = document.createElement('div');
     let randId = generateShortId();
@@ -28,18 +30,25 @@ export function addChatMember() {
     addedUsers = addedUsers + 1;
 }
 
+/**
+ * @description add invite section to DOM
+ */
 export function outputInviteSection() {
     const inviteSection = document.createElement('invite');
     inviteSection.innerHTML = `<h4>Invite</h4>
                             <div id="recipients"></div>
-                <div class="flex-align-middle"><a id="addMember" onclick="addChatMember()"><i class="fas fa-plus-circle fa-lg"></i> Invite Someone</a></div>
+                <div class="flex-align-middle"><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i> Invite Someone</a></div>
                 <hr>
-                <button id="sendInvitations" class="btn send-invitations-btn" onclick="sendInvitations()">Send Invites</button>
+                <button id="sendInvitations" class="btn send-invitations-btn">Send Invites</button>
 `;
     document.querySelector('#dashMenu').appendChild(inviteSection);
 }
 
-// Add pending users to DOM
+/**
+ * @description email successfully sent for invited user
+ * @param {string} id
+ * @param {string} email
+ */
 export function outputInvitedUser({id, email}) {
 
     let invite = document.getElementById(id).parentNode;
@@ -48,6 +57,10 @@ export function outputInvitedUser({id, email}) {
     invite.setAttribute("id", email);
 }
 
+/**
+ * @description remove users who have logged in from invited user list
+ * @param {Object} users
+ */
 export function updateInvitedList(users) {
 
         for (let user in users) {
@@ -64,48 +77,66 @@ export function updateInvitedList(users) {
     console.log(invitedUserEmails);
 }
 
-export function outputSendFailureMessage(id) {
-    let badge = document.getElementById(id);
+/**
+ * @description output email send failure message to DOM
+ * @param {string} elementId
+ */
+export function outputSendFailureMessage(elementId) {
+    let badge = document.getElementById(elementId);
     outputErrorBadge(badge);
-    document.getElementById(id).parentElement.classList.add("send-failure");
+    document.getElementById(elementId).parentElement.classList.add("send-failure");
     let message = document.createElement('p');
     message.className =  "send-failure-message";
     message.innerHTML = "There was a problem sending this invite. Please check to make sure the email address is valid and try again.";
-    document.getElementById(id).parentNode.appendChild(message);
+    document.getElementById(elementId).parentNode.appendChild(message);
 }
 
-export function outputSendErrorMessage(id) {
-    document.getElementById(id).parentElement.classList.add("send-failure");
+/**
+ * @description output email send error message to DOM
+ * @param {string} elementId
+ */
+export function outputSendErrorMessage(elementId) {
+    document.getElementById(elementId).parentElement.classList.add("send-failure");
     let message = document.createElement('p');
     message.className =  "send-failure-message";
     message.innerHTML = "An error occurred while sending this invite. Please check to make sure the email address is valid and try again.";
-    document.getElementById(id).parentNode.appendChild(message);
+    document.getElementById(elementId).parentNode.appendChild(message);
 }
 
-export function outputPendingBadge(element) {
-    if(document.getElementById(`${element.id}_badge`)) {
-        let existingBadge = document.getElementById(`${element.id}_badge`);
+/**
+ * @description add "PENDING" badge to invited user list item on send of invites
+ * @param {Element} elementId
+ */
+export function outputPendingBadge(elementId) {
+    if(document.getElementById(`${elementId.id}_badge`)) {
+        let existingBadge = document.getElementById(`${elementId.id}_badge`);
         existingBadge.classList.add("badge-warning");
         existingBadge.classList.remove("badge-danger");
         existingBadge.innerHTML = "PENDING";
         return;
     }
     let badge = document.createElement("span");
-    badge.id = element.id + "_badge";
+    badge.id = elementId.id + "_badge";
     badge.classList.add("badge");
     badge.classList.add("badge-warning");
     badge.innerHTML = "PENDING";
-    element.parentNode.prepend(badge);
+    elementId.parentNode.prepend(badge);
 }
 
-export function outputErrorBadge(element) {
-    let badge = document.getElementById(`${element.id}_badge`);
+/**
+ * @description add "ERROR" badge to invited user list item on error
+ * @param {Element} elementId
+ */
+export function outputErrorBadge(elementId) {
+    let badge = document.getElementById(`${elementId.id}_badge`);
     badge.classList.remove("badge-warning");
     badge.classList.add("badge-danger");
     badge.innerHTML = "ERROR";
 }
 
-// send invites onclick event
+/**
+ * @description event callback for sendInvites submit button listener
+ */
 export function sendInvitations() {
     console.log("sendInvitations");
     let newInviteEmails = [];
@@ -125,15 +156,11 @@ export function sendInvitations() {
         }
 
     }
-    // form "invite" object containing an array of "recipients"
+
     let invite = {
         recipients: newInviteEmails
     }
     console.log(invite);
 
-    // emit "emailInvite" with "invite" object
-    // move this to main.js
-    // find all other emits out of main.js and refactor into main.js
-    // try using event listeners to do so
     emitEmailInvite(invite);
 }

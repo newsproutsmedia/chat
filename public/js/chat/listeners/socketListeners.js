@@ -3,7 +3,7 @@ import {logout} from "../utils/logout";
 import {outputRoomName, updateUrlRoom} from "../rooms";
 import {incrementMaxUsers, outputUsers} from "../users";
 import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, updateInvitedList} from "../invitations";
-import {outputMessage, updateMessageCount} from "../messages";
+import {outputMessage, outputUpdatedMessageCount} from "../messages";
 import {setupAdmin} from "../admin";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters";
 
@@ -23,6 +23,9 @@ let currentUser = {
     room
 }
 
+/**
+ * @description set up listeners for socket.io
+ */
 export class SocketListeners {
 
     constructor() {
@@ -70,7 +73,7 @@ export class SocketListeners {
     onUpdatedMessageCount() {
         socket.on('updatedMessageCount', messageCount => {
             console.log('updatedMessageCount:', messageCount);
-            updateMessageCount(messageCount);
+            outputUpdatedMessageCount(messageCount);
         });
     }
 

@@ -1,15 +1,13 @@
-import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState} from "../messages";
+import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages";
 const initHeight = window.innerHeight;
 const messageInput = document.getElementById('msg');
+const messageSubmitBtn = document.getElementById('messageSubmitBtn');
 
-
-// recipient email field typing listener
-/// when typing stops, perform email validation
-/// if email is valid, activate "Send Invitations" button
 export class MessageInputListeners {
     constructor() {
         this.messageInputBlurListener();
         this.messageInputFocusListener();
+        this.messageSubmitButtonListener();
     }
 
     messageInputBlurListener() {
@@ -35,6 +33,10 @@ export class MessageInputListeners {
                 window.scrollTo(0, diffHeight);
             }, 200);
         });
+    };
+
+    messageSubmitButtonListener() {
+        messageSubmitBtn.addEventListener('click', submitMessage);
     };
 
 }

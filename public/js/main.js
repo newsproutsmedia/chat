@@ -2,11 +2,11 @@ import { DashboardListeners } from "./chat/listeners/dashboardListeners";
 import { MessageInputListeners } from "./chat/listeners/messageInputListeners";
 import { SocketListeners } from "./chat/listeners/socketListeners";
 
-// add DOM listeners
+// add DOM listeners for Dashboard and Message Input
 new DashboardListeners();
 new MessageInputListeners();
 
-// add socket listeners
+// add Socket.IO listeners
 new SocketListeners();
 
 
