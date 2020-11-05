@@ -1,7 +1,7 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const User = require('./user');
-const MessageEmitter = require('../emitters/message.emitter');
+const MessageEmitter = require('../emitters/messageEmitter');
 
 /**
  * @desc takes an array of recipients to construct an email

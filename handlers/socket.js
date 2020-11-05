@@ -20,7 +20,7 @@ const io = socketio(server);
 
         // listen for chatMessage
         socket.on('chatMessage', message => {
-            logger.info("socket.connection.chatMessage: Attempting to email invite", {message});
+            logger.info("socket.connection.chatMessage: Attempting to send chat message", {message});
             new Message({...message, ...socketIO}).send();
         });
 

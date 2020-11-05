@@ -1,4 +1,4 @@
-const SocketEmitter = require('./socket.emitter');
+const SocketEmitter = require('./socketEmitter');
 const addCurrentTime = require('../utils/time');
 
 /**
