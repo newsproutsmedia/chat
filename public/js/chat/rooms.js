@@ -12,7 +12,6 @@ export function outputRoomName(elementId, room) {
  * @param {string} room - room id
  */
 export function updateUrlRoom(room) {
-    this.room = room;
     let thisURL = window.location.href;
     window.history.replaceState(null, null, `${thisURL}&room=${room}`);
     console.log(window.location.href + '&room=' + room);

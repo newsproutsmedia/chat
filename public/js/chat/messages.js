@@ -1,4 +1,4 @@
-import {emitChatMessage} from "./emitters/socketEmitters";
+import {emitChatMessage} from "./emitters/socketEmitters.js";
 
 const chatMessages = document.querySelector('.chat-messages');
 export const messageBtnId = 'messageSubmitBtn';

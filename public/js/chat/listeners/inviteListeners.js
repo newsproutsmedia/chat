@@ -1,20 +1,19 @@
-import {outputInviteField, sendInvitations} from "../invitations";
-
-const invitationButton = document.getElementById('sendInvitations');
-const addMemberButton = document.getElementById('addMember');
+import {outputInviteField, sendInvitations} from "../invitations.js";
 
 export class InviteListeners {
 
     constructor() {
+        this.invitationButton = document.getElementById('sendInvitations');
+        this.addMemberButton = document.getElementById('addMember');
         this.sendInviteButtonListener();
         this.addMemberButtonListener();
     }
 
     sendInviteButtonListener() {
-        invitationButton.addEventListener('click', sendInvitations);
+        this.invitationButton.addEventListener('click', sendInvitations);
     }
 
     addMemberButtonListener() {
-        addMemberButton.addEventListener('click', outputInviteField);
+        this.addMemberButton.addEventListener('click', outputInviteField);
     }
 }

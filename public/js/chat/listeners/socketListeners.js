@@ -1,17 +1,17 @@
 // socket listeners
-import {logout} from "../utils/logout";
-import {outputRoomName, updateUrlRoom} from "../rooms";
-import {incrementMaxUsers, outputUsers} from "../users";
-import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, updateInvitedList} from "../invitations";
-import {outputMessage, outputUpdatedMessageCount} from "../messages";
-import {setupAdmin} from "../admin";
-import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters";
+import {logout} from "../utils/logout.js";
+import {outputRoomName, updateUrlRoom} from "../rooms.js";
+import {incrementMaxUsers, outputUsers} from "../users.js";
+import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, updateInvitedList} from "../invitations.js";
+import {outputMessage, outputUpdatedMessageCount} from "../messages.js";
+import {setupAdmin} from "../admin.js";
+import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
 
 const roomName = document.getElementById('room-name');
 const userList = document.getElementById('users');
 
 // Get username and room from URL
-let { username, email, room } = Qs.parse(location.search, {
+export let { username, email, room } = Qs.parse(location.search, {
     ignoreQueryPrefix: true // ignores non key/value data
 });
 

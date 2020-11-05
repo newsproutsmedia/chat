@@ -1,4 +1,4 @@
-import {socket} from "../listeners/socketListeners";
+import {socket} from "../listeners/socketListeners.js";
 
 /**
  * @description emit 'joinRoom' event containing currentUser from login

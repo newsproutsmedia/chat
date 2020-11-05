@@ -1,6 +1,7 @@
-import {generateShortId} from "./utils/generateShortId";
-import {getChildInputIds} from "./utils/getChildInputIds";
-import {emitEmailInvite} from "./emitters/socketEmitters";
+import {generateShortId} from "./utils/generateShortId.js";
+import {getChildInputIds} from "./utils/getChildInputIds.js";
+import {emitEmailInvite} from "./emitters/socketEmitters.js";
+import {InviteListeners} from "./listeners/inviteListeners.js";
 
 let addedUsers = 0;
 let invitedUserEmails = [];
@@ -39,9 +40,9 @@ export function outputInviteSection() {
                             <div id="recipients"></div>
                 <div class="flex-align-middle"><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i> Invite Someone</a></div>
                 <hr>
-                <button id="sendInvitations" class="btn send-invitations-btn">Send Invites</button>
-`;
+                <button id="sendInvitations" class="btn send-invitations-btn">Send Invites</button>`;
     document.querySelector('#dashMenu').appendChild(inviteSection);
+    new InviteListeners();
 }
 
 /**
@@ -73,7 +74,7 @@ export function updateInvitedList(users) {
             }
         }
 
-    if(invitedUserEmails.length === 0) document.getElementById("invited").remove();
+    //if(invitedUserEmails.length === 0) document.getElementById("invited").remove();
     console.log(invitedUserEmails);
 }
 

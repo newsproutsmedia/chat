@@ -1,4 +1,4 @@
-import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages";
+import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages.js";
 const initHeight = window.innerHeight;
 const messageInput = document.getElementById('msg');
 const messageSubmitBtn = document.getElementById('messageSubmitBtn');
