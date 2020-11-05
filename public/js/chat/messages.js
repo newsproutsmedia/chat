@@ -1,3 +1,5 @@
+import {emitChatMessage} from "./emitters/socketEmitters";
+
 const chatMessages = document.querySelector('.chat-messages');
 export const messageBtnId = 'messageSubmitBtn';
 export const messageBtnIconId = 'messageBtnIcon';
@@ -54,7 +56,7 @@ export function addMessage() {
     let message = {text: document.getElementById('msg').innerHTML};
 
     // Emit message to server
-    socket.emit('chatMessage', message);
+    emitChatMessage(message);
 
     // Clear input
     document.getElementById('msg').innerHTML = '';

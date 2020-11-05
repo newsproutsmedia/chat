@@ -1,6 +1,7 @@
 // add chat member onclick event
 import {generateShortId} from "./utils/generateShortId";
 import {getChildInputIds} from "./utils/getChildInputIds";
+import {emitEmailInvite} from "./emitters/socketEmitters";
 
 let addedUsers = 0;
 let invitedUserEmails = [];
@@ -25,9 +26,9 @@ export function addChatMember() {
     document.getElementById(`inviteInput_${randId}`).focus();
 
     addedUsers = addedUsers + 1;
-};
+}
 
-export function outputInviteSection(user) {
+export function outputInviteSection() {
     const inviteSection = document.createElement('invite');
     inviteSection.innerHTML = `<h4>Invite</h4>
                             <div id="recipients"></div>
@@ -47,32 +48,25 @@ export function outputInvitedUser({id, email}) {
     invite.setAttribute("id", email);
 }
 
-export function outputInviteDiv(userList) {
-    let invited = document.createElement("div");
-    invited.id = "invited";
-    invited.innerHTML = "<h4>Invite</h4>";
-    userList.parentNode.insertBefore(invited, userList.nextSibling); // insert after "users" section
-}
-
 export function updateInvitedList(users) {
-    if(invitedUserEmails.length === 0) return document.getElementById("invited").remove();
-    console.log(users);
-    for(let user in users) {
-        console.log("user in users:", users[user].email);
-        if(invitedUserEmails.includes(users[user].email)) {
-            let thisChildId = users[user].email;
-            console.log("removing child: ", thisChildId);
-            document.getElementById(thisChildId).remove();
-            invitedUserEmails = invitedUserEmails.filter(a => a !== users[user].email);
-        }
-    }
 
+        for (let user in users) {
+            if (invitedUserEmails.includes(users[user].email)) {
+                console.log("user in users:", users[user].email);
+                let thisChildId = users[user].email;
+                console.log("removing child: ", thisChildId);
+                document.getElementById(thisChildId).remove();
+                invitedUserEmails = invitedUserEmails.filter(a => a !== users[user].email);
+            }
+        }
+
+    if(invitedUserEmails.length === 0) document.getElementById("invited").remove();
     console.log(invitedUserEmails);
 }
 
 export function outputSendFailureMessage(id) {
     let badge = document.getElementById(id);
-    errorBadge(badge);
+    outputErrorBadge(badge);
     document.getElementById(id).parentElement.classList.add("send-failure");
     let message = document.createElement('p');
     message.className =  "send-failure-message";
@@ -88,7 +82,7 @@ export function outputSendErrorMessage(id) {
     document.getElementById(id).parentNode.appendChild(message);
 }
 
-export function addPendingBadge(element) {
+export function outputPendingBadge(element) {
     if(document.getElementById(`${element.id}_badge`)) {
         let existingBadge = document.getElementById(`${element.id}_badge`);
         existingBadge.classList.add("badge-warning");
@@ -104,7 +98,7 @@ export function addPendingBadge(element) {
     element.parentNode.prepend(badge);
 }
 
-export function errorBadge(element) {
+export function outputErrorBadge(element) {
     let badge = document.getElementById(`${element.id}_badge`);
     badge.classList.remove("badge-warning");
     badge.classList.add("badge-danger");
@@ -120,7 +114,7 @@ export function sendInvitations() {
     for (let i = 0; i < newInviteChildren.length; i++) {
         let inviteInputId = newInviteChildren[i].id;
         let inviteEmailInput = document.getElementById(inviteInputId);
-        addPendingBadge(inviteEmailInput);
+        outputPendingBadge(inviteEmailInput);
         let inviteEmailAddress = inviteEmailInput.value;
         if(inviteEmailAddress !== "") {
             invitedUserEmails.push(inviteEmailAddress);
@@ -141,5 +135,5 @@ export function sendInvitations() {
     // move this to main.js
     // find all other emits out of main.js and refactor into main.js
     // try using event listeners to do so
-    socket.emit('emailInvite', invite);
+    emitEmailInvite(invite);
 }

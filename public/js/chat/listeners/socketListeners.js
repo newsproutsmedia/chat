@@ -40,20 +40,18 @@ export class SocketListeners {
     }
 
     onInvalidRoom() {
-        socket.on('invalidRoom', room => {
+        socket.on('invalidRoom', () => {
             logout();
         });
     }
 
     onRoomCreated() {
-        // listen for roomCreated, set new room value
         socket.on('roomCreated', room => {
             updateUrlRoom(room);
         });
     }
 
     onRoomUsers() {
-        // Get room and users
         socket.on('roomUsers', ({ room, users }) => {
             outputRoomName(roomName, room);
             outputUsers(userList, users);
@@ -62,7 +60,6 @@ export class SocketListeners {
     }
 
     onMessage() {
-        // catch 'message' emitted in server.js
         socket.on('message', message => {
             console.log(message);
             outputMessage(message, username);
@@ -95,9 +92,7 @@ export class SocketListeners {
     onInviteSendSuccess() {
         socket.on('inviteSendSuccess', ({id, email}) => {
             console.log("inviteSendSuccess");
-            // if admin, show invited users, greyed out (or with "not joined" badge), in users section
             outputInvitedUser({id, email});
-            // adjust users list
             incrementMaxUsers();
         });
     }
@@ -105,7 +100,6 @@ export class SocketListeners {
     onInviteSendFailure() {
         socket.on('inviteSendFailure', ({id}) => {
             console.log("inviteSendFailure");
-            // display "there was a problem" message
             outputSendFailureMessage(id);
         });
     }
@@ -113,7 +107,6 @@ export class SocketListeners {
     onInviteSendError() {
         socket.on('inviteSendError', ({id}) => {
             console.log("inviteSendError");
-            // display "there was a problem" message
             outputSendErrorMessage(id);
         });
     }
