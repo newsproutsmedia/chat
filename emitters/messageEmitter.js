@@ -28,9 +28,9 @@ module.exports = class MessageEmitter extends SocketEmitter {
      * @requires {string} user.room - room id for passed user
      * @param {string} messageText - message text to send
      */
-    sendMessageToAllInRoom(user, messageText) {
+    /*  sendMessageToAllInRoom(user, messageText) {
         this.emitToAllInRoom('message', user.room, this._formatMessage(user, messageText));
-    }
+    }*/
 
     /**
      * @desc send a message to all room users (EXCEPT sender)

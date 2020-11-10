@@ -6,6 +6,7 @@ import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, upd
 import {outputMessage, outputUpdatedMessageCount} from "../messages.js";
 import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
+import {redirectToError} from "../errors.js";
 
 const roomName = document.getElementById('room-name');
 const userList = document.getElementById('users');
@@ -40,6 +41,7 @@ export class SocketListeners {
         this.onInviteSendError();
         this.onInviteSendSuccess();
         this.onInviteSendFailure();
+        this.onFatalError();
     }
 
     onInvalidRoom() {
@@ -111,6 +113,13 @@ export class SocketListeners {
         socket.on('inviteSendError', ({id}) => {
             console.log("inviteSendError");
             outputSendErrorMessage(id);
+        });
+    }
+
+    onFatalError() {
+        socket.on('fatalError', ({error}) => {
+           console.log("fatalError", error);
+           redirectToError();
         });
     }
 }

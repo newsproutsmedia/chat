@@ -354,5 +354,36 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
     });
+
+    describe('uncaughtException test', ()=> {
+
+        beforeEach(done => {
+            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
+            uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
+            done();
+        });
+
+        function myFunc(condition){
+            if(condition){
+                process.emit('uncaughtException', new Error);
+            }
+        }
+
+        it('should catch an unhandled exception', (done)=> {
+            const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('message', message => {
+                    myFunc(true);
+                    expect(mockExit).toHaveBeenCalledWith(1);
+                    client1.disconnect();
+                    done();
+                });
+
+                client1.emit('joinRoom', chatUser1);
+            });
+        });
+    });
 });
 
