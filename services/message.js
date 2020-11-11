@@ -1,7 +1,7 @@
 const logger = require('../loaders/logger');
 const User = require('./user');
 const MessageEmitter = require('../emitters/messageEmitter');
-const MessageHistory = require('./messageHistory');
+const MessageHistory = require('../services/messageHistory');
 
 /**
  * @desc construct a chat message

@@ -1,4 +1,4 @@
-const messages = [];
+let messages = [];
 const MessageEmitter = require('../emitters/messageEmitter');
 const logger = require('../loaders/logger');
 
@@ -13,18 +13,25 @@ module.exports = class MessageHistory {
         messages.push(message);
     }
 
-    getRoomMessages(room) {
+    static getRoomMessages(room) {
         const roomMessages = messages.filter(e => e.user.room.includes(room));
         logger.info('service.messageHistory.getRoomMessages', {messagesArrayLength: roomMessages.length});
         return roomMessages;
     }
 
     sendMessageHistoryToUser(room, socketIO) {
-        const roomMessages = this.getRoomMessages(room);
+        const roomMessages = MessageHistory.getRoomMessages(room);
         if(roomMessages) {
             roomMessages.forEach(message => {
                 new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text);
             });
         }
+    }
+
+    static deleteRoomMessages(room) {
+        logger.info('service.messageHistory.deleteRoomMessages', {room});
+        messages = messages.filter(message => {
+            return this.getRoomMessages(room).indexOf(message) === -1;
+        });
     }
 }

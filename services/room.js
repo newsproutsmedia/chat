@@ -93,4 +93,6 @@ module.exports = class Room {
         logger.info("service.room.emitSetupAdmin", {user});
         new MessageEmitter(this.socketIO).emitEventToSender('setupAdmin', user);
     }
+
+
 }

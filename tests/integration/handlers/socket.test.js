@@ -23,15 +23,10 @@ jest.mock("uuid", () => ({
     v4: jest.fn()
 }));
 
-let server;
-
 describe("Socket.IO Server-Side Events", () => {
 
-    afterAll(done => {
-        server.close(done);
-    })
-
     describe("joinRoom", () => {
+        let server;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
@@ -154,6 +149,7 @@ describe("Socket.IO Server-Side Events", () => {
     });
 
     describe("chatMessage", () => {
+        let server;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
@@ -180,7 +176,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should broadcast message to other users on message event', done => {
+        it.only('should broadcast message to other users on message event', done => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
 
@@ -299,13 +295,18 @@ describe("Socket.IO Server-Side Events", () => {
     });
 
     describe('disconnect', () => {
+        let server;
 
-        beforeEach(done => {
+        beforeAll(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
+        });
+
+        afterAll(done => {
+            server.close(done);
         });
 
         it('should notify remaining chat participants that a user left', done => {
@@ -360,8 +361,9 @@ describe("Socket.IO Server-Side Events", () => {
     });
 
     describe('uncaughtException test', () => {
+        let server;
 
-        beforeEach(done => {
+        beforeAll(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
@@ -369,7 +371,7 @@ describe("Socket.IO Server-Side Events", () => {
             done();
         });
 
-        afterEach(done => {
+        afterAll(done => {
             server.close(done);
         });
 

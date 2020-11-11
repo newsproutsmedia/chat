@@ -3,7 +3,6 @@ const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
 const User = require('../services/user');
-const UncaughtException = require('../handlers/uncaughtException');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
@@ -39,7 +38,5 @@ module.exports = function(server) {
             User.userLeave(socketIO);
         });
 
-        // Set up uncaught exception handler
-        new UncaughtException(socketIO);
     });
 }

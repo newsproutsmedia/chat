@@ -32,6 +32,8 @@ export class SocketListeners {
     constructor() {
         this.onInvalidRoom();
         emitJoinRoom(currentUser);
+        this.onDestroyRoom();
+        this.onLogoutUser();
         this.onRoomCreated();
         this.onRoomUsers();
         this.onMessage();
@@ -42,6 +44,18 @@ export class SocketListeners {
         this.onInviteSendSuccess();
         this.onInviteSendFailure();
         this.onFatalError();
+    }
+
+    onDestroyRoom() {
+        socket.on('destroyRoom', () => {
+            logout();
+        });
+    }
+
+    onLogoutUser() {
+        socket.on('logoutUser', () => {
+            logout();
+        });
     }
 
     onInvalidRoom() {
