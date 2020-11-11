@@ -5,8 +5,7 @@ const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
 const appName = process.env.PORT || "ChatApp";
 
-let server,
-    options = {
+let options = {
         transports: ['websocket'],
         'force new connection': true
     };
@@ -24,23 +23,29 @@ jest.mock("uuid", () => ({
     v4: jest.fn()
 }));
 
+let server;
+
 describe("Socket.IO Server-Side Events", () => {
 
+    afterAll(done => {
+        server.close(done);
+    })
+
     describe("joinRoom", () => {
+
+        beforeEach(done => {
+            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
+            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
+            done();
+        });
 
         function validateRoom(room) {
             return uuid.validate(room);
         }
 
-        beforeEach((done) => {
-            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
-            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
-            server = require('../../../server').server;
-            uuid.v4.mockReturnValueOnce(uniqueRoomId);
-            done();
-        });
-
-        it('should emit welcome message to new user when they join a room', (done) => {
+        it('should emit welcome message to new user when they join a room', done => {
             client1 = io.connect(socketURL, options);
 
             client1.once('connect', () => {
@@ -57,7 +62,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should broadcast to existing users when a new user joins room', (done) => {
+        it('should broadcast to existing users when a new user joins room', done => {
 
             // figure out way to get in the middle of uuid() call, perhaps using module mock
             // purpose is to eliminate having to set bot.room in !room conditional of room.js constructor
@@ -85,7 +90,7 @@ describe("Socket.IO Server-Side Events", () => {
 
         });
 
-        it('should emit roomCreated with a valid room id when first user joins a room', (done) => {
+        it('should emit roomCreated with a valid room id when first user joins a room', done => {
             client1 = io.connect(socketURL, options);
             client1.once('connect', () => {
                 client1.once('roomCreated', room => {
@@ -98,7 +103,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should emit invalidRoom with room id when an invalid room id is passed when user joins', (done) => {
+        it('should emit invalidRoom with room id when an invalid room id is passed when user joins', done => {
             chatUser1.room = 1234;
             client1 = io.connect(socketURL, options);
             client1.once('connect', () => {
@@ -112,7 +117,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should emit room id and array of users to all room sockets on user join', (done) => {
+        it('should emit room id and array of users to all room sockets on user join', done => {
             client1 = io.connect(socketURL, options);
             client1.once('connect', () => {
                 client1.once('roomUsers', users => {
@@ -127,7 +132,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         }, 5000);
 
-        it('should emit setupAdmin with user object if user is admin', (done) => {
+        it('should emit setupAdmin with user object if user is admin', done => {
             client1 = io.connect(socketURL, options);
             client1.once('connect', () => {
                 client1.once('setupAdmin', user => {
@@ -150,15 +155,15 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe("chatMessage", () => {
 
-        beforeEach((done) => {
+        beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
-            server = require('../../../server').server;
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
             done();
         });
 
-        it('should emit message back to sender on message event', (done) => {
+        it('should emit message back to sender on message event', done => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('message', message => {
@@ -218,11 +223,11 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe("emailInvite", () => {
 
-        beforeEach((done) => {
+        beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
-            server = require('../../../server').server;
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
             done();
         });
 
@@ -295,12 +300,11 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe('disconnect', () => {
 
-
-        beforeEach((done) => {
+        beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
-            server = require('../../../server').server;
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
             done();
         });
 
@@ -355,13 +359,18 @@ describe("Socket.IO Server-Side Events", () => {
         });
     });
 
-    describe('uncaughtException test', ()=> {
+    describe('uncaughtException test', () => {
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
+            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
+        });
+
+        afterEach(done => {
+            server.close(done);
         });
 
         function myFunc(condition){
@@ -370,7 +379,7 @@ describe("Socket.IO Server-Side Events", () => {
             }
         }
 
-        it('should catch an unhandled exception', (done)=> {
+        it('should catch an unhandled exception', done => {
             const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {

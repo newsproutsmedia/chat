@@ -7,9 +7,9 @@ const UncaughtException = require('../handlers/uncaughtException');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
-const io = socketio(server);
+    const io = socketio(server);
 
-// Run when client connects
+    // Run when client connects
     io.on('connection', socket => {
         const socketIO = {socket, io};
 

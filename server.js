@@ -13,7 +13,7 @@ const logger = require('./loaders/logger');
 // Server
 app.use(express.static(path.join(__dirname, 'public')));
 const PORT = process.env.PORT || 3000;
-const server = exports.server = http.createServer(app).listen(PORT, () => {
+const server = http.createServer(app).listen(PORT, () => {
     logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
 });
 
@@ -25,6 +25,8 @@ require('./handlers/socket')(server);
 
 // Production Modules
 require('./loaders/production')(app);
+
+module.exports = server;
 
 
 
