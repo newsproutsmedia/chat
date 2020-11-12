@@ -148,6 +148,34 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
+        it('should emit message history when a new user joins', done => {
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('message', message => {
+                    // welcome message
+                    client1.emit('chatMessage', {text: 'test message'});
+                });
+
+                client1.emit('joinRoom', chatUser1);
+
+                client2 = io.connect(socketURL, options);
+                client2.on('connect', data => {
+                    chatUser2.room = uniqueRoomId;
+                    client2.once('message', message => {
+                        // welcome message
+                        client2.once('message', message => {
+                            // message history
+                            expect(message.text).toBe('test message');
+                            client1.disconnect();
+                            client2.disconnect();
+                            done();
+                        });
+                    });
+                    client2.emit('joinRoom', chatUser2);
+                });
+            });
+        });
+
     });
 
     describe("chatMessage", () => {
@@ -307,7 +335,7 @@ describe("Socket.IO Server-Side Events", () => {
     describe('disconnect', () => {
         let server;
 
-        beforeAll(done => {
+        beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
@@ -316,7 +344,7 @@ describe("Socket.IO Server-Side Events", () => {
         });
 
         afterEach(done => {
-            setTimeout(() => done(), 1000);
+            setTimeout(() => done(), 2000);
         });
 
         it('should notify remaining chat participants that a user left', done => {
@@ -373,7 +401,7 @@ describe("Socket.IO Server-Side Events", () => {
     describe('uncaughtException test', () => {
         let server;
 
-        beforeAll(done => {
+        beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             uuid.v4.mockReturnValueOnce(uniqueRoomId);

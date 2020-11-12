@@ -21,11 +21,13 @@ module.exports = class MessageHistory {
 
     sendMessageHistoryToUser(room, socketIO) {
         const roomMessages = MessageHistory.getRoomMessages(room);
-        if(roomMessages) {
-            roomMessages.forEach(message => {
-                new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text);
-            });
-        }
+        if(!roomMessages) return false;
+
+        roomMessages.forEach(message => {
+            new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text);
+        });
+
+        return true;
     }
 
     static deleteRoomMessages(room) {

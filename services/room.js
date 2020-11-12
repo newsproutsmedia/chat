@@ -32,11 +32,15 @@ module.exports = class Room {
     }
 
     join() {
-        // check if roomID is valid
-        if(!this._validate(this.room)) return this._emitInvalidRoom(this.room);
-
         // create user object
         const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type}).addUser();
+
+        // check if roomID is valid
+        if(!this._validate(this.room)) {
+            this._emitInvalidRoom(this.room);
+            this.socket.disconnect();
+            return;
+        }
 
         logger.info("service.room.joinRoom", {room: this.room});
         this.socket.join(this.room);

@@ -165,15 +165,14 @@ module.exports = class User {
     static destroyRoom({socket, io}, room) {
         logger.info('service.room.destroyRoom', {message: 'performing room cleanup', room});
         MessageHistory.deleteRoomMessages(room);
-        this.deleteRoomUsers(room);
+        User.deleteRoomUsers(room);
     }
 
     static deleteRoomUsers(room) {
         logger.info('service.user.deleteRoomUsers', {message: 'deleting room users', room});
-        const newUsersArray = users.filter(user => {
+        users = users.filter(user => {
             return this.getRoomUsers(room).indexOf(user) === -1;
         });
-        users = newUsersArray;
         logger.info('service.user.deleteRoomUsers', {users});
     }
 
@@ -181,7 +180,7 @@ module.exports = class User {
         logger.info('service.room.userDisconnected', {message: 'checking number of room users'});
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
-        const rooms = Object.keys(socket.rooms);
+        const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
         logger.info('service.room.userDisconnected', {rooms});
         if(!rooms) {
             User.destroyRoom(socketIO, currentUser.room);

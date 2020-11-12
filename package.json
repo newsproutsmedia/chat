@@ -4,7 +4,7 @@
   "description": "Socket.IO-based chat app",
   "main": "server.js",
   "scripts": {
-    "test": "jest --verbose --runInBand --forceExit",
+    "test": "jest --verbose --runInBand --coverage --forceExit",
     "start": "node server",
     "dev": "nodemon server"
   },
@@ -20,8 +20,8 @@
     "moment": "^2.29.0",
     "nodemailer": "^6.4.13",
     "os": "^0.1.1",
-    "socket.io": "^3.0.1",
-    "socket.io-client": "^3.0.1",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.1",
     "uuid": "^8.3.0",
     "weak-napi": "^2.0.2",
     "winston": "^3.3.3"
