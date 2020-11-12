@@ -32,9 +32,9 @@ module.exports = function(server) {
             await mail.sendAll();
         });
 
-        // Runs when client disconnects
+        // Runs when client is disconnected
         socket.on('disconnect', () => {
-            logger.info("socket.connection.disconnect: User attempting to disconnect");
+            logger.info("socket.connection.disconnected: User disconnected");
             User.userLeave(socketIO);
         });
 

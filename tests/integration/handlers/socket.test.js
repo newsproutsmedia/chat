@@ -36,6 +36,10 @@ describe("Socket.IO Server-Side Events", () => {
             done();
         });
 
+        afterEach(done => {
+            setTimeout(() => done(), 1000);
+        })
+
         function validateRoom(room) {
             return uuid.validate(room);
         }
@@ -57,10 +61,8 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should broadcast to existing users when a new user joins room', done => {
+        it('should broadcast to existing users when a new user joins room', async (done) => {
 
-            // figure out way to get in the middle of uuid() call, perhaps using module mock
-            // purpose is to eliminate having to set bot.room in !room conditional of room.js constructor
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('message', message => {
@@ -159,6 +161,10 @@ describe("Socket.IO Server-Side Events", () => {
             done();
         });
 
+        afterEach(done => {
+            setTimeout(() => done(), 1000);
+        })
+
         it('should emit message back to sender on message event', done => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
@@ -176,7 +182,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it.only('should broadcast message to other users on message event', done => {
+        it('should broadcast message to other users on message event', done => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
 
@@ -226,6 +232,10 @@ describe("Socket.IO Server-Side Events", () => {
             server = require('../../../server').server;
             done();
         });
+
+        afterEach(done => {
+            setTimeout(() => done(), 1000);
+        })
 
         it('should emit inviteNotAllowed if user is not admin', done => {
             let invite = {
@@ -305,8 +315,8 @@ describe("Socket.IO Server-Side Events", () => {
             done();
         });
 
-        afterAll(done => {
-            server.close(done);
+        afterEach(done => {
+            setTimeout(() => done(), 1000);
         });
 
         it('should notify remaining chat participants that a user left', done => {
@@ -371,8 +381,8 @@ describe("Socket.IO Server-Side Events", () => {
             done();
         });
 
-        afterAll(done => {
-            server.close(done);
+        afterEach(done => {
+            setTimeout(() => done(), 1000);
         });
 
         function myFunc(condition){

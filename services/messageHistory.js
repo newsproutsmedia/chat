@@ -29,9 +29,11 @@ module.exports = class MessageHistory {
     }
 
     static deleteRoomMessages(room) {
-        logger.info('service.messageHistory.deleteRoomMessages', {room});
-        messages = messages.filter(message => {
+        logger.info('service.messageHistory.deleteRoomMessages', {message: 'deleting room messages', room});
+        const newMessageArray = messages.filter(message => {
             return this.getRoomMessages(room).indexOf(message) === -1;
         });
+        messages = newMessageArray;
+        logger.info('service.messageHistory.deleteRoomMessages', {messages});
     }
 }
