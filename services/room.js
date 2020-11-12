@@ -1,6 +1,7 @@
 const {validate: validateUUID, v4: uuid} = require('uuid');
 const User = require('./user');
 const MessageEmitter = require('../emitters/messageEmitter');
+const MessageHistory = require('./messageHistory');
 const logger = require('../loaders/logger');
 let {bot} = require('../loaders/globals');
 
@@ -31,11 +32,15 @@ module.exports = class Room {
     }
 
     join() {
-        // check if roomID is valid
-        if(!this._validate(this.room)) return this._emitInvalidRoom(this.room);
-
         // create user object
         const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type}).addUser();
+
+        // check if roomID is valid
+        if(!this._validate(this.room)) {
+            this._emitInvalidRoom(this.room);
+            this.socket.disconnect();
+            return;
+        }
 
         logger.info("service.room.joinRoom", {room: this.room});
         this.socket.join(this.room);
@@ -46,6 +51,8 @@ module.exports = class Room {
         this._emitJoinedMessage(user);
         // send users and room info to front end
         User.sendRoomUsers(this.room, this.socketIO);
+        // send message history to front end
+        new MessageHistory().sendMessageHistoryToUser(this.room, this.socketIO);
         // set up admin tools
         if(this.type === 'admin') this._emitSetupAdmin(user);
     }
@@ -90,4 +97,6 @@ module.exports = class Room {
         logger.info("service.room.emitSetupAdmin", {user});
         new MessageEmitter(this.socketIO).emitEventToSender('setupAdmin', user);
     }
+
+
 }

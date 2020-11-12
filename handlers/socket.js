@@ -3,13 +3,12 @@ const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
 const User = require('../services/user');
-const UncaughtException = require('../handlers/uncaughtException');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
-const io = socketio(server);
+    const io = socketio(server);
 
-// Run when client connects
+    // Run when client connects
     io.on('connection', socket => {
         const socketIO = {socket, io};
 
@@ -33,13 +32,11 @@ const io = socketio(server);
             await mail.sendAll();
         });
 
-        // Runs when client disconnects
+        // Runs when client is disconnected
         socket.on('disconnect', () => {
-            logger.info("socket.connection.disconnect: User attempting to disconnect");
+            logger.info("socket.connection.disconnected: User disconnected");
             User.userLeave(socketIO);
         });
 
-        // Set up uncaught exception handler
-        new UncaughtException(socketIO);
     });
 }

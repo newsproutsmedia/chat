@@ -1,8 +1,8 @@
 const logger = require('../loaders/logger');
-let {appName, bot, userTypes} = require('../loaders/globals');
-const addCurrentTime = require('../utils/time');
+let {bot, userTypes} = require('../loaders/globals');
 const MessageEmitter = require('../emitters/messageEmitter');
-const users = [];
+const MessageHistory = require('./messageHistory');
+let users = [];
 
 /**
  * @desc construct a new user
@@ -58,24 +58,29 @@ module.exports = class User {
 
     /**
      * @desc remove user from users array upon disconnect
-     * @param {Object} socketIO
+     * @param {Object} socketIO - socket and io params
      * @emits User.emitUserHasLeft, User.sendRoomUsers
      */
     static userLeave({socket, io}) {
+        logger.info('service.user.userLeave', {socket_id: socket.id});
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
-        logger.info("socket.disconnect: User is leaving", {currentUser});
+        logger.info('service.user.userLeave', {room: currentUser.room});
 
         const index = users.findIndex(user => user.id === socket.id);
 
-        // return user
-        if (users.splice(index, 1)[0]) {
-            // notify other chat participants that user has left
-            User.emitUserHasLeft(currentUser, socketIO);
-            logger.info("socket.disconnect: User left", {currentUser});
-            // send updated users and room info
-            User.sendRoomUsers(currentUser.room, socketIO);
-        }
+        // log out current user
+        User.emitLogoutUser(currentUser, socketIO);
+        // notify other chat participants that user has left
+        User.emitUserHasLeft(currentUser, socketIO);
+        // set user status to DISCONNECTED
+        users[index].status = "DISCONNECTED";
+
+        logger.info("socket.disconnect: User left", {userStatus: currentUser.status});
+        // send updated users and room info
+        User.sendRoomUsers(currentUser.room, socketIO);
+
+        User.userDisconnected(socketIO);
     }
 
     /**
@@ -95,6 +100,15 @@ module.exports = class User {
     }
 
     /**
+     * @desc emits logout user event to front-end
+     * @param {Object} user - user object
+     * @param {Object} socketIO - io and socket params
+     */
+    static emitLogoutUser(user, socketIO) {
+        new MessageEmitter(socketIO).emitEventToSender('logoutUser', {});
+    }
+
+    /**
      * @desc returns array of room user objects
      * @param {string} room
      * @return {array} - array of user objects
@@ -102,6 +116,8 @@ module.exports = class User {
     static getRoomUsers(room) {
         return users.filter(user => user.room === room);
     }
+
+
 
     /**
      * @desc returns array of room user objects
@@ -133,12 +149,42 @@ module.exports = class User {
      * @return string
      */
     static setUserType(type) {
-        logger.info("service.room.setUserType", {type});
+        logger.info("service.user.setUserType", {type});
         if (!User.validateUserType(type)) {
-            logger.error("service.user.setUserType", {message: `INVALID USER TYPE: ${type} is not a valid user type`, type});
+            logger.warn("service.user.setUserType", {message: `INVALID USER TYPE: ${type} is not a valid user type`, type});
             return 'user';
         }
         return type;
+    }
+
+    /**
+     * @desc remove all clients and destroy room
+     * @param {Object} socketIO - socket and io params
+     * @param {string} room - id of room
+     */
+    static destroyRoom({socket, io}, room) {
+        logger.info('service.room.destroyRoom', {message: 'performing room cleanup', room});
+        MessageHistory.deleteRoomMessages(room);
+        User.deleteRoomUsers(room);
+    }
+
+    static deleteRoomUsers(room) {
+        logger.info('service.user.deleteRoomUsers', {message: 'deleting room users', room});
+        users = users.filter(user => {
+            return this.getRoomUsers(room).indexOf(user) === -1;
+        });
+        logger.info('service.user.deleteRoomUsers', {users});
+    }
+
+    static userDisconnected({socket, io}) {
+        logger.info('service.room.userDisconnected', {message: 'checking number of room users'});
+        const socketIO = {socket, io};
+        const currentUser = User.getCurrentUser(socket.id);
+        const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
+        logger.info('service.room.userDisconnected', {rooms});
+        if(!rooms) {
+            User.destroyRoom(socketIO, currentUser.room);
+        };
     }
 
 }
