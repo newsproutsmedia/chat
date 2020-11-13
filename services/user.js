@@ -62,10 +62,9 @@ module.exports = class User {
      * @emits User.emitUserHasLeft, User.sendRoomUsers
      */
     static userLeave({socket, io}) {
-        logger.info('service.user.userLeave', {socket_id: socket.id});
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
-        logger.info('service.user.userLeave', {room: currentUser.room});
+        logger.info('[service.user.userLeave]', {message: `User (${currentUser.username}) leaving room`, room: currentUser.room});
 
         const index = users.findIndex(user => user.id === socket.id);
 
@@ -76,7 +75,7 @@ module.exports = class User {
         // set user status to DISCONNECTED
         users[index].status = "DISCONNECTED";
 
-        logger.info("socket.disconnect: User left", {userStatus: currentUser.status});
+        logger.info("[service.user.userLeave]", {message: "Status Changed", userStatus: currentUser.status});
         // send updated users and room info
         User.sendRoomUsers(currentUser.room, socketIO);
 
@@ -130,7 +129,7 @@ module.exports = class User {
             room: room,
             users: User.getRoomUsers(room)
         };
-        logger.info("service.room.sendRoomUsers", {room, roomUsers});
+        logger.info("[service.room.sendRoomUsers]", {room, roomUsers});
         new MessageEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsers);
     }
 
@@ -151,7 +150,7 @@ module.exports = class User {
     static setUserType(type) {
         logger.info("service.user.setUserType", {type});
         if (!User.validateUserType(type)) {
-            logger.warn("service.user.setUserType", {message: `INVALID USER TYPE: ${type} is not a valid user type`, type});
+            logger.warn("[service.user.setUserType]", {message: `INVALID USER TYPE: ${type} is not a valid user type`, type});
             return 'user';
         }
         return type;
@@ -163,25 +162,25 @@ module.exports = class User {
      * @param {string} room - id of room
      */
     static destroyRoom({socket, io}, room) {
-        logger.info('service.room.destroyRoom', {message: 'performing room cleanup', room});
+        logger.info('[service.room.destroyRoom]', {message: 'performing room cleanup', room});
         MessageHistory.deleteRoomMessages(room);
         User.deleteRoomUsers(room);
     }
 
     static deleteRoomUsers(room) {
-        logger.info('service.user.deleteRoomUsers', {message: 'deleting room users', room});
+        logger.info('[service.user.deleteRoomUsers]', {message: 'deleting room users', room});
         users = users.filter(user => {
             return this.getRoomUsers(room).indexOf(user) === -1;
         });
-        logger.info('service.user.deleteRoomUsers', {users});
+        logger.info('[service.user.deleteRoomUsers]', {users});
     }
 
     static userDisconnected({socket, io}) {
-        logger.info('service.room.userDisconnected', {message: 'checking number of room users'});
+        logger.info('[service.room.userDisconnected]', {message: 'Checking number of room users'});
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
         const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
-        logger.info('service.room.userDisconnected', {rooms});
+        logger.info('[service.room.userDisconnected]', {rooms});
         if(!rooms) {
             User.destroyRoom(socketIO, currentUser.room);
         };

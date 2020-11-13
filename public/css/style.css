@@ -144,6 +144,11 @@ dashboard hr {
     margin-right: 8px;
 }
 
+.userListItemMenu {
+    margin-left: auto;
+    align-self: center;
+}
+
 invite {
     display: flex;
     flex-direction: column;
