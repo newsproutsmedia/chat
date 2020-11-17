@@ -22,6 +22,16 @@ module.exports = class SocketEmitter {
     }
 
     /**
+     * @desc emit an event and object back to the current user
+     * @param {string} eventType - The type of event to be passed (eg 'message')
+     * @param {string} socketID - Socket ID for event target
+     * @param {any} object - The object to be passed with the event
+     */
+    emitEventToSocket(eventType, socketID, object) {
+        this.io.to(socketID).emit(eventType, object);
+    }
+
+    /**
      * @desc emit an event and object to ALL room users (including sender)
      * @param {string} eventType - The type of event to be passed (eg 'message')
      * @param {string} room - The ID of the room to emit to

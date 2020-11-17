@@ -36,3 +36,11 @@ export function emitChatMessage(message) {
 export function emitEmailInvite(invite) {
     socket.emit('emailInvite', invite);
 }
+
+/**
+ * @description emit 'kickOutUser' event containing the socket ID of the user to be removed
+ * @param {string} socketID
+ */
+export function emitKickOutUser(socketID) {
+    socket.emit('kickOutUser', socketID);
+}

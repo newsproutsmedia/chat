@@ -49,12 +49,13 @@ module.exports = class Room {
         this._emitWelcome(user);
         // broadcast to everyone (except user) when user connects
         this._emitJoinedMessage(user);
+        // set up admin tools
+        if(this.type === 'admin') this._emitSetupAdmin(user);
         // send users and room info to front end
         User.sendRoomUsers(this.room, this.socketIO);
         // send message history to front end
         new MessageHistory().sendMessageHistoryToUser(this.room, this.socketIO);
-        // set up admin tools
-        if(this.type === 'admin') this._emitSetupAdmin(user);
+
     }
 
     _validate(room) {

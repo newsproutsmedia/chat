@@ -144,6 +144,15 @@ dashboard hr {
     margin-right: 8px;
 }
 
+.userListItemMenu {
+    margin-left: auto;
+    align-self: center;
+}
+
+.userListItemMenu:hover {
+    cursor: pointer;
+}
+
 invite {
     display: flex;
     flex-direction: column;
