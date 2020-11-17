@@ -485,6 +485,50 @@ describe("Socket.IO Server-Side Events", () => {
             client1.emit('joinRoom', chatUser1);
         });
 
+        it('should set user status to TERMINATED if user is already disconnected', done => {
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('message', message => {
+                    // welcome message
+                    logger.info('CLIENT 1: Welcome Message');
+                    client1.once('message', message => {
+                        // client 2 has joined message
+                        logger.info('CLIENT 1: Client 2 has joined');
+                        client1.once('message', message => {
+                            // client 2 has disconnected
+                            logger.info('CLIENT 1: Client 2 has left');
+                            client1.once('roomUsers', roomUsers => {
+                                logger.info('CLIENT 1: Room users updated');
+                                const client2socket = roomUsers.users[1].id;
+                                client1.once('roomUsers', roomUsers => {
+                                    logger.info('CLIENT 1: Room users updated after kick out');
+                                    expect(roomUsers.users[1].status).toBe("TERMINATED");
+                                    client1.disconnect();
+                                    done();
+                                });
+
+                                // emit kickOutUser
+                                client1.emit('kickOutUser', client2socket);
+                            });
+                        })
+
+                    });
+                });
+
+                client2 = io.connect(socketURL, options);
+                client2.on('connect', data => {
+                    chatUser2.room = uniqueRoomId;
+                    client2.once('message', message => {
+                        // welcome message
+                        client2.disconnect();
+                    });
+                    client2.emit('joinRoom', chatUser2);
+                });
+            });
+
+            client1.emit('joinRoom', chatUser1);
+        });
+
         it('should log out ejected user', done => {
             let client2socket;
             client1 = io.connect(socketURL, options);
