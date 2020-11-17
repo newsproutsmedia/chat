@@ -68,8 +68,6 @@ module.exports = class User {
 
         const index = users.findIndex(user => user.id === socket.id);
 
-        // log out current user
-        User.emitLogoutUser(currentUser, socketIO);
         // notify other chat participants that user has left
         User.emitUserHasLeft(currentUser, socketIO);
         // set user status to DISCONNECTED
@@ -95,6 +93,7 @@ module.exports = class User {
     static emitUserHasLeft(user, socketIO) {
         const sysUser = {...bot, room: user.room};
         const text = `${user.username} has left the chat`;
+        logger.info('[service.user.emitUserHasLeft]', {message: "Sending user has left notice to room", text});
         new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(sysUser, text);
     }
 
@@ -104,7 +103,8 @@ module.exports = class User {
      * @param {Object} socketIO - io and socket params
      */
     static emitLogoutUser(user, socketIO) {
-        new MessageEmitter(socketIO).emitEventToSender('logoutUser', {});
+        logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", user});
+        new MessageEmitter(socketIO).emitEventToSocket('logoutUser', user.id, user);
     }
 
     /**

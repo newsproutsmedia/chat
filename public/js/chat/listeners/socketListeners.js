@@ -53,8 +53,9 @@ export class SocketListeners {
     }
 
     onLogoutUser() {
-        socket.on('logoutUser', () => {
-            logout();
+        socket.on('logoutUser', user => {
+            console.log('logout received');
+            logout(user);
         });
     }
 
