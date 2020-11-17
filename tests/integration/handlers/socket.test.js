@@ -435,7 +435,7 @@ describe("Socket.IO Server-Side Events", () => {
         });
     });
 
-    describe('kickOutUser', () => {
+    describe('blockUser', () => {
         let server;
 
         beforeEach(done => {
@@ -450,7 +450,7 @@ describe("Socket.IO Server-Side Events", () => {
             setTimeout(() => done(), 2000);
         });
 
-        it('should set status of ejected user to TERMINATED', done => {
+        it('should set status of ejected user to BLOCKED', done => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('message', message => {
@@ -460,14 +460,14 @@ describe("Socket.IO Server-Side Events", () => {
                         client1.once('roomUsers', roomUsers => {
                             const client2socket = roomUsers.users[1].id;
                             client1.once('roomUsers', roomUsers => {
-                                expect(roomUsers.users[1].status).toBe("TERMINATED");
+                                expect(roomUsers.users[1].status).toBe("BLOCKED");
                                 client1.disconnect();
                                 client2.disconnect();
                                 done();
                             });
 
                             // emit kickOutUser
-                            client1.emit('kickOutUser', client2socket);
+                            client1.emit('blockUser', client2socket);
                         });
                     });
                 });
@@ -485,7 +485,7 @@ describe("Socket.IO Server-Side Events", () => {
             client1.emit('joinRoom', chatUser1);
         });
 
-        it('should set user status to TERMINATED if user is already disconnected', done => {
+        it('should set user status to BLOCKED if user is already disconnected', done => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('message', message => {
@@ -502,13 +502,13 @@ describe("Socket.IO Server-Side Events", () => {
                                 const client2socket = roomUsers.users[1].id;
                                 client1.once('roomUsers', roomUsers => {
                                     logger.info('CLIENT 1: Room users updated after kick out');
-                                    expect(roomUsers.users[1].status).toBe("TERMINATED");
+                                    expect(roomUsers.users[1].status).toBe("BLOCKED");
                                     client1.disconnect();
                                     done();
                                 });
 
                                 // emit kickOutUser
-                                client1.emit('kickOutUser', client2socket);
+                                client1.emit('blockUser', client2socket);
                             });
                         })
 
@@ -529,7 +529,7 @@ describe("Socket.IO Server-Side Events", () => {
             client1.emit('joinRoom', chatUser1);
         });
 
-        it('should log out ejected user', done => {
+        it('should log out blocked user', done => {
             let client2socket;
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
@@ -540,7 +540,7 @@ describe("Socket.IO Server-Side Events", () => {
                         client1.once('roomUsers', roomUsers => {
                             client2socket = roomUsers.users[1].id;
                             // emit kickOutUser
-                            client1.emit('kickOutUser', client2socket);
+                            client1.emit('blockUser', client2socket);
                         });
                     });
                 });
@@ -550,7 +550,7 @@ describe("Socket.IO Server-Side Events", () => {
                     chatUser2.room = uniqueRoomId;
                     client2.once('logoutUser', user => {
                         console.log("logoutUser received", user);
-                        //expect(user.id).toBe(client2socket);
+                        expect(user.id).toBe(client2socket);
                         client1.disconnect();
                         client2.disconnect();
                         done();
