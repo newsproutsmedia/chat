@@ -3,7 +3,7 @@ const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
 const User = require('../services/user');
-const KickOutUser = require('../services/kickOutUser');
+const BlockUser = require('../services/blockUser');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
@@ -35,9 +35,9 @@ module.exports = function(server) {
             await mail.sendAll();
         });
 
-        // listen for kick out
-        socket.on('kickOutUser', id => {
-          new KickOutUser({...socketIO, id}).kickOutUser();
+        // listen for block user event
+        socket.on('blockUser', id => {
+          new BlockUser({...socketIO, id}).blockUser();
         });
 
         // Runs when client is disconnected

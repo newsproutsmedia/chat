@@ -38,9 +38,9 @@ export function emitEmailInvite(invite) {
 }
 
 /**
- * @description emit 'kickOutUser' event containing the socket ID of the user to be removed
+ * @description emit 'blockUser' event containing the socket ID of the user to be blocked
  * @param {string} socketID
  */
-export function emitKickOutUser(socketID) {
-    socket.emit('kickOutUser', socketID);
+export function emitBlockUser(socketID) {
+    socket.emit('blockUser', socketID);
 }
