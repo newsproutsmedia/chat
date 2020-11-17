@@ -1,15 +1,17 @@
-import {socket} from "./socketListeners.js";
+import {emitKickOutUser} from "../emitters/socketEmitters.js";
 
-export class UserItemMenuListeners {
-    constructor(id) {
-        this.socketId = id;
-        this.disconnectUserButton = document.getElementById(`${id}-disconnect`);
-        this.addDisconnectUserButtonListener();
+    export function addDisconnectUserButtonListener(id) {
+        const disconnectUserButton = document.getElementById(`${id}-disconnect`);
+        disconnectUserButton.addEventListener('click', kickOutUser);
     }
 
-    addDisconnectUserButtonListener() {
-        this.disconnectUserButton.addEventListener('click', ()=> {
-            socket.emit('kickOutUser', this.socketId);
-        })
+    export function removeDisconnectUserButtonListeners(users) {
+        users.forEach(user => {
+            const disconnectButton = document.getElementById(`${user.id}-disconnect`);
+            disconnectButton.removeEventListener('click', kickOutUser);
+        });
     }
-}
+
+    function kickOutUser(evt) {
+        emitKickOutUser(evt.currentTarget.getAttribute('data-value'));
+    }

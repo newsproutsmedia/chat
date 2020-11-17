@@ -74,6 +74,7 @@ export class SocketListeners {
         socket.on('roomUsers', ({ room, users }) => {
             outputRoomName(roomName, room);
             outputUsers(userList, users);
+
             updateInvitedList(users);
         });
     }

@@ -1,3 +1,5 @@
+const User = require('../services/user');
+
 module.exports = class KickOutUser {
     constructor({socket, io, id}) {
         this.socket = socket;
@@ -6,6 +8,7 @@ module.exports = class KickOutUser {
     }
 
     kickOutUser() {
+        User.setUserTerminated(this.socketId);
         this.io.sockets.sockets[this.socketId].disconnect();
     }
 }

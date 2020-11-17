@@ -73,7 +73,7 @@ module.exports = class User {
         // notify other chat participants that user has left
         User.emitUserHasLeft(currentUser, socketIO);
         // set user status to DISCONNECTED
-        users[index].status = "DISCONNECTED";
+        if(users[index].status !== "TERMINATED") users[index].status = "DISCONNECTED";
 
         logger.info("[service.user.userLeave]", {message: "Status Changed", userStatus: currentUser.status});
         // send updated users and room info
@@ -184,6 +184,11 @@ module.exports = class User {
         if(!rooms) {
             User.destroyRoom(socketIO, currentUser.room);
         };
+    }
+
+    static setUserTerminated(id) {
+        const index = users.findIndex(user => user.id === id);
+        users[index].status = "TERMINATED";
     }
 
 }
