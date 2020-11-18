@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --verbose --runInBand --coverage --forceExit",
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "scss": "node-sass — watch public/scss/import.scss -o public/css/newstyles.scss"
   },
   "engines": {
     "node": "12.18.3"
@@ -18,6 +19,7 @@
     "express": "^4.17.1",
     "helmet": "^4.1.1",
     "moment": "^2.29.0",
+    "node-sass": "^5.0.0",
     "nodemailer": "^6.4.13",
     "os": "^0.1.1",
     "socket.io": "^2.3.0",
