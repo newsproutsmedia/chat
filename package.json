@@ -7,7 +7,9 @@
     "test": "jest --verbose --runInBand --coverage --forceExit",
     "start": "node server",
     "dev": "nodemon server",
-    "scss": "node-sass — watch public/scss/import.scss -o public/css/newstyles.scss"
+    "scss": "node-sass scss/main.scss public/css/styles.css",
+    "watch-scss": "node-sass -w scss -o public/css",
+    "watch": "npm run dev & npm run watch-scss"
   },
   "engines": {
     "node": "12.18.3"

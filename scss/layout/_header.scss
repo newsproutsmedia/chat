@@ -1,0 +1,54 @@
+header {
+  padding: 1em 2em;
+  height: 10%;
+  background-color: $secondary;
+  color: $white;
+  font-size: 20px;
+}
+
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  &-item {
+    height: 100%;
+  }
+
+  &-center {
+    flex-grow: 1;
+  }
+
+  &-item + &-item {
+    margin-left: 2em;
+  }
+}
+
+headermenu {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+headermenu .logo {
+  height: 6vh;
+  color: $white;
+  margin-left: 5vw;
+}
+
+headermenu .site-title h1 {
+  padding-top: 1vh;
+  font-size: 100%;
+}
+
+headermenu .site-menu {
+  margin-right: 20px;
+  margin-left: auto;
+}
+
+headermenu .site-menu li {
+  color: $white;
+  font-size: 100%;
+}

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/main.css">
     <title>Chat App!</title>
 </head>
 <body>
@@ -17,18 +17,16 @@
         </dashtitle>
         <hr/>
         <dashmenu id="dashMenu">
-            <view>
+            <view class="dash-section">
                 <h4>View</h4>
-                <hr/>
             </view>
-            <room>
+            <room class="dash-section">
                 <h4>Room</h4>
                 <p id="room-name">JavaScript</p>
                 <button id="logoutBtn" class="btn leave-room">Leave Room</button>
-                <hr/>
             </room>
 
-            <users id="users">
+            <users id="users" class="dash-section">
 
             </users>
 
@@ -36,13 +34,11 @@
     </dashboard>
 </div>
 <div id="page">
-    <header class="chat-header">
-        <headermenu>
-            <div class="site-title"><h1><b>Chat</b>App!</h1></div>
-            <a id="show-dash" class="site-menu"><i class="fas fa-th fa-lg"></i></a>
-        </headermenu>
+    <header class="header">
+        <div class="header-item logo"><h1><b>Chat</b>App!</h1></div>
+        <div class="header-center">&nbsp;</div>
+        <div class="header-item"><a id="show-dash" class="site-menu"><i class="fas fa-th fa-lg"></i></a></div>
     </header>
-
     <div id="main">
         <chat>
 

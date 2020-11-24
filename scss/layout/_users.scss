@@ -1,0 +1,17 @@
+.user {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: 1em;
+  span {
+    margin-right: 8px;
+  }
+}
+
+.user-list-item-menu {
+  align-self: center;
+  margin-left: auto;
+  &:hover {
+    cursor: pointer;
+  }
+}
