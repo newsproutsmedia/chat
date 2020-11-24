@@ -1,0 +1,75 @@
+@media screen and (min-width: 1000px) {
+  /*.btn:hover {*/
+  /*    background-color: #ffffff;*/
+  /*    color: #000000;*/
+  /*}*/
+  .default-message-btn-icon:before {
+    content: "\f1d8";
+  }
+
+  .send-message-btn-icon:before {
+    content: "\f1d8";
+  }
+
+  .ok-message-btn-icon:before {
+    content: "\f1d8";
+  }
+
+  .btn-default {
+    background-color: var(--light-color-b);
+    color: #ffffff;
+  }
+
+  .btn-ok {
+    background-color: var(--light-color-b);
+    color: #ffffff;
+  }
+
+  .btn-send {
+    background-color: var(--light-color-b);
+    color: #ffffff;
+  }
+
+  dashboard {
+    display: block;
+    max-width: 400px;
+    padding: 2vh 1vw 2vh 1vw;
+  }
+
+  #main {
+    width: 65%;
+  }
+
+  #main > chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  chat > messages {
+    flex-grow: 40;
+    height: 80%;
+    overflow: auto;
+  }
+
+  messages .message {
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 15px;
+    background-color: var(--dark-lighter);
+    border-radius: 5px;
+    max-width: 65%;
+    color: var(--lightest);
+    font-size: 120%;
+  }
+
+  messages .message .meta {
+    font-size: 12px;
+  }
+
+  chat > form textarea {
+    margin-bottom: 25px;
+    max-width: 55%;
+  }
+
+}

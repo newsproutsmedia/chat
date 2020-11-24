@@ -27,9 +27,6 @@ export function outputUsers(elementId, users) {
         users.push({id: user.id, username: user.username, status: user.status});
         if(document.getElementById(`${user.id}-disconnect`)) addDisconnectUserButtonListener(user.id);
     });
-
-    const addLine = document.createElement("hr");
-    elementId.appendChild(addLine);
 }
 
 export function incrementMaxUsers() {

@@ -1,0 +1,35 @@
+$border-radius: 5px; // Border-radius
+$btn-border-radius: 5px; // Button border-radius
+
+.btn {
+  border-radius: $btn-border-radius;
+  text-align: center;
+  background-color: $accent;
+  color: $white;
+  font-size: 100%;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.btn-default {
+  background-color: $accent;
+  color: #ffffff;
+}
+
+.btn-ok {
+  background-color: $white;
+  color: #333333;
+}
+
+.btn-send {
+  background-color: $accent;
+  color: #ffffff;
+}
+
+button:disabled,
+button[disabled]{
+  background-color: $charcoal;
+  color: $steel;
+  opacity: 0.3;
+}

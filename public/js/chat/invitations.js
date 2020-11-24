@@ -36,10 +36,10 @@ export function outputInviteField() {
  */
 export function outputInviteSection() {
     const inviteSection = document.createElement('invite');
+    inviteSection.className = "dash-section";
     inviteSection.innerHTML = `<h4>Invite</h4>
                             <div id="recipients"></div>
                 <div class="flex-align-middle"><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i> Invite Someone</a></div>
-                <hr>
                 <button id="sendInvitations" class="btn send-invitations-btn">Send Invites</button>`;
     document.querySelector('#dashMenu').appendChild(inviteSection);
     new InviteListeners();

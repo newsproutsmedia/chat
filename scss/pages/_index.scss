@@ -1,0 +1,64 @@
+.login {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .form-control {
+    background-color: transparent;
+    border: transparent;
+    width: 100%;
+    text-align: center;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+    font-size: 200%;
+    color: $white;
+    font-weight: 100;
+  }
+
+  .username-input {
+    color: $white;
+    font-weight: 100;
+  }
+
+  input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid $white;
+    outline: none;
+    padding-bottom: 6px;
+    text-align: center;
+    width: 400px;
+    max-width: 80%;
+    font-size: 200%;
+    letter-spacing: 3px;
+  }
+
+  button {
+    margin-top: 60px;
+  }
+}
+
+#usernameField {
+
+}
+
+#roomField {
+  display: none;
+}
+
+#emailField {
+  display: none;
+}
+
+#roomInput {
+  font-size: 94%;
+  margin-top: 24px;
+}
+
+#emailInput {
+  font-size: 100%;
+  margin-top: 22px;
+}

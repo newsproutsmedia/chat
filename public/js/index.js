@@ -13,6 +13,7 @@ $(function() {
     const $roomField = $('#roomField');
     const $roomInput = $('#roomInput'); // Input for username
     const $roomBtn = $('#roomBtn'); // Input for username
+    const $joinBtn = $('#joinBtn'); // Input for join
     const $emailForm = $('#emailForm');
     const $emailField = $('#emailField');
     const $emailInput = $('#emailInput'); // Input for username
@@ -39,7 +40,7 @@ $(function() {
         // add to user object
         user.username = username;
         // show next step
-        nextField($usernameField, $roomField, $roomInput);
+        nextField($usernameField, $emailField, $emailInput);
     });
 
     $roomBtn.on('click', () => {
@@ -49,7 +50,18 @@ $(function() {
         // add to user object
         user.room = room;
         // show next step
-        nextField($roomField, $emailField, $emailInput);
+        window.location.replace(`chat.html?username=${user.username}&email=${user.email}&room=${user.room}`);
+    });
+
+    $joinBtn.on('click', () => {
+        // get email from input
+        email = cleanInput($emailInput.val().trim());
+        // validate email
+
+        // if valid, add to user object
+        user.email = email;
+        // show next step
+        nextField($emailField, $roomField, $roomInput);
     });
 
     $emailBtn.on('click', () => {
@@ -60,11 +72,7 @@ $(function() {
         // if valid, add to user object
         user.email = email;
         // update window location with form params from user object
-        if(user.room) {
-            window.location.replace(`chat.html?username=${user.username}&email=${user.email}&room=${user.room}`);
-        } else {
-            window.location.replace(`chat.html?username=${user.username}&email=${user.email}`);
-        }
+        window.location.replace(`chat.html?username=${user.username}&email=${user.email}`);
     });
 
     // Prevents input from having injected markup
@@ -72,10 +80,18 @@ $(function() {
         return $('<div/>').text(input).html();
     }
 
-    const nextField = (thisField, nextField, nextInput) => {
-        thisField.fadeOut();
+    function showNext(nextField) {
         nextField.show();
-        thisField.off('click');
-        $currentInput = nextInput.focus();
     }
+
+    const nextField = (thisField, nextField, nextInput) => {
+        thisField.fadeOut(400, ()=> {
+            nextField.fadeIn(400, ()=> {
+                thisField.off('click');
+                $currentInput = nextInput.focus();
+            });
+        });
+
+    }
+
 });

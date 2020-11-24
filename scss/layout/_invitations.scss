@@ -1,0 +1,47 @@
+invite {
+  display: flex;
+  flex-direction: column;
+  justify-items: baseline;
+}
+
+.send-failure {
+  padding: 1em 0 1em 1em;
+}
+
+.send-failure-message {
+  color: $white;
+  font-size: 80%;
+}
+
+#addMember a {
+  color: $accent !important;
+}
+
+.fa-plus-circle {
+  margin-right: 0.2em;
+}
+
+#recipients {
+  display: flex;
+  flex-direction: column;
+}
+
+#recipients input {
+  color: $white;
+  font-size: 80%;
+  width: 80%;
+  margin-bottom: 1em;
+  background-color: transparent;
+  border: 1px solid $white;
+  height: 2.5em;
+  padding-left: 1em;
+}
+
+input[type="email"]::-webkit-input-placeholder {
+  color: $white;
+}
+
+invite > button.send-invitations-btn {
+  width: 50%;
+  background-color: $accent;
+}

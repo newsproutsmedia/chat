@@ -1,0 +1,49 @@
+dashboard {
+  display: none;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  background-color: $shuttle-gray;
+  color: #ffffff;
+  padding: 3vh 5vw 5vh 5vw;
+  hr {
+    border: 1px solid darken($shuttle-gray, 10%);
+    width: 100%;
+  }
+}
+
+dashtitle {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dash-close {
+  color: #000000;
+  margin-right: 6px;
+}
+
+.dash-section {
+  margin-top: 1em;
+  padding: 1em;
+  border-radius: 5px;
+  border: 1px solid darken($shuttle-gray, 10%);
+}
+
+dashmenu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+body > dashboard > button.leave-room {
+  width: 92%;
+  height: 80px;
+  font-size: 150%;
+  text-align: center;
+  background-color: $accent;
+}
