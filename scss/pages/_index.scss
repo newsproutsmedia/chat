@@ -36,8 +36,18 @@
     letter-spacing: 3px;
   }
 
+  label {
+    color: $white;
+    margin-top: 0.5em;
+  }
+
   button {
-    margin-top: 60px;
+    margin-top: 2em;
+  }
+
+  &-email-buttons {
+    display: flex;
+    justify-content: center;
   }
 }
 

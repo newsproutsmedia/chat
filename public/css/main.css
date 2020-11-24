@@ -70,6 +70,11 @@ h5 {
   background-color: #61D9FA;
   color: #ffffff; }
 
+.btn-link {
+  background-color: transparent;
+  border: none;
+  color: #61D9FA; }
+
 button:disabled,
 button[disabled] {
   background-color: #333333;
@@ -191,8 +196,11 @@ chat > messages::-webkit-scrollbar-thumb {
   padding-bottom: 10px;
   align-self: end; }
 
+.message-label {
+  color: #ffffff;
+  font-size: small; }
+
 #msg[contenteditable]:empty::before {
-  content: "Enter Message";
   color: gray; }
 
 button.submit-message {
@@ -381,8 +389,14 @@ invite > button.send-invitations-btn {
     max-width: 80%;
     font-size: 200%;
     letter-spacing: 3px; }
+  .login label {
+    color: #ffffff;
+    margin-top: 0.5em; }
   .login button {
-    margin-top: 60px; }
+    margin-top: 2em; }
+  .login-email-buttons {
+    display: flex;
+    justify-content: center; }
 
 #roomField {
   display: none; }
