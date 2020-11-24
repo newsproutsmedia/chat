@@ -56,8 +56,12 @@ chat > messages::-webkit-scrollbar-thumb {
   align-self: end;
 }
 
+.message-label {
+  color: $white;
+  font-size: small;
+}
+
 #msg[contenteditable]:empty::before {
-  content: "Enter Message";
   color: gray;
 }
 

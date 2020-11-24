@@ -27,6 +27,12 @@ $btn-border-radius: 5px; // Button border-radius
   color: #ffffff;
 }
 
+.btn-link {
+  background-color: transparent;
+  border: none;
+  color: $accent;
+}
+
 button:disabled,
 button[disabled]{
   background-color: $charcoal;
