@@ -151,13 +151,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 79vh;
+  /* height: 100%; */
   width: 100%; }
 
 chat > messages {
-  overflow: auto;
-  flex-grow: 2;
-  height: 80%;
   padding: 0 2vw 2vh 2vw; }
 
 chat > messages::-webkit-scrollbar {
@@ -171,10 +168,11 @@ chat > messages::-webkit-scrollbar-thumb {
   outline: 1px solid #ffffff; }
 
 .flexbox-row {
-  flex-grow: 1;
-  /* display: flex; */
   width: 100%;
-  /*height: 10%;*/
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
   background-color: #1d2026;
   padding: 20px 6px 6px 10px;
   align-self: flex-end; }
@@ -189,32 +187,47 @@ chat > messages::-webkit-scrollbar-thumb {
   color: #fff;
   font-size: 100%;
   font-weight: 100;
-  width: 85%;
+  width: 96%;
   float: left;
   margin-right: 10px;
   margin-bottom: 9px;
   padding-bottom: 10px;
-  align-self: end; }
+  align-self: end;
+  display: table-cell; }
 
 .message-label {
+  display: table;
   color: #ffffff;
-  font-size: small; }
+  font-size: small;
+  width: 100%; }
 
 #msg[contenteditable]:empty::before {
   color: gray; }
 
 button.submit-message {
-  margin-left: auto;
-  font-size: 100% !important;
-  float: right;
-  align-self: flex-end;
-  margin-bottom: 8px; }
+  font-size: 100% !important; }
 
 .username {
   font-weight: 700;
   overflow: hidden;
   padding-right: 15px;
   text-align: right; }
+
+.message-form {
+  width: 100%; }
+
+.message-input-align {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  flex-grow: 1;
+  width: 100%;
+  clear: right; }
+
+.message-button-align {
+  flex-grow: 0;
+  align-self: center;
+  clear: both; }
 
 dashboard {
   display: none;
@@ -261,7 +274,6 @@ body > dashboard > button.leave-room {
 
 header {
   padding: 1em 2em;
-  height: 10%;
   background-color: #1d2026;
   color: #ffffff;
   font-size: 20px; }
@@ -270,13 +282,14 @@ header {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
-  align-items: center; }
-  .header-item {
-    height: 100%; }
+  align-items: center;
+  flex: 0 0 80px; }
   .header-center {
     flex-grow: 1; }
   .header-item + .header-item {
     margin-left: 2em; }
+  .header.menu {
+    margin-top: 10px; }
 
 headermenu {
   display: flex;
@@ -341,10 +354,7 @@ invite > button.send-invitations-btn {
   background-color: #61D9FA; }
 
 #main {
-  display: flex;
-  flex-grow: 0;
-  /*min-height: 100vh;*/
-  /*max-height: 100vh;*/ }
+  display: flex; }
 
 .user {
   display: flex;
@@ -437,15 +447,11 @@ invite > button.send-invitations-btn {
     max-width: 400px;
     padding: 2vh 1vw 2vh 1vw; }
   #main {
-    width: 65%; }
+    width: 100%; }
   #main > chat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; }
+    flex: 1; }
   chat > messages {
-    flex-grow: 40;
-    height: 80%;
+    flex-grow: 1;
     overflow: auto; }
   messages .message {
     padding: 10px 20px 10px 20px;

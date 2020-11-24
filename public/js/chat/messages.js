@@ -6,7 +6,8 @@ export const messageBtnIconId = 'messageBtnIcon';
 export const messageBtnDefault = {id: messageBtnId, style: 'btn-default', icon: {id: messageBtnIconId, style: 'default-message-btn-icon'}};
 export const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: messageBtnIconId, style: 'send-message-btn-icon'}};
 export const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
-
+const messageForm = document.getElementById('messageForm');
+const messageInput = document.getElementById('msg');
 /**
  * @description get text from message input and send to back end
  */
@@ -14,21 +15,20 @@ export function submitMessage() {
 
     // get message from "chat-form"
     // form has an id of "msg", so we're getting the value of that input
-    let message = {text: document.getElementById('msg').innerHTML};
+    let message = {text: messageInput.value};
 
     // Emit message to server
     emitChatMessage(message);
 
-    // Clear input
-    document.getElementById('msg').innerHTML = '';
-    document.getElementById('msg').style.content = 'Enter Message';
+    // Clear form
+    messageInput.value = "";
     // Set focus to message input
-    // document.getElementById('msg').focus();
+    messageInput.focus();
 
     // Scroll to top of page
     window.scrollTo(0, 0);
     // disable button
-    setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
+    //setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
 }
 
 

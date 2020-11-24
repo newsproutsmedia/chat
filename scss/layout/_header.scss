@@ -1,6 +1,5 @@
 header {
   padding: 1em 2em;
-  height: 10%;
   background-color: $secondary;
   color: $white;
   font-size: 20px;
@@ -11,10 +10,7 @@ header {
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
-
-  &-item {
-    height: 100%;
-  }
+  flex: 0 0 80px;
 
   &-center {
     flex-grow: 1;
@@ -22,6 +18,10 @@ header {
 
   &-item + &-item {
     margin-left: 2em;
+  }
+
+  &.menu {
+    margin-top: 10px;
   }
 }
 
