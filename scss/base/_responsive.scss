@@ -16,32 +16,24 @@
   }
 
   .btn-default {
-    background-color: var(--light-color-b);
-    color: #ffffff;
+    background-color: $accent;
+    color: $text-primary;
   }
 
   .btn-ok {
-    background-color: var(--light-color-b);
-    color: #ffffff;
+    background-color: $accent;
+    color: $text-primary;
   }
 
   .btn-send {
-    background-color: var(--light-color-b);
-    color: #ffffff;
+    background-color: $accent;
+    color: $text-primary;
   }
 
   dashboard {
     display: block;
     max-width: 400px;
     padding: 2vh 1vw 2vh 1vw;
-  }
-
-  #main {
-    width: 100%;
-  }
-
-  #main > chat {
-    flex: 1;
   }
 
   chat > messages {
@@ -52,10 +44,10 @@
   messages .message {
     padding: 10px 20px 10px 20px;
     margin-bottom: 15px;
-    background-color: var(--dark-lighter);
+    background-color: $secondary;
     border-radius: 5px;
     max-width: 65%;
-    color: var(--lightest);
+    color: $text-primary;
     font-size: 120%;
   }
 

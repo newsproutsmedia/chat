@@ -1,7 +1,7 @@
 header {
   padding: 1em 2em;
   background-color: $secondary;
-  color: $white;
+  color: $text-primary;
   font-size: 20px;
 }
 
@@ -34,7 +34,7 @@ headermenu {
 
 headermenu .logo {
   height: 6vh;
-  color: $white;
+  color: $text-primary;
   margin-left: 5vw;
 }
 
@@ -49,6 +49,6 @@ headermenu .site-menu {
 }
 
 headermenu .site-menu li {
-  color: $white;
+  color: $text-primary;
   font-size: 100%;
 }

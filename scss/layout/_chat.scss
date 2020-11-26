@@ -44,7 +44,7 @@ chat > messages::-webkit-scrollbar-thumb {
   outline: none;
   text-align: left;
   letter-spacing: 2px;
-  color: #fff;
+  color: $text-primary;
   font-size: 100%;
   font-weight: 100;
   width: 96%;
@@ -58,13 +58,13 @@ chat > messages::-webkit-scrollbar-thumb {
 
 .message-label {
   display: table;
-  color: $white;
+  color: $text-primary;
   font-size: small;
   width: 100%;
 }
 
 #msg[contenteditable]:empty::before {
-  color: gray;
+  color: $text-secondary;
 }
 
 button.submit-message {

@@ -147,6 +147,23 @@ body {
   top: 0;
   left: 0; }
 
+#page, #page-chat, #page-login {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0; }
+  #page-chat {
+    flex-direction: row; }
+  #page-login {
+    flex-direction: column; }
+
+#main {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+  #main chat {
+    flex: 4; }
+
 #main > chat {
   display: flex;
   flex-direction: column;
@@ -184,7 +201,7 @@ chat > messages::-webkit-scrollbar-thumb {
   outline: none;
   text-align: left;
   letter-spacing: 2px;
-  color: #fff;
+  color: #ffffff;
   font-size: 100%;
   font-weight: 100;
   width: 96%;
@@ -202,7 +219,7 @@ chat > messages::-webkit-scrollbar-thumb {
   width: 100%; }
 
 #msg[contenteditable]:empty::before {
-  color: gray; }
+  color: #333333; }
 
 button.submit-message {
   font-size: 100% !important; }
@@ -251,7 +268,7 @@ dashtitle {
   align-items: center; }
 
 .dash-close {
-  color: #000000;
+  color: #333333;
   margin-right: 6px; }
 
 .dash-section {
@@ -434,32 +451,28 @@ invite > button.send-invitations-btn {
   .ok-message-btn-icon:before {
     content: "\f1d8"; }
   .btn-default {
-    background-color: var(--light-color-b);
+    background-color: #61D9FA;
     color: #ffffff; }
   .btn-ok {
-    background-color: var(--light-color-b);
+    background-color: #61D9FA;
     color: #ffffff; }
   .btn-send {
-    background-color: var(--light-color-b);
+    background-color: #61D9FA;
     color: #ffffff; }
   dashboard {
     display: block;
     max-width: 400px;
     padding: 2vh 1vw 2vh 1vw; }
-  #main {
-    width: 100%; }
-  #main > chat {
-    flex: 1; }
   chat > messages {
     flex-grow: 1;
     overflow: auto; }
   messages .message {
     padding: 10px 20px 10px 20px;
     margin-bottom: 15px;
-    background-color: var(--dark-lighter);
+    background-color: #1d2026;
     border-radius: 5px;
     max-width: 65%;
-    color: var(--lightest);
+    color: #ffffff;
     font-size: 120%; }
   messages .message .meta {
     font-size: 12px; }

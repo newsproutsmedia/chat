@@ -33,35 +33,29 @@
         </dashmenu>
     </dashboard>
 </div>
-<div id="page">
-    <header class="header">
-        <div class="header-item logo"><h1><b>Chat</b>App!</h1></div>
-        <div class="header-center">&nbsp;</div>
-        <div class="header-item menu"><a id="show-dash" class="site-menu"><i class="fas fa-th fa-lg"></i></a></div>
-    </header>
+<div id="page-chat">
     <div id="main">
+        <header class="header">
+            <div class="header-item logo"><h1><b>Chat</b>App!</h1></div>
+            <div class="header-center">&nbsp;</div>
+            <div class="header-item menu"><a id="show-dash" class="site-menu"><i class="fas fa-th fa-lg"></i></a></div>
+        </header>
         <chat>
-
-
             <messages class="chat-messages">
             </messages>
-
-            <div id="messageRow" class="flexbox-row">
-
+        </chat>
+        <messageInput id="messageRow" class="flexbox-row">
                 <div class="message-input-align">
 
-                            <label for="msg" id="messageLabel" class="message-label">Enter Message
-                                <input id="msg">
-                            </label>
+                    <label for="msg" id="messageLabel" class="message-label">Enter Message
+                        <input id="msg">
+                    </label>
 
-                    </div>
-                    <div class="message-button-align">
-                        <button id="messageSubmitBtn" class="btn submit-message btn-default" disabled><i id="messageBtnIcon" class="fas default-message-btn-icon"></i></button>
-                    </div>
                 </div>
-            </div>
-
-        </chat>
+                <div class="message-button-align">
+                    <button id="messageSubmitBtn" class="btn submit-message btn-default" disabled><i id="messageBtnIcon" class="fas default-message-btn-icon"></i></button>
+                </div>
+        </messageInput>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
