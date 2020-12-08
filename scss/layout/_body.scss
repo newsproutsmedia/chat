@@ -10,7 +10,7 @@ html {
 html, body {
   font-family: $system-font-stack;
   background-color: $shark;
-  color: $white;
+  color: $text-primary;
 }
 
 body {
@@ -21,4 +21,27 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+#page {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  &-chat {
+    @extend #page;
+    flex-direction: row;
+  }
+
+  &-login {
+    @extend #page;
+    flex-direction: column;
+  }
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

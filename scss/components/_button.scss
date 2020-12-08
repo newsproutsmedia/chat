@@ -5,7 +5,7 @@ $btn-border-radius: 5px; // Button border-radius
   border-radius: $btn-border-radius;
   text-align: center;
   background-color: $accent;
-  color: $white;
+  color: $text-primary;
   font-size: 100%;
   &:hover {
     cursor: pointer;
@@ -14,17 +14,17 @@ $btn-border-radius: 5px; // Button border-radius
 
 .btn-default {
   background-color: $accent;
-  color: #ffffff;
+  color: $text-primary;
 }
 
 .btn-ok {
   background-color: $white;
-  color: #333333;
+  color: $text-secondary;
 }
 
 .btn-send {
   background-color: $accent;
-  color: #ffffff;
+  color: $text-primary;
 }
 
 .btn-link {

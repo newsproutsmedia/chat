@@ -7,7 +7,7 @@ dashboard {
   width: 100vw;
   height: 100vh;
   background-color: $shuttle-gray;
-  color: #ffffff;
+  color: $text-primary;
   padding: 3vh 5vw 5vh 5vw;
   hr {
     border: 1px solid darken($shuttle-gray, 10%);
@@ -23,7 +23,7 @@ dashtitle {
 }
 
 .dash-close {
-  color: #000000;
+  color: $text-secondary;
   margin-right: 6px;
 }
 

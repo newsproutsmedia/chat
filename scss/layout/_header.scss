@@ -1,8 +1,7 @@
 header {
   padding: 1em 2em;
-  height: 10%;
   background-color: $secondary;
-  color: $white;
+  color: $text-primary;
   font-size: 20px;
 }
 
@@ -11,10 +10,7 @@ header {
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
-
-  &-item {
-    height: 100%;
-  }
+  flex: 0 0 80px;
 
   &-center {
     flex-grow: 1;
@@ -22,6 +18,10 @@ header {
 
   &-item + &-item {
     margin-left: 2em;
+  }
+
+  &.menu {
+    margin-top: 10px;
   }
 }
 
@@ -34,7 +34,7 @@ headermenu {
 
 headermenu .logo {
   height: 6vh;
-  color: $white;
+  color: $text-primary;
   margin-left: 5vw;
 }
 
@@ -49,6 +49,6 @@ headermenu .site-menu {
 }
 
 headermenu .site-menu li {
-  color: $white;
+  color: $text-primary;
   font-size: 100%;
 }

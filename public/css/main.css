@@ -147,34 +147,48 @@ body {
   top: 0;
   left: 0; }
 
-#main > chat {
+#page, #page-chat, #page-login {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0; }
+  #page-chat {
+    flex-direction: row; }
+  #page-login {
+    flex-direction: column; }
+
+#main {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+
+chat {
+  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 79vh;
+  margin-bottom: 17px;
   width: 100%; }
 
-chat > messages {
-  overflow: auto;
-  flex-grow: 2;
-  height: 80%;
+messages {
   padding: 0 2vw 2vh 2vw; }
 
-chat > messages::-webkit-scrollbar {
+messages::-webkit-scrollbar {
   width: 1em; }
 
-chat > messages::-webkit-scrollbar-track {
+messages::-webkit-scrollbar-track {
   border: 1px solid #ffffff; }
 
-chat > messages::-webkit-scrollbar-thumb {
+messages::-webkit-scrollbar-thumb {
   background-color: #ffffff;
   outline: 1px solid #ffffff; }
 
 .flexbox-row {
-  flex-grow: 1;
-  /* display: flex; */
   width: 100%;
-  /*height: 10%;*/
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
   background-color: #1d2026;
   padding: 20px 6px 6px 10px;
   align-self: flex-end; }
@@ -186,35 +200,50 @@ chat > messages::-webkit-scrollbar-thumb {
   outline: none;
   text-align: left;
   letter-spacing: 2px;
-  color: #fff;
+  color: #ffffff;
   font-size: 100%;
   font-weight: 100;
-  width: 85%;
+  width: 96%;
   float: left;
   margin-right: 10px;
   margin-bottom: 9px;
   padding-bottom: 10px;
-  align-self: end; }
+  align-self: end;
+  display: table-cell; }
 
 .message-label {
+  display: table;
   color: #ffffff;
-  font-size: small; }
+  font-size: small;
+  width: 100%; }
 
 #msg[contenteditable]:empty::before {
-  color: gray; }
+  color: #333333; }
 
 button.submit-message {
-  margin-left: auto;
-  font-size: 100% !important;
-  float: right;
-  align-self: flex-end;
-  margin-bottom: 8px; }
+  font-size: 100% !important; }
 
 .username {
   font-weight: 700;
   overflow: hidden;
   padding-right: 15px;
   text-align: right; }
+
+.message-form {
+  width: 100%; }
+
+.message-input-align {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  flex-grow: 1;
+  width: 100%;
+  clear: right; }
+
+.message-button-align {
+  flex-grow: 0;
+  align-self: center;
+  clear: both; }
 
 dashboard {
   display: none;
@@ -238,7 +267,7 @@ dashtitle {
   align-items: center; }
 
 .dash-close {
-  color: #000000;
+  color: #333333;
   margin-right: 6px; }
 
 .dash-section {
@@ -261,7 +290,6 @@ body > dashboard > button.leave-room {
 
 header {
   padding: 1em 2em;
-  height: 10%;
   background-color: #1d2026;
   color: #ffffff;
   font-size: 20px; }
@@ -270,13 +298,14 @@ header {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
-  align-items: center; }
-  .header-item {
-    height: 100%; }
+  align-items: center;
+  flex: 0 0 80px; }
   .header-center {
     flex-grow: 1; }
   .header-item + .header-item {
     margin-left: 2em; }
+  .header.menu {
+    margin-top: 10px; }
 
 headermenu {
   display: flex;
@@ -341,10 +370,9 @@ invite > button.send-invitations-btn {
   background-color: #61D9FA; }
 
 #main {
-  display: flex;
-  flex-grow: 0;
-  /*min-height: 100vh;*/
-  /*max-height: 100vh;*/ }
+  display: grid;
+  grid-template-rows: 80px auto 80px;
+  height: 100vh; }
 
 .user {
   display: flex;
@@ -424,36 +452,24 @@ invite > button.send-invitations-btn {
   .ok-message-btn-icon:before {
     content: "\f1d8"; }
   .btn-default {
-    background-color: var(--light-color-b);
+    background-color: #61D9FA;
     color: #ffffff; }
   .btn-ok {
-    background-color: var(--light-color-b);
+    background-color: #61D9FA;
     color: #ffffff; }
   .btn-send {
-    background-color: var(--light-color-b);
+    background-color: #61D9FA;
     color: #ffffff; }
   dashboard {
     display: block;
     max-width: 400px;
     padding: 2vh 1vw 2vh 1vw; }
-  #main {
-    width: 65%; }
-  #main > chat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; }
-  chat > messages {
-    flex-grow: 40;
-    height: 80%;
-    overflow: auto; }
   messages .message {
     padding: 10px 20px 10px 20px;
     margin-bottom: 15px;
-    background-color: var(--dark-lighter);
     border-radius: 5px;
     max-width: 65%;
-    color: var(--lightest);
+    color: #ffffff;
     font-size: 120%; }
   messages .message .meta {
     font-size: 12px; }

@@ -17,7 +17,10 @@ $primary: $shark;
 $secondary: darken($primary, 5%);
 $accent: $malibu;
 
+// Text
+$text-primary: $white;
+$text-secondary: $charcoal;
+
 // Elements
-$text: $white;
 $border: darken($primary, 25%);
 $line: darken($primary, 25%);

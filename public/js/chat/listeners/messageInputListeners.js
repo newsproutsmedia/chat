@@ -8,15 +8,14 @@ export class MessageInputListeners {
         this.messageInputBlurListener();
         this.messageInputFocusListener();
         this.messageSubmitButtonListener();
+        this.messageInputEnterListener();
     }
 
     messageInputBlurListener() {
         messageInput.addEventListener('blur', () => {
             window.scrollTo(0, 0);
-            if (document.getElementById('msg').innerHTML !== "") {
+            if (document.getElementById('msg').value !== "") {
                 return setButtonState(messageBtnId, messageBtnSend, [messageBtnDefault, messageBtnOk], false);
-                // setSendButtonDisabled(false);
-                // return activeSendButton();
             }
             setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
         });
@@ -24,14 +23,7 @@ export class MessageInputListeners {
 
     messageInputFocusListener() {
         messageInput.addEventListener('focus', () => {
-            setTimeout(() => {
-                setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
-                // activeOkButton();
-                // setSendButtonDisabled(false);
-                let diffHeight = initHeight - window.innerHeight;
-                document.getElementById('msg').style.content = diffHeight.toString();
-                window.scrollTo(0, diffHeight);
-            }, 200);
+            setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
         });
     };
 
@@ -39,4 +31,12 @@ export class MessageInputListeners {
         messageSubmitBtn.addEventListener('click', submitMessage);
     };
 
+    messageInputEnterListener() {
+        messageInput.addEventListener("keyup", function(event) {
+            if (event.code === 'Enter') {
+                event.preventDefault();
+                messageSubmitBtn.click();
+            }
+        });
+    }
 }

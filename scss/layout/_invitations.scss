@@ -9,7 +9,7 @@ invite {
 }
 
 .send-failure-message {
-  color: $white;
+  color: $text-primary;
   font-size: 80%;
 }
 
@@ -27,7 +27,7 @@ invite {
 }
 
 #recipients input {
-  color: $white;
+  color: $text-primary;
   font-size: 80%;
   width: 80%;
   margin-bottom: 1em;
@@ -38,7 +38,7 @@ invite {
 }
 
 input[type="email"]::-webkit-input-placeholder {
-  color: $white;
+  color: $text-primary;
 }
 
 invite > button.send-invitations-btn {
