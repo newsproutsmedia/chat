@@ -1,6 +1,6 @@
 import {emitChatMessage} from "./emitters/socketEmitters.js";
 
-const chatMessages = document.querySelector('.chat-messages');
+const chatMessages = document.querySelector('.messages-panel');
 export const messageBtnId = 'messageSubmitBtn';
 export const messageBtnIconId = 'messageBtnIcon';
 export const messageBtnDefault = {id: messageBtnId, style: 'btn-default', icon: {id: messageBtnIconId, style: 'default-message-btn-icon'}};

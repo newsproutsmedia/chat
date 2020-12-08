@@ -1,25 +1,26 @@
 
-#main > chat {
+chat {
+  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* height: 100%; */
+  margin-bottom: 17px;
   width: 100%;
 }
 
-chat > messages {
+messages {
   padding: 0 2vw 2vh 2vw;
 }
 
-chat > messages::-webkit-scrollbar {
+messages::-webkit-scrollbar {
   width: 1em;
 }
 
-chat > messages::-webkit-scrollbar-track {
+messages::-webkit-scrollbar-track {
   border: 1px solid $white;
 }
 
-chat > messages::-webkit-scrollbar-thumb {
+messages::-webkit-scrollbar-thumb {
   background-color: $white;
   outline: 1px solid $white;
 }

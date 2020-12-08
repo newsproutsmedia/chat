@@ -161,26 +161,25 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%; }
-  #main chat {
-    flex: 4; }
 
-#main > chat {
+chat {
+  overflow: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* height: 100%; */
+  margin-bottom: 17px;
   width: 100%; }
 
-chat > messages {
+messages {
   padding: 0 2vw 2vh 2vw; }
 
-chat > messages::-webkit-scrollbar {
+messages::-webkit-scrollbar {
   width: 1em; }
 
-chat > messages::-webkit-scrollbar-track {
+messages::-webkit-scrollbar-track {
   border: 1px solid #ffffff; }
 
-chat > messages::-webkit-scrollbar-thumb {
+messages::-webkit-scrollbar-thumb {
   background-color: #ffffff;
   outline: 1px solid #ffffff; }
 
@@ -371,7 +370,9 @@ invite > button.send-invitations-btn {
   background-color: #61D9FA; }
 
 #main {
-  display: flex; }
+  display: grid;
+  grid-template-rows: 80px auto 80px;
+  height: 100vh; }
 
 .user {
   display: flex;
@@ -463,13 +464,9 @@ invite > button.send-invitations-btn {
     display: block;
     max-width: 400px;
     padding: 2vh 1vw 2vh 1vw; }
-  chat > messages {
-    flex-grow: 1;
-    overflow: auto; }
   messages .message {
     padding: 10px 20px 10px 20px;
     margin-bottom: 15px;
-    background-color: #1d2026;
     border-radius: 5px;
     max-width: 65%;
     color: #ffffff;
