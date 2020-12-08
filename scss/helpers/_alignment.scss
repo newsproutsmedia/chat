@@ -1,5 +1,12 @@
-.flex-align-middle {
+.flex-row {
   display: flex;
   flex-flow: row nowrap;
+}
+
+.align-center {
   align-items: center;
+}
+
+.spread {
+  justify-content: space-between;
 }
