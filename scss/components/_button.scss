@@ -35,7 +35,7 @@ $btn-border-radius: 5px; // Button border-radius
 
 button:disabled,
 button[disabled]{
-  background-color: $charcoal;
-  color: $steel;
-  opacity: 0.3;
+  background-color: $charcoal !important;
+  color: #999999 !important;
+  opacity: 0.5 !important;
 }

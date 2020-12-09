@@ -46,7 +46,7 @@ function deactivateUser(id) {
 // User item admin menu
 function adminUserItemMenu(user) {
     if(getIsAdmin() && user.status !== "BLOCKED" && user.type !== "admin") {
-        const content = `<a id="${user.id}-disconnect" class="userListItemMenu" alt="Block this user" data-value="${user.id}" data-username="${user.username}" data-email="${user.email}"><i class="fas fa-sign-out-alt fa-1"></i></a>`;
+        const content = `<a id="${user.id}-disconnect" class="user-list-item-menu" alt="Block this user" data-value="${user.id}" data-username="${user.username}" data-email="${user.email}"><i class="fas fa-sign-out-alt fa-1"></i></a>`;
         return content;
     }
     return "";

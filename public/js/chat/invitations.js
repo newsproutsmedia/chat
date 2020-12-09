@@ -2,9 +2,12 @@ import {generateShortId} from "./utils/generateShortId.js";
 import {getChildInputIds} from "./utils/getChildInputIds.js";
 import {emitEmailInvite} from "./emitters/socketEmitters.js";
 import {InviteListeners} from "./listeners/inviteListeners.js";
+import {InviteFieldListener} from "./listeners/inviteFieldListener.js";
 
 let addedUsers = 0;
 let invitedUserEmails = [];
+let invitationsToProcess = 0;
+let allInvitesSuccessful = true;
 
 /**
  * @description listener callback - add a new invitation field to DOM
@@ -13,20 +16,24 @@ export function outputInviteField() {
     console.log("Add Chat Member Clicked");
     let recipient = document.createElement('div');
     let randId = generateShortId();
+    let inviteInputId = `inviteInput_${randId}`;
     recipient.id = "inviteWrapper_" + randId;
     recipient.className = "inviteWrapper";
     recipient.innerHTML = `
         <input 
         type="email" 
-        id="inviteInput_${randId}"
-        name="inviteInput_${randId}"
+        id=${inviteInputId}
+        name=${inviteInputId}
         class="emailField"
         placeholder="Enter email address"
         >`;
     document.querySelector('#recipients').appendChild(recipient);
 
     // set focus to this field
-    document.getElementById(`inviteInput_${randId}`).focus();
+    document.getElementById(inviteInputId).focus();
+
+    // add event listener to this field
+    new InviteFieldListener(inviteInputId);
 
     addedUsers = addedUsers + 1;
 }
@@ -39,7 +46,7 @@ export function outputInviteSection() {
     inviteSection.className = "dash-section";
     inviteSection.innerHTML = `<div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i></a></div>
                             <div id="recipients"></div>
-                <button id="sendInvitations" class="btn send-invitations-btn">Send Invites</button>`;
+                <button id="sendInvitations" class="btn send-invitations-btn h-hidden">Send Invites</button>`;
     document.querySelector('#dashMenu').appendChild(inviteSection);
     new InviteListeners();
 }
@@ -50,11 +57,11 @@ export function outputInviteSection() {
  * @param {string} email
  */
 export function outputInvitedUser({id, email}) {
-
     let invite = document.getElementById(id).parentNode;
     invite.innerHTML = `<span class="badge badge-success">SENT</span>${email}`;
     invite.className = "user";
     invite.setAttribute("id", email);
+    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
 /**
@@ -89,6 +96,8 @@ export function outputSendFailureMessage(elementId) {
     message.className =  "send-failure-message";
     message.innerHTML = "There was a problem sending this invite. Please check to make sure the email address is valid and try again.";
     document.getElementById(elementId).parentNode.appendChild(message);
+    allInvitesSuccessful = false;
+    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
 /**
@@ -101,6 +110,8 @@ export function outputSendErrorMessage(elementId) {
     message.className =  "send-failure-message";
     message.innerHTML = "An error occurred while sending this invite. Please check to make sure the email address is valid and try again.";
     document.getElementById(elementId).parentNode.appendChild(message);
+    allInvitesSuccessful = false;
+    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
 /**
@@ -160,7 +171,45 @@ export function sendInvitations() {
     let invite = {
         recipients: newInviteEmails
     }
+    invitationsToProcess = newInviteEmails.length;
     console.log(invite);
-
+    document.getElementById('sendInvitations').setAttribute('disabled', "");
     emitEmailInvite(invite);
+}
+
+export function setInviteButtonStateAfterSend(success) {
+    document.getElementById('sendInvitations').removeAttribute('disabled');
+    success ? hideInviteButton() : showInviteButton();
+    invitationsToProcess = 0;
+    allInvitesSuccessful = true;
+}
+
+export function showInviteButton() {
+    document.getElementById('sendInvitations').classList.remove('h-hidden');
+}
+
+export function hideInviteButton() {
+    // check that all invite inputs have length of < 5 && button isn't already hidden
+    let inviteButton = document.getElementById('sendInvitations');
+    if(!inviteButton.classList.contains('h-hidden') && !checkInputLengths('recipients')) {
+        document.getElementById('sendInvitations').classList.add('h-hidden');
+    }
+}
+
+function checkInputLengths(parentId) {
+    let newInviteChildren = getChildInputIds(parentId);
+    if(newInviteChildren.length === 0) return false;
+    let inviteValues = [];
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    console.log(newInviteChildren);
+    for (let i = 0; i < newInviteChildren.length; i++) {
+        let inviteInput = document.getElementById(newInviteChildren[i].id);
+        inviteValues.push(inviteInput.value.length);
+    }
+    return inviteValues.reduce(reducer) > 0;
+}
+
+function allInvitationsProcessed() {
+    invitationsToProcess--;
+    return invitationsToProcess === 0;
 }

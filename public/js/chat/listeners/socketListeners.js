@@ -2,7 +2,7 @@
 import {logout} from "../utils/logout.js";
 import {outputRoomName, updateUrlRoom} from "../rooms.js";
 import {incrementMaxUsers, outputUsers} from "../users.js";
-import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, updateInvitedList} from "../invitations.js";
+import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, updateInvitedList, setInviteButtonStateAfterSend} from "../invitations.js";
 import {outputMessage, outputUpdatedMessageCount} from "../messages.js";
 import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
@@ -43,6 +43,7 @@ export class SocketListeners {
         this.onInviteSendError();
         this.onInviteSendSuccess();
         this.onInviteSendFailure();
+        this.onInviteSendComplete();
         this.onFatalError();
     }
 
@@ -129,6 +130,13 @@ export class SocketListeners {
         socket.on('inviteSendError', ({id}) => {
             console.log("inviteSendError");
             outputSendErrorMessage(id);
+        });
+    }
+
+    onInviteSendComplete() {
+        socket.on('inviteSendComplete', ({success}) => {
+            console.log("inviteSendComplete");
+            setInviteButtonStateAfterSend(success);
         });
     }
 

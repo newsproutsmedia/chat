@@ -82,9 +82,9 @@ h5 {
 
 button:disabled,
 button[disabled] {
-  background-color: #333333;
-  color: #666666;
-  opacity: 0.3; }
+  background-color: #333333 !important;
+  color: #999999 !important;
+  opacity: 0.5 !important; }
 
 .default-message-btn-icon:before {
   content: "\f14a"; }
@@ -360,7 +360,7 @@ invite {
 #recipients input {
   color: #ffffff;
   font-size: 80%;
-  width: 80%;
+  width: 75%;
   margin-bottom: 1em;
   background-color: transparent;
   border: 1px solid #ffffff;

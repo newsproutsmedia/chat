@@ -19,7 +19,8 @@ module.exports = class Mail {
             username: this.user.username,
             email: this.user.email,
             room: this.user.room
-        }
+        };
+        this.allSentSuccessfully = true;
     }
 
     async sendAll() {
@@ -37,6 +38,7 @@ module.exports = class Mail {
 
                 if(err || info.rejected.length > 0) {
                     logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem", {"id": mailRecipient.id, "email": mailRecipient.email});
+                    this.allSentSuccessfully = false;
                     return this._emitInviteSendFailure(mailRecipient);
                 }
 
