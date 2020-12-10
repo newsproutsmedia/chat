@@ -95,6 +95,9 @@ button[disabled] {
 .ok-message-btn-icon:before {
   content: "\f14a"; }
 
+input:focus {
+  outline: none; }
+
 ul {
   list-style: none;
   word-wrap: break-word; }
