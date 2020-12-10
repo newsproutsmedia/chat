@@ -1,54 +1,50 @@
 header {
-  padding: 1em 2em;
-  background-color: $secondary;
-  color: $text-primary;
-  font-size: 20px;
+  background-color: $offwhite;
+  color: $text-secondary;
+  padding-left: 2em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-between;
+  height: 80px;
+  min-width: 375px;
 }
 
-.header {
+.logo {
+  align-self: center;
+  padding-top: 16px;
+}
+
+.header-menu {
+  align-self: flex-end;
+  height: 65%;
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  flex: 0 0 80px;
-
-  &-center {
-    flex-grow: 1;
-  }
-
-  &-item + &-item {
+  &-item {
     margin-left: 2em;
   }
+}
 
-  &.menu {
-    margin-top: 10px;
+.menu-item {
+  padding-top: 10px;
+  width: 60px;
+  text-align: center;
+  &-selected {
+    padding-top: 10px;
+    width: 60px;
+    text-align: center;
+    background-color: $primary;
+    border-top: 4px solid $accent;
   }
 }
 
-headermenu {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center;
-}
+@media(min-width: 750px) {
 
-headermenu .logo {
-  height: 6vh;
-  color: $text-primary;
-  margin-left: 5vw;
-}
+  .header-menu {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
 
-headermenu .site-title h1 {
-  padding-top: 1vh;
-  font-size: 100%;
-}
-
-headermenu .site-menu {
-  margin-right: 20px;
-  margin-left: auto;
-}
-
-headermenu .site-menu li {
-  color: $text-primary;
-  font-size: 100%;
 }

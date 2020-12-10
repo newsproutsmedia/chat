@@ -1,13 +1,15 @@
-import { DashboardListeners } from "./chat/listeners/dashboardListeners.js";
+import { MenuListeners } from "./chat/listeners/menuListeners.js";
 import { MessageInputListeners } from "./chat/listeners/messageInputListeners.js";
 import { SocketListeners } from "./chat/listeners/socketListeners.js";
 
+$(document).ready(function() {
 // add DOM listeners for Dashboard and Message Input
-new DashboardListeners();
-new MessageInputListeners();
+    new MenuListeners();
+    new MessageInputListeners();
 
 // add Socket.IO listeners
-new SocketListeners();
+    new SocketListeners();
+});
 
 
 

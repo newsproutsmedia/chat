@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,600;0,800;1,300&family=Open+Sans:ital,wght@0,300;0,400;0,800;1,400&display=swap");
 body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 100%;
@@ -10,16 +11,30 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+  font-family: "Montserrat", sans-serif; }
 
-.flex-align-middle {
+h2 {
+  font-weight: 200; }
+
+p {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 100; }
+
+.flex-row {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row nowrap; }
+
+.align-center {
   align-items: center; }
+
+.spread {
+  justify-content: space-between; }
 
 .h-hidden {
   display: none !important;
-  visibility: hidden; }
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none; }
 
 .h-hidden-invisible {
   visibility: hidden; }
@@ -50,16 +65,17 @@ h5 {
   opacity: 1; }
 
 .btn {
-  border-radius: 5px;
+  border-radius: 30px;
+  padding: 10px 40px;
   text-align: center;
-  background-color: var(--light-color-b);
+  background-color: #61D9FA;
   color: #ffffff;
   font-size: 100%; }
   .btn:hover {
     cursor: pointer; }
 
 .btn-default {
-  background-color: var(--light-color-b);
+  background-color: #61D9FA;
   color: #ffffff; }
 
 .btn-ok {
@@ -67,14 +83,19 @@ h5 {
   color: #333333; }
 
 .btn-send {
-  background-color: var(--light-color-b);
+  background-color: #61D9FA;
   color: #ffffff; }
+
+.btn-link {
+  background-color: transparent;
+  border: none;
+  color: #61D9FA; }
 
 button:disabled,
 button[disabled] {
-  background-color: #333333;
-  color: #666666;
-  opacity: 0.3; }
+  background-color: #333333 !important;
+  color: #999999 !important;
+  opacity: 0.5 !important; }
 
 .default-message-btn-icon:before {
   content: "\f14a"; }
@@ -84,6 +105,9 @@ button[disabled] {
 
 .ok-message-btn-icon:before {
   content: "\f14a"; }
+
+input:focus {
+  outline: none; }
 
 ul {
   list-style: none;
@@ -116,8 +140,6 @@ messages .bot-message {
   font-size: 12px;
   text-align: center;
   padding: 4px 0px 4px 0px;
-  border-top: 1px solid white;
-  border-bottom: 1px solid white;
   margin: 10px 0 10px 0; }
 
 messages .message > p.text {
@@ -131,8 +153,8 @@ html {
   -webkit-font-smoothing: antialiased; }
 
 html, body {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  background-color: #282C34;
+  font-family: "Open Sans", sans-serif;
+  background-color: #333333;
   color: #ffffff; }
 
 body {
@@ -140,66 +162,83 @@ body {
   width: 100%;
   height: 100vh;
   margin: 0;
-  position: absolute;
   top: 0;
   left: 0; }
 
-#main > chat {
+#page, #page-login {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 79vh;
-  width: 100%; }
+  min-height: 100vh;
+  margin: 0;
+  padding: 0; }
+  #page-login {
+    flex-direction: column; }
 
-chat > messages {
-  overflow: auto;
-  flex-grow: 2;
-  height: 80%;
+messages {
   padding: 0 2vw 2vh 2vw; }
 
-chat > messages::-webkit-scrollbar {
+messages::-webkit-scrollbar {
   width: 1em; }
 
-chat > messages::-webkit-scrollbar-track {
-  border: 1px solid var(--light-color); }
+messages::-webkit-scrollbar-track {
+  border: 1px solid #ffffff; }
 
-chat > messages::-webkit-scrollbar-thumb {
-  background-color: var(--light-color);
-  outline: 1px solid var(--light-color); }
+messages::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  outline: 1px solid #ffffff; }
 
 #msg {
-  background-color: transparent;
+  background-color: #ffffff;
+  border-radius: 30px;
   border: none;
-  border-bottom: 2px solid #fff;
   outline: none;
   text-align: left;
   letter-spacing: 2px;
-  color: #fff;
-  font-size: 100%;
+  color: #333333;
+  font-size: 150%;
   font-weight: 100;
-  width: 85%;
+  width: 96%;
   float: left;
   margin-right: 10px;
   margin-bottom: 9px;
   padding-bottom: 10px;
-  align-self: end; }
+  align-self: end;
+  display: table-cell;
+  padding-left: 1em;
+  padding-top: .5em; }
+
+.message-label {
+  display: table;
+  color: #ffffff;
+  font-size: small;
+  width: 100%; }
 
 #msg[contenteditable]:empty::before {
-  content: "Enter Message";
-  color: gray; }
+  color: #333333; }
 
 button.submit-message {
-  margin-left: auto;
-  font-size: 100% !important;
-  float: right;
-  align-self: flex-end;
-  margin-bottom: 8px; }
+  font-size: 100% !important; }
 
 .username {
   font-weight: 700;
   overflow: hidden;
   padding-right: 15px;
   text-align: right; }
+
+.message-form {
+  width: 100%; }
+
+.message-input-align {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  flex-grow: 1;
+  width: 100%;
+  clear: right; }
+
+.message-button-align {
+  flex-grow: 0;
+  align-self: center;
+  clear: both; }
 
 dashboard {
   display: none;
@@ -209,11 +248,11 @@ dashboard {
   z-index: 10;
   width: 100vw;
   height: 100vh;
-  background-color: #282C34;
+  background-color: #626C80;
   color: #ffffff;
   padding: 3vh 5vw 5vh 5vw; }
   dashboard hr {
-    border: 1px solid #282C34;
+    border: 1px solid #4c5463;
     width: 100%; }
 
 dashtitle {
@@ -223,8 +262,17 @@ dashtitle {
   align-items: center; }
 
 .dash-close {
-  color: #000000;
+  color: #333333;
   margin-right: 6px; }
+
+.dash-section {
+  margin-top: 1em;
+  padding: 1em;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 3px 1px rgba(104, 106, 111, 0.1), 0 0 0 0 rgba(104, 106, 111, 0.1);
+  -webkit-transition: .2s,opacity .5s;
+  transition: .2s,opacity .5s; }
 
 dashmenu {
   flex: 1;
@@ -236,49 +284,75 @@ body > dashboard > button.leave-room {
   height: 80px;
   font-size: 150%;
   text-align: center;
-  background-color: var(--light-blue); }
+  background-color: #61D9FA; }
+
+footer {
+  background-color: #333333;
+  color: #ffffff;
+  padding-left: 1em;
+  height: 80px; }
+
+.footer-content {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px 6px 6px 10px;
+  align-self: flex-end; }
+
+.header-content {
+  grid-area: header; }
+
+#navMenu {
+  grid-area: nav; }
+
+.main-content {
+  grid-area: main; }
+
+.footer-content {
+  grid-area: footer; }
 
 header {
-  padding: 1em 2em;
-  height: 10%;
-  background-color: #1d2026;
-  color: #ffffff;
-  font-size: 20px; }
-
-.header {
+  background-color: #fafafa;
+  color: #333333;
+  padding-left: 2em;
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center; }
-  .header-item {
-    height: 100%; }
-  .header-center {
-    flex-grow: 1; }
-  .header-item + .header-item {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-between;
+  height: 80px;
+  min-width: 375px; }
+
+.logo {
+  align-self: center;
+  padding-top: 16px; }
+
+.header-menu {
+  align-self: flex-end;
+  height: 65%;
+  display: flex; }
+  .header-menu-item {
     margin-left: 2em; }
 
-headermenu {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  align-items: center; }
+.menu-item {
+  padding-top: 10px;
+  width: 60px;
+  text-align: center; }
+  .menu-item-selected {
+    padding-top: 10px;
+    width: 60px;
+    text-align: center;
+    background-color: #282C34;
+    border-top: 4px solid #61D9FA; }
 
-headermenu .logo {
-  height: 6vh;
-  color: #ffffff;
-  margin-left: 5vw; }
-
-headermenu .site-title h1 {
-  padding-top: 1vh;
-  font-size: 100%; }
-
-headermenu .site-menu {
-  margin-right: 20px;
-  margin-left: auto; }
-
-headermenu .site-menu li {
-  color: #ffffff;
-  font-size: 100%; }
+@media (min-width: 750px) {
+  .header-menu {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none; } }
 
 invite {
   display: flex;
@@ -293,7 +367,7 @@ invite {
   font-size: 80%; }
 
 #addMember a {
-  color: var(--light-blue) !important; }
+  color: #61D9FA !important; }
 
 .fa-plus-circle {
   margin-right: 0.2em; }
@@ -305,10 +379,10 @@ invite {
 #recipients input {
   color: #ffffff;
   font-size: 80%;
-  width: 80%;
+  width: 75%;
   margin-bottom: 1em;
   background-color: transparent;
-  border: 1px solid white;
+  border: 1px solid #ffffff;
   height: 2.5em;
   padding-left: 1em; }
 
@@ -317,13 +391,61 @@ input[type="email"]::-webkit-input-placeholder {
 
 invite > button.send-invitations-btn {
   width: 50%;
-  background-color: var(--light-blue); }
+  background-color: #61D9FA; }
+
+#app {
+  display: grid;
+  grid-template-areas: "header" "nav" "main" "footer";
+  height: 100vh; }
+
+main {
+  overflow: auto;
+  height: calc(100vh - 160px); }
+
+@media (min-width: 750px) {
+  #app {
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas: "header main" "nav main" "nav footer"; }
+  main {
+    height: calc(100vh - 80px); } }
+
+main {
+  padding-left: 1em;
+  padding-right: 1em; }
 
 #main {
   display: flex;
-  flex-grow: 0;
-  /*min-height: 100vh;*/
-  /*max-height: 100vh;*/ }
+  flex-direction: column;
+  width: 100%; }
+
+.nav {
+  background-color: #fafafa;
+  display: none;
+  padding-left: 1em;
+  height: calc(100vh - 80px);
+  color: #333333; }
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1em 2em;
+  background-color: #282C34;
+  width: 100%;
+  position: absolute;
+  top: 80px;
+  z-index: 100; }
+
+#loadLoremBtn.btn {
+  align-self: center; }
+
+@media (min-width: 750px) {
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1em 2em;
+    min-width: 375px; } }
 
 .user {
   display: flex;
@@ -339,10 +461,48 @@ invite > button.send-invitations-btn {
   .user-list-item-menu:hover {
     cursor: pointer; }
 
-.login.page {
-  background-color: #000; }
+.login {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .login .form-control {
+    background-color: transparent;
+    border: transparent;
+    width: 100%;
+    text-align: center; }
+  .login .title {
+    margin-bottom: 1rem;
+    font-size: 200%;
+    color: #ffffff;
+    font-weight: 100; }
+  .login .username-input {
+    color: #ffffff;
+    font-weight: 100; }
+  .login input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    outline: none;
+    padding-bottom: 6px;
+    text-align: center;
+    width: 400px;
+    max-width: 80%;
+    font-size: 200%;
+    letter-spacing: 3px; }
+  .login label {
+    color: #ffffff;
+    margin-top: 0.5em; }
+  .login button {
+    margin-top: 2em; }
+  .login-email-buttons {
+    display: flex;
+    justify-content: center; }
 
 #roomField {
+  display: none; }
+
+#emailField {
   display: none; }
 
 #roomInput {
@@ -353,40 +513,32 @@ invite > button.send-invitations-btn {
   font-size: 100%;
   margin-top: 22px; }
 
-#emailField {
-  display: none; }
-
-.login.page .form-control {
-  background-color: transparent;
-  border: transparent;
-  height: 100px;
-  margin-top: -100px;
-  position: absolute;
-  text-align: center;
-  top: 50%;
-  width: 100%; }
-
-.login.page .title {
-  margin-bottom: 1rem;
-  font-size: 200%; }
-
-.login.page .username-input {
-  font-size: 200%;
-  letter-spacing: 3px; }
-
-.login.page .title, .login.page .username-input {
-  color: #fff;
-  font-weight: 100; }
-
-.login.page .form-control input {
-  background-color: transparent;
-  border: none;
-  border-bottom: 2px solid #fff;
-  outline: none;
-  padding-bottom: 6px;
-  text-align: center;
-  width: 400px;
-  max-width: 80%; }
-
-.login.page .form-control button {
-  margin-top: 60px; }
+@media screen and (min-width: 750px) {
+  /*.btn:hover {*/
+  /*    background-color: #ffffff;*/
+  /*    color: #000000;*/
+  /*}*/
+  .default-message-btn-icon:before {
+    content: "\f1d8"; }
+  .send-message-btn-icon:before {
+    content: "\f1d8"; }
+  .ok-message-btn-icon:before {
+    content: "\f1d8"; }
+  .btn-default {
+    background-color: #61D9FA;
+    color: #ffffff; }
+  .btn-ok {
+    background-color: #61D9FA;
+    color: #ffffff; }
+  .btn-send {
+    background-color: #61D9FA;
+    color: #ffffff; }
+  messages .message {
+    padding: 10px 20px 10px 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    max-width: 65%;
+    color: #ffffff;
+    font-size: 120%; }
+  messages .message .meta {
+    font-size: 12px; } }

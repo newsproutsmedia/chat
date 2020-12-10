@@ -1,8 +1,9 @@
 $border-radius: 5px; // Border-radius
-$btn-border-radius: 5px; // Button border-radius
+$btn-border-radius: 30px; // Button border-radius
 
 .btn {
   border-radius: $btn-border-radius;
+  padding: 10px 40px;
   text-align: center;
   background-color: $accent;
   color: $text-primary;
