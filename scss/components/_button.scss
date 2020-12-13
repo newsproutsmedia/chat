@@ -19,8 +19,8 @@ $btn-border-radius: 30px; // Button border-radius
 }
 
 .btn-ok {
-  background-color: $white;
-  color: $text-secondary;
+  background-color: $accent;
+  color: $text-primary;
 }
 
 .btn-send {
@@ -36,7 +36,7 @@ $btn-border-radius: 30px; // Button border-radius
 
 button:disabled,
 button[disabled]{
-  background-color: $charcoal !important;
-  color: #999999 !important;
+  background-color: $lightgrey !important;
+  color: #ffffff !important;
   opacity: 0.2 !important;
 }

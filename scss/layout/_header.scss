@@ -13,7 +13,14 @@ header {
 
 .logo {
   align-self: center;
-  padding-top: 16px;
+  padding-top: 22px;
+  padding-bottom: 8px;
+  flex-grow: 1;
+  margin-bottom: 0px;
+}
+
+.logo-border-bottom {
+  border-bottom: 1px solid $lightgrey;
 }
 
 .header-menu {
@@ -30,11 +37,17 @@ header {
   width: 60px;
   text-align: center;
   &-selected {
-    padding-top: 10px;
-    width: 60px;
-    text-align: center;
-    background-color: $primary;
+    @extend .menu-item;
+    background-color: $offwhite;
     border-top: 4px solid $accent;
+    border-left: 1px solid $lightgrey;
+    color: $charcoal;
+  }
+  &-selected:hover {
+    cursor: pointer;
+  }
+  :hover {
+    cursor: pointer;
   }
 }
 
@@ -45,6 +58,7 @@ header {
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
+    color: $text-secondary;
   }
 
 }

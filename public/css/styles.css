@@ -79,8 +79,8 @@ p {
   color: #ffffff; }
 
 .btn-ok {
-  background-color: #ffffff;
-  color: #333333; }
+  background-color: #61D9FA;
+  color: #ffffff; }
 
 .btn-send {
   background-color: #61D9FA;
@@ -93,18 +93,18 @@ p {
 
 button:disabled,
 button[disabled] {
-  background-color: #333333 !important;
-  color: #999999 !important;
+  background-color: #999999 !important;
+  color: #ffffff !important;
   opacity: 0.2 !important; }
 
 .default-message-btn-icon:before {
-  content: "\f14a"; }
+  content: "\f1d8"; }
 
 .send-message-btn-icon:before {
   content: "\f1d8"; }
 
 .ok-message-btn-icon:before {
-  content: "\f14a"; }
+  content: "\f1d8"; }
 
 input:focus {
   outline: none; }
@@ -215,7 +215,13 @@ header {
 
 .logo {
   align-self: center;
-  padding-top: 16px; }
+  padding-top: 22px;
+  padding-bottom: 8px;
+  flex-grow: 1;
+  margin-bottom: 0px; }
+
+.logo-border-bottom {
+  border-bottom: 1px solid #999999; }
 
 .header-menu {
   align-self: flex-end;
@@ -224,23 +230,27 @@ header {
   .header-menu-item {
     margin-left: 2em; }
 
-.menu-item {
+.menu-item, .menu-item-selected {
   padding-top: 10px;
   width: 60px;
   text-align: center; }
   .menu-item-selected {
-    padding-top: 10px;
-    width: 60px;
-    text-align: center;
-    background-color: #333333;
-    border-top: 4px solid #61D9FA; }
+    background-color: #fafafa;
+    border-top: 4px solid #61D9FA;
+    border-left: 1px solid #999999;
+    color: #333333; }
+  .menu-item-selected:hover {
+    cursor: pointer; }
+  .menu-item :hover, .menu-item-selected :hover {
+    cursor: pointer; }
 
 @media (min-width: 750px) {
   .header-menu {
     display: none;
     visibility: hidden;
     opacity: 0;
-    pointer-events: none; } }
+    pointer-events: none;
+    color: #333333; } }
 
 main {
   padding-left: 1em;
@@ -333,7 +343,7 @@ button.submit-message {
   flex-direction: column;
   justify-content: space-between;
   padding: 1em 2em;
-  background-color: #333333;
+  background-color: #fafafa;
   width: 100%;
   position: absolute;
   top: 80px;

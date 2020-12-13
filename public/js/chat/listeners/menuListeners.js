@@ -3,6 +3,7 @@ import {logout} from "../utils/logout.js";
 const showMenuBtn = document.getElementById('showMenu');
 const hideMenuBtn = document.getElementById('hideMenu');
 const logoutButton = document.getElementById('logoutBtn');
+const logo = document.getElementById('logo');
 const nav = document.getElementById('navMenu');
 
 export class MenuListeners {
@@ -28,6 +29,7 @@ export class MenuListeners {
     static showMenu() {
         showMenuBtn.classList.add('h-hidden');
         hideMenuBtn.classList.remove('h-hidden');
+        logo.classList.add('logo-border-bottom');
         nav.classList.add('menu');
         MenuListeners.addMenuResizeListener();
     }
@@ -35,6 +37,7 @@ export class MenuListeners {
     static hideMenu() {
         hideMenuBtn.classList.add('h-hidden');
         showMenuBtn.classList.remove('h-hidden');
+        logo.classList.remove('logo-border-bottom');
         nav.classList.remove('menu');
         MenuListeners.removeMenuResizeListener();
     }
