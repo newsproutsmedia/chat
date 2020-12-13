@@ -113,7 +113,7 @@ ul {
   list-style: none;
   word-wrap: break-word; }
 
-messages .message {
+.message {
   padding: 10px 20px 10px 10px;
   margin-bottom: 15px;
   background-color: #626C80;
@@ -123,27 +123,32 @@ messages .message {
   font-size: 100%;
   word-wrap: break-word; }
 
-.message.own {
+.own {
   margin-left: auto !important;
   background-color: #61D9FA !important; }
 
-messages .message .meta {
+.meta {
   font-size: 15px;
   font-weight: bold;
   margin-bottom: 7px; }
 
-messages .message .timestamp {
+.timestamp {
   float: right;
   font-size: 12px; }
 
-messages .bot-message {
+.bot-message {
   font-size: 12px;
   text-align: center;
   padding: 4px 0px 4px 0px;
   margin: 10px 0 10px 0; }
 
-messages .message > p.text {
-  margin-bottom: 2px; }
+.text {
+  margin-bottom: 2px;
+  font-size: 100%; }
+
+@media (min-width: 750px) {
+  .text {
+    font-size: 150%; } }
 
 .header-content {
   grid-area: header; }
@@ -281,15 +286,15 @@ messages::-webkit-scrollbar-thumb {
   text-align: left;
   letter-spacing: 2px;
   color: #333333;
-  font-size: 150%;
+  font-size: 100%;
   font-weight: 100;
   width: 96%;
   float: left;
   align-self: end;
   display: table-cell;
   padding-left: 1.5em;
-  padding-top: 5px;
-  padding-bottom: 5px; }
+  padding-top: 0.7em;
+  padding-bottom: 0.7em; }
 
 .message-label {
   display: table;
@@ -330,6 +335,12 @@ button.submit-message {
   flex-grow: 0;
   align-self: center;
   clear: both; }
+
+@media (min-width: 750px) {
+  #msg {
+    font-size: 150%;
+    padding-top: 5px;
+    padding-bottom: 5px; } }
 
 .nav {
   background-color: #fafafa;
