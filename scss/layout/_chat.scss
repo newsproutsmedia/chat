@@ -22,15 +22,15 @@ messages::-webkit-scrollbar-thumb {
     text-align: left;
     letter-spacing: 2px;
     color: #333333;
-    font-size: 150%;
+    font-size: 100%;
     font-weight: 100;
     width: 96%;
     float: left;
     align-self: end;
     display: table-cell;
     padding-left: 1.5em;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
 
 }
 
@@ -79,4 +79,14 @@ width: 100%;
 flex-grow: 0;
 align-self: center;
 clear: both;
+}
+
+@media(min-width: 750px) {
+
+  #msg {
+    font-size: 150%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
 }
