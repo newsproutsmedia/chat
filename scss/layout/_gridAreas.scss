@@ -1,0 +1,15 @@
+.header-content {
+  grid-area: header;
+}
+
+#navMenu {
+  grid-area: nav;
+}
+
+.main-content {
+  grid-area: main;
+}
+
+.footer-content {
+  grid-area: footer;
+}

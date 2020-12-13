@@ -1,4 +1,4 @@
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 750px) {
   /*.btn:hover {*/
   /*    background-color: #ffffff;*/
   /*    color: #000000;*/
@@ -30,12 +30,6 @@
     color: $text-primary;
   }
 
-  dashboard {
-    display: block;
-    max-width: 400px;
-    padding: 2vh 1vw 2vh 1vw;
-  }
-
   messages .message {
     padding: 10px 20px 10px 20px;
     margin-bottom: 15px;
@@ -47,11 +41,6 @@
 
   messages .message .meta {
     font-size: 12px;
-  }
-
-  chat > form textarea {
-    margin-bottom: 25px;
-    max-width: 55%;
   }
 
 }

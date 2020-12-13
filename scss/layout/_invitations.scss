@@ -4,17 +4,18 @@ invite {
   justify-items: baseline;
 }
 
-.send-failure {
-  padding: 1em 0 1em 1em;
-}
-
 .send-failure-message {
-  color: $text-primary;
+  color: $danger;
   font-size: 80%;
+  padding-left: 1em;
 }
 
-#addMember a {
+#addMember {
   color: $accent !important;
+}
+
+#addMember:hover {
+  cursor: pointer;
 }
 
 .fa-plus-circle {
@@ -27,14 +28,15 @@ invite {
 }
 
 #recipients input {
-  color: $text-primary;
+  color: #ffffff;
   font-size: 80%;
-  width: 75%;
-  margin-bottom: 1em;
+  flex-grow: 1;
+  border: none;
   background-color: transparent;
-  border: 1px solid $white;
+  border-radius: 30px;
   height: 2.5em;
   padding-left: 1em;
+  padding-right: 1em;
 }
 
 input[type="email"]::-webkit-input-placeholder {
@@ -44,4 +46,21 @@ input[type="email"]::-webkit-input-placeholder {
 invite > button.send-invitations-btn {
   width: 50%;
   background-color: $accent;
+  margin-top: 0.5em;
+}
+
+.inviteWrapper {
+  background-color: $lightgrey;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.badge-warning {
+  margin-left: 1em;
+}
+
+.badge-danger {
+  margin-left: 1em;
 }

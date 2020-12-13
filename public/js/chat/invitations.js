@@ -3,6 +3,7 @@ import {getChildInputIds} from "./utils/getChildInputIds.js";
 import {emitEmailInvite} from "./emitters/socketEmitters.js";
 import {InviteListeners} from "./listeners/inviteListeners.js";
 import {InviteFieldListener} from "./listeners/inviteFieldListener.js";
+import {removeElementById} from "./utils/elements.js";
 
 let addedUsers = 0;
 let invitedUserEmails = [];
@@ -91,11 +92,12 @@ export function updateInvitedList(users) {
 export function outputSendFailureMessage(elementId) {
     let badge = document.getElementById(elementId);
     outputErrorBadge(badge);
-    document.getElementById(elementId).parentElement.classList.add("send-failure");
     let message = document.createElement('p');
+    message.id = `${elementId}_ErrorMsg`;
     message.className =  "send-failure-message";
     message.innerHTML = "There was a problem sending this invite. Please check to make sure the email address is valid and try again.";
-    document.getElementById(elementId).parentNode.appendChild(message);
+    const inputParent = document.getElementById(elementId).parentElement;
+    inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
     allInvitesSuccessful = false;
     if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
@@ -105,33 +107,36 @@ export function outputSendFailureMessage(elementId) {
  * @param {string} elementId
  */
 export function outputSendErrorMessage(elementId) {
-    document.getElementById(elementId).parentElement.classList.add("send-failure");
     let message = document.createElement('p');
+    message.id = `${elementId}_ErrorMsg`;
     message.className =  "send-failure-message";
     message.innerHTML = "An error occurred while sending this invite. Please check to make sure the email address is valid and try again.";
-    document.getElementById(elementId).parentNode.appendChild(message);
+    const inputParent = document.getElementById(elementId).parentElement;
+    console.log(inputParent);
+    inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
     allInvitesSuccessful = false;
     if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
 /**
  * @description add "PENDING" badge to invited user list item on send of invites
- * @param {Element} elementId
+ * @param {Element} element
  */
-export function outputPendingBadge(elementId) {
-    if(document.getElementById(`${elementId.id}_badge`)) {
-        let existingBadge = document.getElementById(`${elementId.id}_badge`);
+export function outputPendingBadge(element) {
+    if(document.getElementById(`${element.id}_badge`)) {
+        let existingBadge = document.getElementById(`${element.id}_badge`);
         existingBadge.classList.add("badge-warning");
         existingBadge.classList.remove("badge-danger");
+        removeElementById(`${element.id}_ErrorMsg`);
         existingBadge.innerHTML = "PENDING";
         return;
     }
     let badge = document.createElement("span");
-    badge.id = elementId.id + "_badge";
+    badge.id = element.id + "_badge";
     badge.classList.add("badge");
     badge.classList.add("badge-warning");
     badge.innerHTML = "PENDING";
-    elementId.parentNode.prepend(badge);
+    element.parentNode.prepend(badge);
 }
 
 /**

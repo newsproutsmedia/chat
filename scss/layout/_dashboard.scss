@@ -31,7 +31,10 @@ dashtitle {
   margin-top: 1em;
   padding: 1em;
   border-radius: 5px;
-  border: 1px solid darken($shuttle-gray, 10%);
+  background-color: $white;
+  box-shadow: 0 2px 3px 1px rgba(104,106,111,.1), 0 0 0 0 rgba(104,106,111,.1);
+  -webkit-transition: .2s,opacity .5s;
+  transition: .2s,opacity .5s;
 }
 
 dashmenu {

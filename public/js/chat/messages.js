@@ -1,6 +1,6 @@
 import {emitChatMessage} from "./emitters/socketEmitters.js";
 
-const chatMessages = document.querySelector('.messages-panel');
+const chatMessages = document.getElementById('main');
 export const messageBtnId = 'messageSubmitBtn';
 export const messageBtnIconId = 'messageBtnIcon';
 export const messageBtnDefault = {id: messageBtnId, style: 'btn-default', icon: {id: messageBtnIconId, style: 'default-message-btn-icon'}};
@@ -76,8 +76,12 @@ export function setButtonState(id, state, removeStates, isDisabled) {
  */
 export function scrollMessageWindowToBottom(messageWindowId) {
     // Scrolls down automatically
+    console.log('original scrollTop: ' + messageWindowId.scrollHeight);
+    console.log('original scrollHeight:' + messageWindowId.scrollHeight);
     //TODO instead of scrolling automatically, bring up a clickable arrow at bottom of message window that says "New Messages"
     messageWindowId.scrollTop = messageWindowId.scrollHeight;
+    console.log('new scrollTop: ' + messageWindowId.scrollHeight);
+    console.log('new scrollHeight:' + messageWindowId.scrollHeight);
 }
 
 /**

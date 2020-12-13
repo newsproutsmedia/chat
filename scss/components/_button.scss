@@ -1,8 +1,9 @@
 $border-radius: 5px; // Border-radius
-$btn-border-radius: 5px; // Button border-radius
+$btn-border-radius: 30px; // Button border-radius
 
 .btn {
   border-radius: $btn-border-radius;
+  padding: 10px 40px;
   text-align: center;
   background-color: $accent;
   color: $text-primary;
@@ -18,8 +19,8 @@ $btn-border-radius: 5px; // Button border-radius
 }
 
 .btn-ok {
-  background-color: $white;
-  color: $text-secondary;
+  background-color: $accent;
+  color: $text-primary;
 }
 
 .btn-send {
@@ -35,7 +36,7 @@ $btn-border-radius: 5px; // Button border-radius
 
 button:disabled,
 button[disabled]{
-  background-color: $charcoal !important;
-  color: #999999 !important;
-  opacity: 0.5 !important;
+  background-color: $lightgrey !important;
+  color: #ffffff !important;
+  opacity: 0.2 !important;
 }

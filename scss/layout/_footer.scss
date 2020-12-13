@@ -1,0 +1,16 @@
+footer {
+  background-color: $charcoal;
+  color: $white;
+  padding: 20px 1em 20px 1em;
+  height: 80px;
+}
+
+.footer-content {
+
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: flex-end;
+}

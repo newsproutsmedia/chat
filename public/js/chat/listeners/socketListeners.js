@@ -8,7 +8,7 @@ import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
 import {redirectToError} from "../errors.js";
 
-const roomName = document.getElementById('room-name');
+const roomName = document.getElementById('roomName');
 const userList = document.getElementById('users');
 
 // Get username and room from URL

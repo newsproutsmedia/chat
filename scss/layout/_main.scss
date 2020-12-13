@@ -1,5 +1,10 @@
+main {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
 #main {
-  display: grid;
-  grid-template-rows: 80px auto 80px;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
