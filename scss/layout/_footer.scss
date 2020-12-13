@@ -1,7 +1,7 @@
 footer {
   background-color: $charcoal;
   color: $white;
-  padding-left: 1em;
+  padding: 20px 1em 20px 1em;
   height: 80px;
 }
 
@@ -12,6 +12,5 @@ footer {
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 6px 6px 10px;
   align-self: flex-end;
 }

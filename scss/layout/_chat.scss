@@ -16,63 +16,67 @@ messages::-webkit-scrollbar-thumb {
 }
 
 #msg {
-  background-color: #ffffff;
-  border-radius: 30px;
-  border: none;
-  outline: none;
-  text-align: left;
-  letter-spacing: 2px;
-  color: #333333;
-  font-size: 150%;
-  font-weight: 100;
-  width: 96%;
-  float: left;
-  margin-right: 10px;
-  margin-bottom: 9px;
-  padding-bottom: 10px;
-  align-self: end;
-  display: table-cell;
-  padding-left: 1em;
-  padding-top: .5em;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    text-align: left;
+    letter-spacing: 2px;
+    color: #333333;
+    font-size: 150%;
+    font-weight: 100;
+    width: 96%;
+    float: left;
+    align-self: end;
+    display: table-cell;
+    padding-left: 1.5em;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
 }
 
 .message-label {
-  display: table;
-  color: $text-primary;
-  font-size: small;
-  width: 100%;
+display: table;
+color: $text-primary;
+font-size: small;
+width: 100%;
 }
 
 #msg[contenteditable]:empty::before {
-  color: $text-secondary;
+color: $text-secondary;
 }
 
 button.submit-message {
   font-size: 100% !important;
+  margin-right: 5px;
+  padding: 6px 40px;
 }
 
 .username {
-  font-weight: 700;
-  overflow: hidden;
-  padding-right: 15px;
-  text-align: right;
+font-weight: 700;
+overflow: hidden;
+padding-right: 15px;
+text-align: right;
 }
 
 .message-form {
-  width: 100%;
+width: 100%;
 }
 
 .message-input-align {
+  background-color: #ffffff;
+  border-radius: 30px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
   flex-grow: 1;
   width: 100%;
   clear: right;
+  margin: 20px 1vw 20px 1vw;
+  align-items: center;
 }
 
 .message-button-align {
-  flex-grow: 0;
-  align-self: center;
-  clear: both;
+flex-grow: 0;
+align-self: center;
+clear: both;
 }

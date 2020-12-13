@@ -20,18 +20,18 @@
 @import "./components/navigation";
 
 // *** Layout ***
-@import "./layout/body";
-@import "./layout/chat";
-@import "./layout/dashboard";
-@import "./layout/footer";
-@import "./layout/forms";
 @import "./layout/gridAreas";
-@import "./layout/header";
-@import "./layout/invitations";
 @import "./layout/layout";
+@import "./layout/body";
+@import "./layout/header";
 @import "./layout/main";
 @import "./layout/messages";
+@import "./layout/chat";
 @import "./layout/nav";
+@import "./layout/footer";
+@import "./layout/dashboard";
+@import "./layout/forms";
+@import "./layout/invitations";
 @import "./layout/users";
 
 // *** Pages ***
