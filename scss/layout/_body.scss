@@ -11,12 +11,14 @@ html, body {
   font-family: $secondary-font;
   background-color: $charcoal;
   color: $text-primary;
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: fill-available;
 }
 
 body {
   overflow: hidden;
   width: 100%;
-  height: 100vh;
   margin: 0;
   top: 0;
   left: 0;
@@ -25,6 +27,8 @@ body {
 #page {
   display: flex;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
   margin: 0;
   padding: 0;
 

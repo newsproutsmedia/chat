@@ -71,8 +71,10 @@ p {
   background-color: #61D9FA;
   color: #ffffff;
   font-size: 100%; }
+
+@media (hover) {
   .btn:hover {
-    cursor: pointer; }
+    cursor: pointer; } }
 
 .btn-default {
   background-color: #61D9FA;
@@ -165,7 +167,9 @@ ul {
 #app {
   display: grid;
   grid-template-areas: "header" "nav" "main" "footer";
-  height: 100vh; }
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: fill-available; }
 
 main {
   overflow: auto;
@@ -188,12 +192,14 @@ html {
 html, body {
   font-family: "Open Sans", sans-serif;
   background-color: #333333;
-  color: #ffffff; }
+  color: #ffffff;
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: fill-available; }
 
 body {
   overflow: hidden;
   width: 100%;
-  height: 100vh;
   margin: 0;
   top: 0;
   left: 0; }
@@ -201,6 +207,8 @@ body {
 #page, #page-login {
   display: flex;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
   margin: 0;
   padding: 0; }
   #page-login {
@@ -501,7 +509,7 @@ invite > button.send-invitations-btn {
     cursor: pointer; }
 
 .login {
-  min-height: 90vh;
+  min-height: calc(100vh - 160px);
   display: flex;
   justify-content: center;
   align-items: center; }
