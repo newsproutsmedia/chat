@@ -1,4 +1,5 @@
 import {emitChatMessage} from "./emitters/socketEmitters.js";
+import {userAgentIsMobile} from "./utils/detectUserAgent.js";
 
 const chatMessages = document.getElementById('main');
 export const messageBtnId = 'messageSubmitBtn';
@@ -24,7 +25,7 @@ export function submitMessage() {
     messageInput.value = "";
 
     // If desktop, set focus to message input
-    messageInput.focus();
+    if(!userAgentIsMobile()) messageInput.focus();
 
     // Scroll to top of page
     window.scrollTo(0, 0);
