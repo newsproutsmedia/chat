@@ -22,7 +22,8 @@ export function submitMessage() {
 
     // Clear form
     messageInput.value = "";
-    // Set focus to message input
+
+    // If desktop, set focus to message input
     messageInput.focus();
 
     // Scroll to top of page
@@ -30,8 +31,6 @@ export function submitMessage() {
     // disable button
     //setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
 }
-
-
 
 /**
  * @description add state and icon to specified button
@@ -63,11 +62,21 @@ export function removeButtonState(state) {
  * @param {boolean} isDisabled
  */
 export function setButtonState(id, state, removeStates, isDisabled) {
-    document.getElementById(id).disabled = isDisabled;
+    toggleDisabled(id, isDisabled);
     for(let remove of removeStates) {
         removeButtonState(remove);
     }
     addButtonState(state);
+}
+
+/**
+ * @description add/remove "link-disabled" class
+ * @param {string} id
+ * @param {boolean} isDisabled
+ */
+function toggleDisabled(id, isDisabled) {
+    if(isDisabled) return document.getElementById(id).classList.add("link-disabled");
+    document.getElementById(id).classList.remove("link-disabled");
 }
 
 /**
