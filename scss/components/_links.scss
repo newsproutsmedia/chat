@@ -1,0 +1,14 @@
+.a-btn {
+  border-radius: $btn-border-radius;
+  padding: 8px 30px;
+  text-align: center;
+  background-color: $accent;
+  color: $text-primary;
+  font-size: 100%;
+}
+
+.link-disabled {
+  background-color: $lightgrey !important;
+  color: #ffffff !important;
+  opacity: 0.2 !important;
+}

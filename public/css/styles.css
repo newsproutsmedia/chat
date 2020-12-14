@@ -111,6 +111,19 @@ button[disabled] {
 input:focus {
   outline: none; }
 
+.a-btn {
+  border-radius: 30px;
+  padding: 8px 30px;
+  text-align: center;
+  background-color: #61D9FA;
+  color: #ffffff;
+  font-size: 100%; }
+
+.link-disabled {
+  background-color: #999999 !important;
+  color: #ffffff !important;
+  opacity: 0.2 !important; }
+
 ul {
   list-style: none;
   word-wrap: break-word; }
@@ -313,9 +326,9 @@ messages::-webkit-scrollbar-thumb {
 #msg[contenteditable]:empty::before {
   color: #333333; }
 
-button.submit-message {
+.submit-message {
   font-size: 100% !important;
-  margin-right: 5px;
+  margin-right: 6px;
   padding: 6px 40px; }
 
 .username {
