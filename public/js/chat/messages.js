@@ -25,7 +25,7 @@ export function submitMessage() {
     messageInput.value = "";
 
     // If desktop, set focus to message input
-    if(!userAgentIsMobile()) messageInput.focus();
+    setMessageInputFocus();
 
     // Scroll to top of page
     window.scrollTo(0, 0);
@@ -131,4 +131,12 @@ export function outputBotMessage(message) {
  */
 export function outputUpdatedMessageCount(messageCount) {
     document.getElementById(`${messageCount.userId}-count`).innerHTML = messageCount.count;
+}
+
+function setMessageInputFocus() {
+    if(userAgentIsMobile()) {
+        messageInput.blur();
+    } else {
+        messageInput.focus();
+    }
 }
