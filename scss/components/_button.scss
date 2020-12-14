@@ -8,8 +8,11 @@ $btn-border-radius: 30px; // Button border-radius
   background-color: $accent;
   color: $text-primary;
   font-size: 100%;
-  &:hover {
-    cursor: pointer;
+}
+
+@media(hover) {
+  .btn:hover {
+    cursor:pointer;
   }
 }
 
