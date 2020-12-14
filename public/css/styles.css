@@ -64,6 +64,20 @@ p {
 .opacity-100 {
   opacity: 1; }
 
+.badge {
+  font-size: 65%;
+  padding: .5em 1em .6em 1em;
+  border-radius: 30px;
+  letter-spacing: .1em; }
+
+.badge-warning {
+  margin-left: 1em;
+  padding: .5em 1em .5em; }
+
+.badge-danger {
+  margin-left: 1em;
+  padding: .5em 1em .5em; }
+
 .btn {
   border-radius: 30px;
   padding: 10px 40px;
@@ -502,12 +516,6 @@ invite > button.send-invitations-btn {
   display: flex;
   align-items: center;
   margin-bottom: 0.5em; }
-
-.badge-warning {
-  margin-left: 1em; }
-
-.badge-danger {
-  margin-left: 1em; }
 
 .user {
   display: flex;
