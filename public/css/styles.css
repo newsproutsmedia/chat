@@ -166,14 +166,14 @@ ul {
 
 #app {
   display: grid;
-  grid-template-areas: "header" "nav" "main" "footer";
+  grid-template-rows: 80px calc(100% - 160px) 80px;
+  grid-template-areas: "header" "main" "footer";
   height: 100vh;
   height: -webkit-fill-available;
   height: fill-available; }
 
 main {
-  overflow: auto;
-  height: calc(100vh - 160px); }
+  overflow: auto; }
 
 @media (min-width: 750px) {
   #app {
