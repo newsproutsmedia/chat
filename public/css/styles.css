@@ -329,7 +329,7 @@ messages::-webkit-scrollbar-thumb {
 .submit-message {
   font-size: 100% !important;
   margin-right: 6px;
-  padding: 6px 40px; }
+  padding: 6px 20px; }
 
 .username {
   font-weight: 700;
@@ -361,7 +361,9 @@ messages::-webkit-scrollbar-thumb {
   #msg {
     font-size: 150%;
     padding-top: 5px;
-    padding-bottom: 5px; } }
+    padding-bottom: 5px; }
+  .submit-message {
+    padding: 6px 40px; } }
 
 .nav {
   background-color: #fafafa;

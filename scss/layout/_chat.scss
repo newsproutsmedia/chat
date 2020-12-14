@@ -48,7 +48,7 @@ color: $text-secondary;
 .submit-message {
   font-size: 100% !important;
   margin-right: 6px;
-  padding: 6px 40px;
+  padding: 6px 20px;
 }
 
 .username {
@@ -87,6 +87,10 @@ clear: both;
     font-size: 150%;
     padding-top: 5px;
     padding-bottom: 5px;
+  }
+
+  .submit-message {
+    padding: 6px 40px;
   }
 
 }
