@@ -19,6 +19,7 @@ export class MessageInputListeners {
             if (document.getElementById('msg').value !== "") {
                 return setButtonState(messageBtnId, messageBtnSend, [messageBtnDefault, messageBtnOk], false);
             }
+            setButtonState(messageBtnId, messageBtnSend, [messageBtnDefault, messageBtnOk], true);
         });
     };
 
