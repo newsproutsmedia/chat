@@ -324,9 +324,6 @@ messages::-webkit-scrollbar-thumb {
   font-size: 100%;
   font-weight: 100;
   width: 96%;
-  float: left;
-  align-self: end;
-  display: table-cell;
   padding-left: 1.5em;
   padding-top: 0.7em;
   padding-bottom: 0.7em; }
@@ -352,7 +349,10 @@ messages::-webkit-scrollbar-thumb {
   text-align: right; }
 
 .message-form {
-  width: 100%; }
+  background-color: transparent;
+  float: left;
+  align-self: end;
+  display: table-cell; }
 
 .message-input-align {
   background-color: #ffffff;
