@@ -14,6 +14,9 @@ const messageInput = document.getElementById('msg');
  * @description get text from message input and send to back end
  */
 export function submitMessage() {
+    // close keyboard on mobile "return" submit
+    messageInput.blur();
+
     // get message from "chat-form"
     // form has an id of "msg", so we're getting the value of that input
     let message = {text: messageInput.value};
@@ -123,7 +126,6 @@ export function outputBotMessage(message) {
     div.innerHTML = `<b>${message.user.username}: </b>${message.text}`;
     document.querySelector('.chat-messages').appendChild(div);
 }
-
 
 /**
  * @description output updated message count to DOM
