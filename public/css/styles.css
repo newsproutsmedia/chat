@@ -323,7 +323,7 @@ messages::-webkit-scrollbar-thumb {
   color: #333333;
   font-size: 100%;
   font-weight: 100;
-  width: 96%;
+  width: 100%;
   padding-left: 1.5em;
   padding-top: 0.7em;
   padding-bottom: 0.7em; }
@@ -352,7 +352,8 @@ messages::-webkit-scrollbar-thumb {
   background-color: transparent;
   float: left;
   align-self: end;
-  display: table-cell; }
+  display: table-cell;
+  width: 100%; }
 
 .message-input-align {
   background-color: #ffffff;
