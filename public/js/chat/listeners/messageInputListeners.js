@@ -2,6 +2,7 @@ import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButton
 
 const initHeight = window.innerHeight;
 const messageInput = document.getElementById('msg');
+const messageForm = document.getElementById('messageForm');
 const messageSubmitBtn = document.getElementById('messageSubmitBtn');
 
 export class MessageInputListeners {
@@ -32,11 +33,17 @@ export class MessageInputListeners {
     };
 
     messageInputEnterListener() {
+        messageForm.addEventListener("keydown", function(event) {
+            if (event.code === 'Enter') {
+                event.preventDefault();
+            }
+        });
         messageInput.addEventListener("keyup", function(event) {
             if (event.code === 'Enter') {
                 event.preventDefault();
                 messageSubmitBtn.click();
             }
         });
+
     }
 }
