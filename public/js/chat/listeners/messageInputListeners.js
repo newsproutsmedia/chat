@@ -1,4 +1,5 @@
 import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages.js";
+
 const initHeight = window.innerHeight;
 const messageInput = document.getElementById('msg');
 const messageSubmitBtn = document.getElementById('messageSubmitBtn');
@@ -17,7 +18,6 @@ export class MessageInputListeners {
             if (document.getElementById('msg').value !== "") {
                 return setButtonState(messageBtnId, messageBtnSend, [messageBtnDefault, messageBtnOk], false);
             }
-            setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
         });
     };
 

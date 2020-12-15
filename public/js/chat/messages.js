@@ -9,11 +9,11 @@ export const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: m
 export const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
 const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('msg');
+
 /**
  * @description get text from message input and send to back end
  */
 export function submitMessage() {
-
     // get message from "chat-form"
     // form has an id of "msg", so we're getting the value of that input
     let message = {text: messageInput.value};
@@ -135,7 +135,7 @@ export function outputUpdatedMessageCount(messageCount) {
 
 function setMessageInputFocus() {
     if(userAgentIsMobile()) {
-        messageInput.blur();
+        setButtonState(messageBtnId, messageBtnSend, [messageBtnDefault, messageBtnOk], true);
     } else {
         messageInput.focus();
     }
