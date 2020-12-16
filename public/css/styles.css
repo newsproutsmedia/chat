@@ -107,11 +107,19 @@ p {
   border: none;
   color: #61D9FA; }
 
+.btn-link:focus {
+  border: none;
+  outline: none; }
+
 button:disabled,
 button[disabled] {
   background-color: #999999 !important;
   color: #ffffff !important;
   opacity: 0.2 !important; }
+
+button:focus {
+  border: 1px solid #ffffff;
+  outline: none; }
 
 .default-message-btn-icon:before {
   content: "\f1d8"; }
@@ -568,7 +576,9 @@ invite > button.send-invitations-btn {
     margin-top: 2em; }
   .login-email-buttons {
     display: flex;
-    justify-content: center; }
+    justify-content: center;
+    flex-direction: column;
+    align-items: center; }
 
 #roomField {
   display: none; }

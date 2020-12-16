@@ -37,9 +37,19 @@ $btn-border-radius: 30px; // Button border-radius
   color: $accent;
 }
 
+.btn-link:focus {
+  border: none;
+  outline: none;
+}
+
 button:disabled,
 button[disabled]{
   background-color: $lightgrey !important;
   color: #ffffff !important;
   opacity: 0.2 !important;
+}
+
+button:focus {
+  border: 1px solid $white;
+  outline: none;
 }
