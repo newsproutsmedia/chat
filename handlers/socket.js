@@ -8,7 +8,7 @@ const logger = require('../loaders/logger');
 
 module.exports = function(server) {
     const io = socketio(server, {
-        pintTimeout: 10000
+        pingTimeout: 30000
     });
 
     // Run when client connects
@@ -41,10 +41,9 @@ module.exports = function(server) {
         });
 
         // Runs when client is disconnected
-        socket.on('disconnect', () => {
-            logger.info("[socket.connection.event.disconnect]", {message: "User disconnected"});
-            User.userLeave(socketIO);
+        socket.on('disconnect', (reason) => {
+            logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
+            User.userDisconnected(socketIO);
         });
-
     });
 }

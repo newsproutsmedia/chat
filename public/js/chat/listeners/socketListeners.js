@@ -16,7 +16,15 @@ export let { username, email, room } = Qs.parse(location.search, {
     ignoreQueryPrefix: true // ignores non key/value data
 });
 
-export const socket = io();
+export const socket = io({
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    timeout: 20000,
+    autoConnect: true,
+    upgrade: true
+});
 
 let currentUser = {
     username,
@@ -45,6 +53,7 @@ export class SocketListeners {
         this.onInviteSendFailure();
         this.onInviteSendComplete();
         this.onFatalError();
+        this.onDisconnect();
     }
 
     onDestroyRoom() {
@@ -144,6 +153,12 @@ export class SocketListeners {
         socket.on('fatalError', ({error}) => {
            console.log("fatalError", error);
            redirectToError();
+        });
+    }
+
+    onDisconnect() {
+        socket.on('disconnect', () => {
+           alert("user disconnected");
         });
     }
 }
