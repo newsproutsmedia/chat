@@ -57,27 +57,29 @@ module.exports = class User {
     }
 
     /**
-     * @desc remove user from users array upon disconnect
+     * @desc set user status to DISCONNECTED and notify other users when user leaves chat
      * @param {Object} socketIO - socket and io params
      * @emits User.emitUserHasLeft, User.sendRoomUsers
      */
-    static userLeave({socket, io}) {
+    static userDisconnected({socket, io}) {
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
-        logger.info('[service.user.userLeave]', {message: `User (${currentUser.username}) leaving room`, room: currentUser.room});
+        logger.info('[service.user.userDisconnected]', {message: `User (${currentUser.username}) leaving room`, room: currentUser.room});
 
         const index = users.findIndex(user => user.id === socket.id);
 
         // notify other chat participants that user has left
         User.emitUserHasLeft(currentUser, socketIO);
+
         // set user status to DISCONNECTED
         if(users[index].status !== "BLOCKED") users[index].status = "DISCONNECTED";
+        logger.info("[service.user.userDisconnected]", {message: "Status Changed", userStatus: currentUser.status});
 
-        logger.info("[service.user.userLeave]", {message: "Status Changed", userStatus: currentUser.status});
         // send updated users and room info
         User.sendRoomUsers(currentUser.room, socketIO);
 
-        User.userDisconnected(socketIO);
+        // check if current user is the last one in the room and destroy the room if it is
+        User.destroyRoomOnLastUserDisconnected(socketIO);
     }
 
     /**
@@ -175,7 +177,7 @@ module.exports = class User {
         logger.info('[service.user.deleteRoomUsers]', {users});
     }
 
-    static userDisconnected({socket, io}) {
+    static destroyRoomOnLastUserDisconnected({socket, io}) {
         logger.info('[service.room.userDisconnected]', {message: 'Checking number of room users'});
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUser(socket.id);
