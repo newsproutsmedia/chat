@@ -1,6 +1,7 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const User = require('./user');
+const Invitations = require('./invitations');
 const MessageEmitter = require('../emitters/messageEmitter');
 
 /**
@@ -14,7 +15,7 @@ module.exports = class Mail {
         this.io = io;
         this.socketIO = {socket, io};
         this.recipients = recipients;
-        this.user = User.getCurrentUser(this.socket.id);
+        this.user = User.getCurrentUserById(this.socket.id);
         this.sender = {
             username: this.user.username,
             email: this.user.email,
@@ -43,6 +44,7 @@ module.exports = class Mail {
                 }
 
                 logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
+                Invitations.incrementRoomInvites(this.user.room);
                 return this._emitInviteSendSuccess(mailRecipient);
             });
         });

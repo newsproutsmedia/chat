@@ -1,3 +1,4 @@
+const validateUserOnConnect = require("../security/validation");
 const socketio = require('socket.io');
 const Room = require('../services/room');
 const Message = require('../services/message');
@@ -14,10 +15,17 @@ module.exports = function(server) {
     // Run when client connects
     io.on('connection', socket => {
         const socketIO = {socket, io};
-
+        logger.info("[socket.connection.event.connection]", {message: "Socket connected", socketID: socket.id});
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
             logger.info("[socket.connection.event.joinRoom]", {message: "Attempting to join room", currentUser});
+
+            if(validateUserOnConnect(socketIO, currentUser)) {
+                logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User validated, attempting to reconnect", currentUser});
+                return new Room({...currentUser, ...socketIO}).reconnect();
+            }
+
+            // if room and/or user don't exist
             new Room({...currentUser, ...socketIO}).join();
         });
 
@@ -41,9 +49,10 @@ module.exports = function(server) {
         });
 
         // Runs when client is disconnected
-        socket.on('disconnect', (reason) => {
+        socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
             User.userDisconnected(socketIO);
         });
+
     });
 }

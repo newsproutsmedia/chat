@@ -7,6 +7,7 @@ import {outputMessage, outputUpdatedMessageCount} from "../messages.js";
 import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
 import {redirectToError} from "../errors.js";
+import {getIsAdmin} from "../admin.js";
 
 const roomName = document.getElementById('roomName');
 const userList = document.getElementById('users');
@@ -22,7 +23,7 @@ export const socket = io({
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
     timeout: 20000,
-    autoConnect: true,
+    autoConnect: false,
     upgrade: true
 });
 
@@ -39,7 +40,8 @@ export class SocketListeners {
 
     constructor() {
         this.onInvalidRoom();
-        emitJoinRoom(currentUser);
+        this.onAccessDenied();
+        this.onConnect();
         this.onDestroyRoom();
         this.onLogoutUser();
         this.onRoomCreated();
@@ -54,39 +56,60 @@ export class SocketListeners {
         this.onInviteSendComplete();
         this.onFatalError();
         this.onDisconnect();
+        this.onReconnectAttempt();
+        this.onReconnect();
+        socket.connect();
+    }
+
+    onConnect() {
+        socket.on('connect', () => {
+            console.log('client connected');
+            emitJoinRoom(currentUser);
+        });
     }
 
     onDestroyRoom() {
         socket.on('destroyRoom', () => {
-            logout();
+            logout('roomDestroyed');
         });
     }
 
     onLogoutUser() {
-        socket.on('logoutUser', user => {
+        socket.on('logoutUser', message => {
             console.log('logout received');
-            logout(user);
+            const logoutMessage = message || "logoutEvent";
+            logout(logoutMessage);
         });
     }
 
     onInvalidRoom() {
         socket.on('invalidRoom', () => {
-            logout();
+            console.log('invalid room');
+            logout('invalidRoom');
+        });
+    }
+
+    onAccessDenied() {
+        socket.on('accessDenied', message => {
+            console.log('access denied: ' + message);
+            logout(message);
         });
     }
 
     onRoomCreated() {
         socket.on('roomCreated', room => {
+            console.log('room created');
             updateUrlRoom(room);
         });
     }
 
     onRoomUsers() {
         socket.on('roomUsers', ({ room, users }) => {
+            console.log('received room users');
             outputRoomName(roomName, room);
             outputUsers(userList, users);
 
-            updateInvitedList(users);
+            if(getIsAdmin()) updateInvitedList(users);
         });
     }
 
@@ -108,6 +131,7 @@ export class SocketListeners {
     onSetupAdmin() {
         socket.on('setupAdmin', user => {
             // add "invite" section to DOM
+            console.log('setting up admin');
             setupAdmin(user);
         });
     }
@@ -157,8 +181,26 @@ export class SocketListeners {
     }
 
     onDisconnect() {
-        socket.on('disconnect', () => {
-           alert("user disconnected");
+        socket.on('disconnect', reason => {
+           console.log('User disconnected: ' + reason);
+           // display fullscreen overlay showing disconnect notice with "attempting to reconnect"
+            // update number of attempts
+            // show disconnect countdown "disconnecting in X" -- start timer
+           // attempt to reconnect
+        });
+    }
+    onReconnectAttempt() {
+        socket.on('reconnect_attempt', attemptNumber => {
+            console.log('Attempting to reconnect...');
+            // update reconnect number on overlay
+        })
+    }
+
+    // on successful reconnect, remove overlay
+    onReconnect() {
+        socket.on('reconnect', () => {
+            console.log('reconnected');
+           // remove overlay
         });
     }
 }

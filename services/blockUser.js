@@ -9,8 +9,9 @@ module.exports = class BlockUser {
     }
 
     blockUser() {
+        const message = "userBlocked";
         User.setUserBlocked(this.blockedUserId);
-        const user = User.getCurrentUser(this.blockedUserId);
+        const user = User.getCurrentUserById(this.blockedUserId);
 
         if(this.io.sockets.sockets[this.blockedUserId] === undefined) {
             logger.info('[service.blockUser.blockUser()', {message: 'User socket is undefined. User already disconnected.'});
@@ -18,7 +19,7 @@ module.exports = class BlockUser {
         }
 
         logger.info('[service.blockUser.blockUser()', {message: 'User socket found. Emitting logout and disconnect.'});
-        User.emitLogoutUser(user, {socket: this.socket, io: this.io});
+        User.emitLogoutUser(user, {socket: this.socket, io: this.io}, message);
         this.io.sockets.sockets[this.blockedUserId].disconnect();
     }
 }

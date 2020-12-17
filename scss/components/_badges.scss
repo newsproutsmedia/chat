@@ -14,3 +14,11 @@
   margin-left: 1em;
   padding: .5em 1em .5em;
 }
+
+.disconnected {
+  background-color: $grey;
+}
+
+.online {
+  background-color: $accent;
+}

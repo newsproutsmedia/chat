@@ -138,7 +138,7 @@ describe("Socket.IO Server-Side Events", () => {
                     expect(validateRoom(user.room)).toBeTruthy();
                     expect(user.email).toBe(chatUser1.email);
                     expect(user.messageCount).toBe(0);
-                    expect(user.status).toBe("LOGGED_IN");
+                    expect(user.status).toBe("ONLINE");
                     expect(user.type).toBe("admin");
                     client1.disconnect();
                     done();
@@ -548,9 +548,9 @@ describe("Socket.IO Server-Side Events", () => {
                 client2 = io.connect(socketURL, options);
                 client2.on('connect', data => {
                     chatUser2.room = uniqueRoomId;
-                    client2.once('logoutUser', user => {
-                        console.log("logoutUser received", user);
-                        expect(user.id).toBe(client2socket);
+                    client2.once('logoutUser', message => {
+                        console.log("logoutUser received", message);
+                        expect(message).toBe("userBlocked");
                         client1.disconnect();
                         client2.disconnect();
                         done();
