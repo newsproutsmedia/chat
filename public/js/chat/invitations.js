@@ -4,6 +4,7 @@ import {emitEmailInvite} from "./emitters/socketEmitters.js";
 import {InviteListeners} from "./listeners/inviteListeners.js";
 import {InviteFieldListener} from "./listeners/inviteFieldListener.js";
 import {removeElementById} from "./utils/elements.js";
+import {emailInRoomUsers} from "./users.js";
 
 let addedUsers = 0;
 let invitedUserEmails = [];
@@ -120,6 +121,22 @@ export function outputSendErrorMessage(elementId) {
 }
 
 /**
+ * @description output email send error message to DOM
+ * @param {string} elementId
+ */
+export function outputRedundantEmailMessage(elementId) {
+    let message = document.createElement('p');
+    message.id = `${elementId}_ErrorMsg`;
+    message.className =  "send-failure-message";
+    message.innerHTML = "You've already invited a chat member with this email address. Please enter a new address and try again.";
+    const inputParent = document.getElementById(elementId).parentElement;
+    console.log(inputParent);
+    inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
+    allInvitesSuccessful = false;
+    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
+}
+
+/**
  * @description add "PENDING" badge to invited user list item on send of invites
  * @param {Element} element
  */
@@ -163,6 +180,10 @@ export function sendInvitations() {
         let inviteInputId = newInviteChildren[i].id;
         let inviteEmailInput = document.getElementById(inviteInputId);
         outputPendingBadge(inviteEmailInput);
+        if(emailInRoomUsers(inviteEmailInput.value)) {
+            outputErrorBadge(inviteEmailInput);
+            outputRedundantEmailMessage(inviteInputId);
+        }
         let inviteEmailAddress = inviteEmailInput.value;
         if(inviteEmailAddress !== "") {
             invitedUserEmails.push(inviteEmailAddress);

@@ -23,10 +23,21 @@ export function outputUsers(elementId, users) {
             <span id="${user.id}-count" class="badge badge-secondary ${user.status.toLowerCase()}">${user.messageCount.toString()}</span>${user.username}
             ${adminUserItemMenu(user)}
          </div>`;
+
         elementId.appendChild(userDiv);
-        users.push({id: user.id, username: user.username, status: user.status});
+
+        addConnectedUser(user);
+
         if(document.getElementById(`${user.id}-disconnect`)) addDisconnectUserButtonListener(user.id);
     });
+}
+
+function addConnectedUser(user) {
+    if(getIsAdmin()) {
+        connectedUsers.push({id: user.id, username: user.username, email: user.email, status: user.status});
+    } else {
+        connectedUsers.push({id: user.id, username: user.username, status: user.status});
+    }
 }
 
 export function incrementMaxUsers() {
