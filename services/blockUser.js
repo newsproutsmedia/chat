@@ -5,6 +5,7 @@ module.exports = class BlockUser {
     constructor({socket, io, id}) {
         this.socket = socket;
         this.io = io;
+        this.socketIO = {socket, io};
         this.blockedUserId = id;
     }
 
@@ -14,12 +15,36 @@ module.exports = class BlockUser {
         const user = User.getCurrentUserById(this.blockedUserId);
 
         if(this.io.sockets.sockets[this.blockedUserId] === undefined) {
-            logger.info('[service.blockUser.blockUser()', {message: 'User socket is undefined. User already disconnected.'});
-            return User.sendRoomUsers(user.room, {socket: this.socket, io: this.io});
+            logger.info('[service.blockUser.blockUser]', {message: 'User socket is undefined. User already disconnected.'});
+            return User.sendRoomUsers(user.room, this.socketIO);
         }
 
-        logger.info('[service.blockUser.blockUser()', {message: 'User socket found. Emitting logout and disconnect.'});
-        User.emitLogoutUser(user, {socket: this.socket, io: this.io}, message);
-        this.io.sockets.sockets[this.blockedUserId].disconnect();
+        logger.info('[service.blockUser.blockUser]', {message: 'User socket found. Emitting logout and disconnect.'});
+        User.emitLogoutUser(user, this.socketIO, message);
+        //this.io.sockets.sockets[this.blockedUserId].disconnect();
+    }
+
+    /**
+     * @desc is the user with passed socket value blocked
+     * @param {Object} socket
+     * @returns {boolean}
+     */
+    static userIsBlocked(socket) {
+        logger.info('[service.blockUser.userIsBlocked]', {message: 'Checking if user is blocked'});
+        const user = User.getCurrentUserById(socket.id);
+        return user.status === "BLOCKED";
+    }
+
+    /**
+     * @desc perform cleanup tasks after blocked user has been forcibly logged out
+     * @param {Object} socketIO - requires socket and io objects
+     */
+    static cleanUpAfterBlockedUserDisconnected(socketIO) {
+        logger.info('[service.blockUser.blockUser]', {message: 'Cleaning up after blocked user disconnected.'});
+        const {socket: {id}, io} = socketIO;
+        if(!User.getCurrentUserById(id)) return;
+        const currentUser = User.getCurrentUserById(id);
+        User.emitUserHasLeft(currentUser, socketIO);
+        User.sendRoomUsers(currentUser.room, socketIO);
     }
 }

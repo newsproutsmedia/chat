@@ -120,8 +120,8 @@ module.exports = class User {
      * @param {string} message - reason for logout
      */
     static emitLogoutUser(user, socketIO, message) {
-        logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", socketID: socketIO.socket.id, logoutMessage: message});
-        new MessageEmitter(socketIO).emitEventToSocket('logoutUser', socketIO.socket.id, {message: message});
+        logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", socketID: user.id, logoutMessage: message});
+        new MessageEmitter(socketIO).emitEventToSocket('logoutUser', user.id, {message: message});
     }
 
     /**

@@ -51,7 +51,7 @@ module.exports = function(server) {
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
-            User.userDisconnected(socketIO);
+            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : User.userDisconnected(socketIO);
         });
 
     });

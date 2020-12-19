@@ -491,12 +491,6 @@ describe("Socket.IO Server-Side Events", () => {
                         // client 2 has joined message
                         client1.once('roomUsers', roomUsers => {
                             const client2socket = roomUsers.users[1].id;
-                            client1.once('roomUsers', roomUsers => {
-                                expect(roomUsers.users[1].status).toBe("BLOCKED");
-                                client1.disconnect();
-                                client2.disconnect();
-                                done();
-                            });
 
                             // emit kickOutUser
                             client1.emit('blockUser', client2socket);
@@ -509,6 +503,12 @@ describe("Socket.IO Server-Side Events", () => {
                     chatUser2.room = uniqueRoomId;
                     client2.once('message', message => {
                         // welcome message
+                        client2.on('logoutUser', message => {
+                            expect(message.message).toBe("userBlocked");
+                            client1.disconnect();
+                            client2.disconnect();
+                            done();
+                        });
                     });
                     client2.emit('joinRoom', chatUser2);
                 });
@@ -593,7 +593,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
 
             client1.emit('joinRoom', chatUser1);
-        }, 10000);
+        }, 100000);
 
     });
 });
