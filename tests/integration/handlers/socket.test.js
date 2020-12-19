@@ -14,6 +14,7 @@ let options = {
 
 let chatUser1;
 let chatUser2;
+let chatUser3;
 
 let client1;
 let client2;
@@ -181,6 +182,149 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
+    });
+
+    describe("joinRoom Reconnect", () => {
+        let server;
+        let roomFullSpy;
+
+        beforeEach(done => {
+            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
+            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            chatUser3 = {username: 'Sally', email: 'sally@sally.com', room: uniqueRoomId};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
+            uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
+            done();
+        });
+
+        afterEach(done => {
+            roomFullSpy.mockRestore();
+            setTimeout(() => done(), 1000);
+        });
+
+        it('should reconnect user', done => {
+
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('message', message => {
+                    // welcome message
+                    client1.once('message', message => {
+                       // user 2 joined
+                       client1.once('message', message => {
+                           // user 2 left
+                           client2 = io.connect(socketURL, options);
+                           client2.on('connect', data => {
+                               client2.once('reconnect', message => {
+                                   // message history
+                                   expect(message.message).toBe('Welcome Back');
+                                   client1.disconnect();
+                                   client2.disconnect();
+                                   done();
+                               });
+                           });
+                           client2.emit('joinRoom', chatUser3);
+                       });
+                    });
+                });
+
+                client1.emit('joinRoom', chatUser1);
+
+                client2 = io.connect(socketURL, options);
+                client2.on('connect', data => {
+                    chatUser2.room = uniqueRoomId;
+                    client2.once('message', message => {
+                        // welcome message
+                        client2.disconnect();
+                    });
+                    client2.emit('joinRoom', chatUser2);
+                });
+
+            });
+        }, 10000);
+
+        it('should emit setupAdmin if reconnecting user is admin', done => {
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('message', message => {
+                    // welcome message
+                    client1.once('message', message => {
+                        // user 2 joined
+                        client1.disconnect();
+                    });
+                });
+
+                client1.emit('joinRoom', chatUser1);
+
+                client2 = io.connect(socketURL, options);
+                client2.on('connect', data => {
+                    chatUser2.room = uniqueRoomId;
+                    client2.once('message', message => {
+                        // welcome message
+                        client2.once('message', message => {
+                            // user 1 left
+                            client2.once('roomUsers', roomUsers => {
+                                // user 2 left
+                                client1 = io.connect(socketURL, options);
+                                chatUser1.room = uniqueRoomId;
+                                client1.on('connect', data => {
+                                    client1.once('setupAdmin', user => {
+                                        // message history
+                                        expect(user.type).toBe('admin');
+                                        client1.disconnect();
+                                        client2.disconnect();
+                                        done();
+                                    });
+                                });
+                                client1.emit('joinRoom', chatUser1);
+                            });
+                        });
+                    });
+                    client2.emit('joinRoom', chatUser2);
+                });
+
+            });
+        });
+
+    });
+
+    describe("roomFull", () => {
+        let server;
+
+        beforeEach(done => {
+            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
+            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            server = require('../../../server').server;
+            done();
+        });
+
+        afterEach(done => {
+            setTimeout(() => done(), 1000);
+        })
+
+        it('should emit access denied, roomFull if room is full', done => {
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('message', message => {
+
+                });
+
+                client1.emit('joinRoom', chatUser1);
+
+                client2 = io.connect(socketURL, options);
+                client2.on('connect', data => {
+                    chatUser2.room = uniqueRoomId;
+                    client2.once('accessDenied', message => {
+                        expect(message.message).toBe('roomFull');
+                        client1.disconnect();
+                        client2.disconnect();
+                        done();
+                    });
+                    client2.emit('joinRoom', chatUser2);
+                });
+            });
+        });
     });
 
     describe("chatMessage", () => {

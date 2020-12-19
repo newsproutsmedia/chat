@@ -91,8 +91,8 @@ export class SocketListeners {
 
     onAccessDenied() {
         socket.on('accessDenied', message => {
-            console.log('access denied: ' + message);
-            logout(message);
+            console.log('access denied: ' + message.message);
+            logout(message.message);
         });
     }
 
@@ -198,7 +198,7 @@ export class SocketListeners {
 
     // on successful reconnect, remove overlay
     onReconnect() {
-        socket.on('reconnect', () => {
+        socket.on('reconnect', user => {
             console.log('reconnected');
            // remove overlay
         });

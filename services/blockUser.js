@@ -21,7 +21,6 @@ module.exports = class BlockUser {
 
         logger.info('[service.blockUser.blockUser]', {message: 'User socket found. Emitting logout and disconnect.'});
         User.emitLogoutUser(user, this.socketIO, message);
-        //this.io.sockets.sockets[this.blockedUserId].disconnect();
     }
 
     /**
@@ -32,7 +31,9 @@ module.exports = class BlockUser {
     static userIsBlocked(socket) {
         logger.info('[service.blockUser.userIsBlocked]', {message: 'Checking if user is blocked'});
         const user = User.getCurrentUserById(socket.id);
-        return user.status === "BLOCKED";
+        // check that user exists, in case client was denied access to room and user never created
+        if(user) return user.status === "BLOCKED";
+        return false;
     }
 
     /**
@@ -42,7 +43,6 @@ module.exports = class BlockUser {
     static cleanUpAfterBlockedUserDisconnected(socketIO) {
         logger.info('[service.blockUser.blockUser]', {message: 'Cleaning up after blocked user disconnected.'});
         const {socket: {id}, io} = socketIO;
-        if(!User.getCurrentUserById(id)) return;
         const currentUser = User.getCurrentUserById(id);
         User.emitUserHasLeft(currentUser, socketIO);
         User.sendRoomUsers(currentUser.room, socketIO);

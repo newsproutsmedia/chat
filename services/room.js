@@ -139,7 +139,7 @@ module.exports = class Room {
         logger.info("service.room.emitReconnect.welcomeBack", {user, text});
         new MessageEmitter(this.socketIO).sendMessageToSender(user, text);
         logger.info("service.room.emitReconnect.reconnect", {room});
-        new MessageEmitter(this.socketIO).emitEventToSender('reconnect', room);
+        new MessageEmitter(this.socketIO).emitEventToSender('reconnect', {message: text});
     }
 
     _broadcastJoinedMessage({id, username, email, room}) {

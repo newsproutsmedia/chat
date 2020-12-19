@@ -86,7 +86,7 @@ module.exports = class User {
         User.emitUserHasLeft(currentUser, socketIO);
 
         // set user status to DISCONNECTED
-        if(users[index].status !== "BLOCKED") users[index].status = "DISCONNECTED";
+        users[index].status = "DISCONNECTED";
         logger.info("[service.user.userDisconnected]", {message: "Status Changed", userStatus: currentUser.status});
 
         // send updated users and room info
