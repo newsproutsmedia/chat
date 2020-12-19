@@ -43,6 +43,7 @@ export function outputInviteField() {
  * @description add invite section to DOM
  */
 export function outputInviteSection() {
+    if(document.getElementsByTagName('invite').length > 0) return;
     const inviteSection = document.createElement('invite');
     inviteSection.className = "dash-section";
     inviteSection.innerHTML = `<div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i></a></div>

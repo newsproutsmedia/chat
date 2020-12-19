@@ -20,7 +20,7 @@ export function outputUsers(elementId, users) {
     users.forEach(user => {
         const userDiv = document.createElement("div");
         userDiv.innerHTML = `<div class="user">
-            <span id="${user.id}-count" class="badge badge-secondary">${user.messageCount.toString()}</span>${user.username}
+            <span id="${user.id}-count" class="badge badge-secondary ${user.status.toLowerCase()}">${user.messageCount.toString()}</span>${user.username}
             ${adminUserItemMenu(user)}
          </div>`;
         elementId.appendChild(userDiv);

@@ -14,7 +14,7 @@ module.exports = class Message {
         this.io = io;
         this.socketIO = {socket, io};
         this.text = text;
-        this.user = User.getCurrentUser(this.socket.id);
+        this.user = User.getCurrentUserById(this.socket.id);
         this.messageCount = User.incrementUserMessageCount(this.user.id);
     }
 

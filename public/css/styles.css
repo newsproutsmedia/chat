@@ -78,6 +78,12 @@ p {
   margin-left: 1em;
   padding: .5em 1em .5em; }
 
+.disconnected {
+  background-color: grey; }
+
+.online {
+  background-color: #61D9FA; }
+
 .btn {
   border-radius: 30px;
   padding: 10px 40px;

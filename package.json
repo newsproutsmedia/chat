@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --verbose --runInBand --coverage --forceExit",
     "start": "node server",
-    "dev": "nodemon server",
+    "dev": "node server",
     "scss": "node-sass scss/styles.scss public/css/styles.css",
     "watch-scss": "node-sass -w scss -o public/css",
     "watch": "npm run dev & npm run watch-scss"
