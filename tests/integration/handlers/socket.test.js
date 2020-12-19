@@ -1,5 +1,7 @@
 const io = require('socket.io-client');
 const uuid = require('uuid');
+const Room = require('../../../services/room');
+const Invitations = require('../../../services/invitations');
 const logger = require('../../../loaders/logger');
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
@@ -27,16 +29,19 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe("joinRoom", () => {
         let server;
+        let roomFullSpy;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            roomFullSpy.mockRestore();
             setTimeout(() => done(), 1000);
         })
 
@@ -61,7 +66,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should broadcast to existing users when a new user joins room', async (done) => {
+        it('should broadcast to existing users when a new user joins room', done => {
 
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
@@ -180,16 +185,19 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe("chatMessage", () => {
         let server;
+        let roomFullSpy;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            roomFullSpy.mockRestore();
             setTimeout(() => done(), 1000);
         })
 
@@ -252,16 +260,19 @@ describe("Socket.IO Server-Side Events", () => {
     });
 
     describe("emailInvite", () => {
+        let roomFullSpy;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            roomFullSpy.mockRestore();
             setTimeout(() => done(), 1000);
         })
 
@@ -334,16 +345,22 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe('disconnect', () => {
         let server;
+        let roomFullSpy;
+        let inviteCountSpy;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
+            inviteCountSpy = jest.spyOn(Invitations, 'getInviteCount').mockReturnValueOnce(1).mockReturnValue(2);
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            roomFullSpy.mockRestore();
+            inviteCountSpy.mockRestore();
             setTimeout(() => done(), 2000);
         });
 
@@ -377,10 +394,17 @@ describe("Socket.IO Server-Side Events", () => {
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('roomUsers', roomUsers => {
-                    expect(roomUsers.room).toBe(uniqueRoomId);
                     expect(roomUsers.users.length).toBe(1);
-                    client1.disconnect();
-                    done();
+                    client1.once('roomUsers', roomUsers => {
+                        expect(roomUsers.users[1].status).toBe("ONLINE");
+                        client1.once('roomUsers', roomUsers => {
+                            expect(roomUsers.room).toBe(uniqueRoomId);
+                            expect(roomUsers.users.length).toBe(2);
+                            expect(roomUsers.users[1].status).toBe("DISCONNECTED");
+                            client1.disconnect();
+                            done();
+                        });
+                    });
                 });
 
                 client1.emit('joinRoom', chatUser1);
@@ -400,16 +424,19 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe('uncaughtException test', () => {
         let server;
+        let roomFullSpy;
 
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            roomFullSpy.mockRestore();
             setTimeout(() => done(), 1000);
         });
 
@@ -437,16 +464,21 @@ describe("Socket.IO Server-Side Events", () => {
 
     describe('blockUser', () => {
         let server;
-
+        let roomFullSpy;
+        let inviteCountSpy;
         beforeEach(done => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
+            inviteCountSpy = jest.spyOn(Invitations, 'getInviteCount').mockReturnValueOnce(1).mockReturnValue(2);
             uuid.v4.mockReturnValueOnce(uniqueRoomId);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            roomFullSpy.mockRestore();
+            inviteCountSpy.mockRestore();
             setTimeout(() => done(), 2000);
         });
 
@@ -550,7 +582,7 @@ describe("Socket.IO Server-Side Events", () => {
                     chatUser2.room = uniqueRoomId;
                     client2.once('logoutUser', message => {
                         console.log("logoutUser received", message);
-                        expect(message).toBe("userBlocked");
+                        expect(message.message).toBe("userBlocked");
                         client1.disconnect();
                         client2.disconnect();
                         done();
@@ -561,7 +593,7 @@ describe("Socket.IO Server-Side Events", () => {
             });
 
             client1.emit('joinRoom', chatUser1);
-        });
+        }, 10000);
 
     });
 });

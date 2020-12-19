@@ -120,8 +120,8 @@ module.exports = class User {
      * @param {string} message - reason for logout
      */
     static emitLogoutUser(user, socketIO, message) {
-        logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", logoutMessage: message});
-        new MessageEmitter(socketIO).emitEventToSocket('logoutUser', message);
+        logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", socketID: socketIO.socket.id, logoutMessage: message});
+        new MessageEmitter(socketIO).emitEventToSocket('logoutUser', socketIO.socket.id, {message: message});
     }
 
     /**
@@ -212,11 +212,11 @@ module.exports = class User {
      * @requires {Object} socketIO.io
      */
     static destroyRoomOnLastUserDisconnected({socket, io}) {
-        logger.info('[service.room.userDisconnected]', {message: 'Checking number of room users'});
+        logger.info('[service.user.userDisconnected]', {message: 'Checking number of room users'});
         const socketIO = {socket, io};
         const currentUser = User.getCurrentUserById(socket.id);
         const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
-        logger.info('[service.room.userDisconnected]', {rooms});
+        logger.info('[service.user.userDisconnected]', {rooms});
         if(!rooms) {
             User.destroyRoom(socketIO, currentUser.room);
         };
