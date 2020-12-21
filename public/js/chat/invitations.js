@@ -7,6 +7,7 @@ import {removeElementById} from "./utils/elements.js";
 import {emailInRoomUsers} from "./users.js";
 
 let addedUsers = 0;
+let newInviteEmails = [];
 let invitedUserEmails = [];
 let invitationsToProcess = 0;
 let allInvitesSuccessful = true;
@@ -173,16 +174,17 @@ export function outputErrorBadge(elementId) {
  */
 export function sendInvitations() {
     console.log("sendInvitations");
-    let newInviteEmails = [];
+    newInviteEmails = [];
     let newInviteChildren = getChildInputIds("recipients");
     console.log(newInviteChildren);
     for (let i = 0; i < newInviteChildren.length; i++) {
         let inviteInputId = newInviteChildren[i].id;
         let inviteEmailInput = document.getElementById(inviteInputId);
         outputPendingBadge(inviteEmailInput);
-        if(emailInRoomUsers(inviteEmailInput.value)) {
-            outputErrorBadge(inviteEmailInput);
-            outputRedundantEmailMessage(inviteInputId);
+        if(emailIsDuplicate(inviteEmailInput.value)) {
+            console.log('duplicate email found');
+            duplicateEmailFound(inviteInputId);
+            continue;
         }
         let inviteEmailAddress = inviteEmailInput.value;
         if(inviteEmailAddress !== "") {
@@ -223,6 +225,11 @@ export function hideInviteButton() {
     }
 }
 
+function allInvitationsProcessed() {
+    invitationsToProcess--;
+    return invitationsToProcess === 0;
+}
+
 function checkInputLengths(parentId) {
     let newInviteChildren = getChildInputIds(parentId);
     if(newInviteChildren.length === 0) return false;
@@ -236,7 +243,25 @@ function checkInputLengths(parentId) {
     return inviteValues.reduce(reducer) > 0;
 }
 
-function allInvitationsProcessed() {
-    invitationsToProcess--;
-    return invitationsToProcess === 0;
+function emailIsDuplicate(email) {
+    return emailIsOnNewInvitesList(email) || emailIsOnInvitesList(email) || emailInRoomUsers(email);
 }
+
+function emailIsOnNewInvitesList(email) {
+    const emailInNewList = newInviteEmails.includes(email);
+    console.log(`Email (${email} found in new invites list: ${emailInNewList}`);
+    return emailInNewList;
+}
+
+function emailIsOnInvitesList(email) {
+    const emailInList = invitedUserEmails.includes(email);
+    console.log(`Email (${email} found in invites list: ${emailInList}`);
+    return emailInList;
+}
+
+function duplicateEmailFound(inviteInputId) {
+    const inviteEmailInput = document.getElementById(inviteInputId);
+    outputErrorBadge(inviteEmailInput);
+    outputRedundantEmailMessage(inviteInputId);
+}
+

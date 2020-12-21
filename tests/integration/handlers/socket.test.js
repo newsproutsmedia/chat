@@ -403,7 +403,7 @@ describe("Socket.IO Server-Side Events", () => {
         });
     });
 
-    describe("emailInvite", () => {
+    describe.only("emailInvite", () => {
         let roomFullSpy;
 
         beforeEach(done => {

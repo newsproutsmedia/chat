@@ -10,7 +10,7 @@ let connectedUsers = [];
  * @param {array} users - array of users in chat room
  */
 export function outputUsers(elementId, users) {
-    removeDisconnectUserButtonListeners(connectedUsers);
+    //removeDisconnectUserButtonListeners(connectedUsers);
     connectedUsers = [];
     elementId.innerHTML = "";
     const usersTitle = document.createElement("h4");
@@ -29,6 +29,7 @@ export function outputUsers(elementId, users) {
         addConnectedUser(user);
 
         if(document.getElementById(`${user.id}-disconnect`)) addDisconnectUserButtonListener(user.id);
+        console.log("All Users Connected", connectedUsers);
     });
 }
 
@@ -38,6 +39,14 @@ function addConnectedUser(user) {
     } else {
         connectedUsers.push({id: user.id, username: user.username, status: user.status});
     }
+}
+
+export function emailInRoomUsers(email) {
+    // THIS IS NOT WORKING
+    // FIX IT!
+    const emailFound = connectedUsers.includes(email);
+    console.log(`Email (${email}) found in room: ${emailFound}`);
+    return emailFound;
 }
 
 export function incrementMaxUsers() {
