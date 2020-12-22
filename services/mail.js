@@ -3,6 +3,10 @@ const nodemailer = require('nodemailer');
 const User = require('./user');
 const Invitations = require('./invitations');
 const MessageEmitter = require('../emitters/messageEmitter');
+const SocketEmitter = require('../emitters/socketEmitter');
+
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 
 /**
  * @desc takes an array of recipients to construct an email
@@ -21,31 +25,31 @@ module.exports = class Mail {
             email: this.user.email,
             room: this.user.room
         };
-        this.allSentSuccessfully = true;
     }
 
     async sendAll() {
 
         if(this.user.type !== 'admin') return this._emitMailNotAllowed();
 
-        const transporter = await this._getMailTransporter();
+        let emailTransporter = await this._getMailTransporter();
 
         this.recipients.forEach(recipient => {
             let mailRecipient = {id: recipient.id, email: recipient.email};
             logger.info(`service.mail.sendAll.forEach.recipient`, {email: recipient.email});
             this.sender.to = recipient.email;
             let formattedMessage = this._formatMail(this.sender);
-            transporter.sendMail(formattedMessage, (err, info) => {
+            emailTransporter.sendMail(formattedMessage, (err, info) => {
 
                 if(err || info.rejected.length > 0) {
                     logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem", {"id": mailRecipient.id, "email": mailRecipient.email});
                     this.allSentSuccessfully = false;
-                    return this._emitInviteSendFailure(mailRecipient);
+                    this._emitInviteSendFailure(mailRecipient);
+                    return;
                 }
 
                 logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
                 Invitations.incrementRoomInvites(this.user.room);
-                return this._emitInviteSendSuccess(mailRecipient);
+                this._emitInviteSendSuccess(mailRecipient);
             });
         });
 
@@ -53,52 +57,80 @@ module.exports = class Mail {
 
     _emitMailNotAllowed() {
         logger.warn("service.mail.emitInviteSendSuccess", {"message": "email not allowed"});
-        new MessageEmitter(this.socketIO).emitEventToSender('inviteNotAllowed', this.user.type);
+        new SocketEmitter(this.socketIO).emitEventToSender('inviteNotAllowed', this.user.type);
     }
 
     _emitInviteSendFailure(recipient) {
         logger.warn("service.mail.emitInviteSendFailure", {"message": "send failed"});
-        new MessageEmitter(this.socketIO).emitEventToSender('inviteSendFailure', recipient);
+        new SocketEmitter(this.socketIO).emitEventToSender('inviteSendFailure', recipient);
     }
 
     _emitInviteSendSuccess(recipient) {
         logger.info("service.mail.emitInviteSendSuccess", {"message": "send successful"});
-        new MessageEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
+        new SocketEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
     }
 
-    async _getMailTransporter() {
-        // Generate test SMTP service account from ethereal.email
-        // Only needed if you don't have a real mail account for testing
-        let testAccount = await nodemailer.createTestAccount();
 
-        // create reusable transporter object using the default SMTP transport
-        return nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: testAccount.user, // generated ethereal user
-                pass: testAccount.pass, // generated ethereal password
-            },
+
+
+
+    // create reusable transporter object using the default SMTP transport
+    _getMailTransporter = async () => {
+        const oauth2Client = new OAuth2(
+            process.env.CLIENT_ID,
+            process.env.CLIENT_SECRET,
+            "https://developers.google.com/oauthplayground"
+        );
+
+        oauth2Client.setCredentials({
+            refresh_token: process.env.REFRESH_TOKEN
         });
+
+        const accessToken = await this._getGoogleAccessToken(oauth2Client);
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                type: "OAuth2",
+                user: process.env.EMAIL,
+                accessToken,
+                clientId: process.env.CLIENT_ID,
+                clientSecret: process.env.CLIENT_SECRET,
+                refreshToken: process.env.REFRESH_TOKEN
+            }
+        });
+
+        return transporter;
     }
 
     _formatMail(sender) {
         //let recipients = sender.recipients.join(', ');
         return {
             // from: `"${sender.username}" <${sender.email}>`, // sender address
-            from: '"Fred Foo 👻" <foo@example.com>', // sender address
+            from: process.env.EMAIL, // sender address
             to: sender.to, // message recipient (could be an array)
-            subject: "Sasquatch Chat Invite", // Subject line
-            //text: "Hello world?", // plain text body
-            html: //TODO Add Sasquatch Chat logo to top of email
-                "<h1>You're invited to join a Chat</h1>" +
+            subject: "ChatApp Invite", // Subject line
+            text: "You received this from ChatApp" // plain text body
+            //html: //TODO Add Sasquatch Chat logo to top of email
+                //"<h1>You're invited to join a Chat</h1>" +
                 //"<p>Follow these steps to join the chat:</p>" +
                 //"<ul><li>1. Click on the link below<li>2. Paste the encrypted message into the message box<li>3. Use your pre-arranged passcode to decrypt your chatroom id and room password.</ul>" +
-                //"<h2><u>Your Encryptid Invitation</u></h2>" +
-                `<p>Room ID: ${sender.room}</p>`
+                //"<h2><u>Your ChatApp Invitation</u></h2>" +
+                //`<p>Room ID: ${sender.room}</p>`
             //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
             //TODO Create Option to Decline Invitation
         }
+    }
+
+    _getGoogleAccessToken(oAuth2Client) {
+        return new Promise((resolve, reject) => {
+            oAuth2Client.getAccessToken((err, token) => {
+                if (err) {
+                    logger.warn("service.mail.getGoogleAccessToken", {"message": err});
+                    reject();
+                }
+                resolve(token);
+            });
+        });
     }
 }

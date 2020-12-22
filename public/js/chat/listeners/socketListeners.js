@@ -105,7 +105,7 @@ export class SocketListeners {
 
     onRoomUsers() {
         socket.on('roomUsers', ({ room, users }) => {
-            console.log('received room users');
+            console.log('received room users', users);
             outputRoomName(roomName, room);
             outputUsers(userList, users);
 

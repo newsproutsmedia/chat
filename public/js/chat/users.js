@@ -10,7 +10,7 @@ let connectedUsers = [];
  * @param {array} users - array of users in chat room
  */
 export function outputUsers(elementId, users) {
-    removeDisconnectUserButtonListeners(connectedUsers);
+    //removeDisconnectUserButtonListeners(connectedUsers);
     connectedUsers = [];
     elementId.innerHTML = "";
     const usersTitle = document.createElement("h4");
@@ -23,10 +23,30 @@ export function outputUsers(elementId, users) {
             <span id="${user.id}-count" class="badge badge-secondary ${user.status.toLowerCase()}">${user.messageCount.toString()}</span>${user.username}
             ${adminUserItemMenu(user)}
          </div>`;
+
         elementId.appendChild(userDiv);
-        users.push({id: user.id, username: user.username, status: user.status});
+
+        addConnectedUser(user);
+
         if(document.getElementById(`${user.id}-disconnect`)) addDisconnectUserButtonListener(user.id);
+        console.log("All Users Connected", connectedUsers);
     });
+}
+
+function addConnectedUser(user) {
+    if(getIsAdmin()) {
+        connectedUsers.push({id: user.id, username: user.username, email: user.email, status: user.status});
+    } else {
+        connectedUsers.push({id: user.id, username: user.username, status: user.status});
+    }
+}
+
+export function emailInRoomUsers(email) {
+    // This is not working, always returns false
+    // FIX IT!
+    const emailFound = connectedUsers.some(user => user.email === email);
+    console.log(`Email (${email}) found in room: ${emailFound}`);
+    return emailFound;
 }
 
 export function incrementMaxUsers() {
