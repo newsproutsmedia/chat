@@ -42,9 +42,9 @@ function addConnectedUser(user) {
 }
 
 export function emailInRoomUsers(email) {
-    // THIS IS NOT WORKING
+    // This is not working, always returns false
     // FIX IT!
-    const emailFound = connectedUsers.includes(email);
+    const emailFound = connectedUsers.some(user => user.email === email);
     console.log(`Email (${email}) found in room: ${emailFound}`);
     return emailFound;
 }

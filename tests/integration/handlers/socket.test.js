@@ -403,7 +403,7 @@ describe("Socket.IO Server-Side Events", () => {
         });
     });
 
-    describe.only("emailInvite", () => {
+    describe("emailInvite", () => {
         let roomFullSpy;
 
         beforeEach(done => {
@@ -467,13 +467,13 @@ describe("Socket.IO Server-Side Events", () => {
 
         it('should emit inviteSendSuccess email was successfully sent', done => {
             let invite = {
-                recipients: [{id: "id", email: "test-success@test.com"}]
+                recipients: [{id: "id", email: process.env.TEST_EMAIL}]
             }
             client1 = io.connect(socketURL, options);
             client1.on('connect', () => {
                 client1.once('inviteSendSuccess', inviteInput => {
                     expect(inviteInput.id).toBe("id");
-                    expect(inviteInput.email).toBe("test-success@test.com");
+                    expect(inviteInput.email).toBe(process.env.TEST_EMAIL);
                     client1.disconnect();
                     done();
                 });

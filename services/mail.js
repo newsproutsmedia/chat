@@ -25,7 +25,6 @@ module.exports = class Mail {
             email: this.user.email,
             room: this.user.room
         };
-        this.allSentSuccessfully = true;
     }
 
     async sendAll() {
@@ -87,14 +86,7 @@ module.exports = class Mail {
             refresh_token: process.env.REFRESH_TOKEN
         });
 
-        const accessToken = await new Promise((resolve, reject) => {
-            oauth2Client.getAccessToken((err, token) => {
-                if (err) {
-                    reject();
-                }
-                resolve(token);
-            });
-        });
+        const accessToken = await this._getGoogleAccessToken(oauth2Client);
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -128,5 +120,17 @@ module.exports = class Mail {
             //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
             //TODO Create Option to Decline Invitation
         }
+    }
+
+    _getGoogleAccessToken(oAuth2Client) {
+        return new Promise((resolve, reject) => {
+            oAuth2Client.getAccessToken((err, token) => {
+                if (err) {
+                    logger.warn("service.mail.getGoogleAccessToken", {"message": err});
+                    reject();
+                }
+                resolve(token);
+            });
+        });
     }
 }

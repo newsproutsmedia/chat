@@ -5,6 +5,7 @@ import {InviteListeners} from "./listeners/inviteListeners.js";
 import {InviteFieldListener} from "./listeners/inviteFieldListener.js";
 import {removeElementById} from "./utils/elements.js";
 import {emailInRoomUsers} from "./users.js";
+import {emailIsValid} from "./utils/validation.js";
 
 let addedUsers = 0;
 let newInviteEmails = [];
@@ -102,7 +103,6 @@ export function outputSendFailureMessage(elementId) {
     const inputParent = document.getElementById(elementId).parentElement;
     inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
     allInvitesSuccessful = false;
-    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
 /**
@@ -118,11 +118,10 @@ export function outputSendErrorMessage(elementId) {
     console.log(inputParent);
     inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
     allInvitesSuccessful = false;
-    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
 /**
- * @description output email send error message to DOM
+ * @description output redundant email error message to DOM
  * @param {string} elementId
  */
 export function outputRedundantEmailMessage(elementId) {
@@ -134,7 +133,21 @@ export function outputRedundantEmailMessage(elementId) {
     console.log(inputParent);
     inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
     allInvitesSuccessful = false;
-    if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
+}
+
+/**
+ * @description output invalid email error message to DOM
+ * @param {string} elementId
+ */
+export function outputInvalidEmailMessage(elementId) {
+    let message = document.createElement('p');
+    message.id = `${elementId}_ErrorMsg`;
+    message.className =  "send-failure-message";
+    message.innerHTML = "Email address is invalid. Needs to be in _@_._ format.";
+    const inputParent = document.getElementById(elementId).parentElement;
+    console.log(inputParent);
+    inputParent.parentNode.insertBefore(message, inputParent.nextSibling);
+    allInvitesSuccessful = false;
 }
 
 /**
@@ -174,6 +187,7 @@ export function outputErrorBadge(elementId) {
  */
 export function sendInvitations() {
     console.log("sendInvitations");
+    allInvitesSuccessful = true;
     newInviteEmails = [];
     let newInviteChildren = getChildInputIds("recipients");
     console.log(newInviteChildren);
@@ -181,11 +195,20 @@ export function sendInvitations() {
         let inviteInputId = newInviteChildren[i].id;
         let inviteEmailInput = document.getElementById(inviteInputId);
         outputPendingBadge(inviteEmailInput);
+
+        // VALIDATION
+        if(!emailIsValid(inviteEmailInput.value)) {
+            console.log('email invalid');
+            invalidEmailFound(inviteInputId);
+            continue;
+        }
+
         if(emailIsDuplicate(inviteEmailInput.value)) {
             console.log('duplicate email found');
             duplicateEmailFound(inviteInputId);
             continue;
         }
+
         let inviteEmailAddress = inviteEmailInput.value;
         if(inviteEmailAddress !== "") {
             invitedUserEmails.push(inviteEmailAddress);
@@ -200,20 +223,22 @@ export function sendInvitations() {
     let invite = {
         recipients: newInviteEmails
     }
+
     invitationsToProcess = newInviteEmails.length;
     console.log(invite);
-    document.getElementById('sendInvitations').setAttribute('disabled', "");
+    if(allInvitesSuccessful) document.getElementById('sendInvitations').setAttribute('disabled', "");
     emitEmailInvite(invite);
 }
 
 export function setInviteButtonStateAfterSend(success) {
-    document.getElementById('sendInvitations').removeAttribute('disabled');
+    console.log('Setting invite button state after send');
     success ? hideInviteButton() : showInviteButton();
     invitationsToProcess = 0;
     allInvitesSuccessful = true;
 }
 
 export function showInviteButton() {
+    document.getElementById('sendInvitations').removeAttribute('disabled');
     document.getElementById('sendInvitations').classList.remove('h-hidden');
 }
 
@@ -221,6 +246,7 @@ export function hideInviteButton() {
     // check that all invite inputs have length of < 5 && button isn't already hidden
     let inviteButton = document.getElementById('sendInvitations');
     if(!inviteButton.classList.contains('h-hidden') && !checkInputLengths('recipients')) {
+        document.getElementById('sendInvitations').setAttribute('disabled', "");
         document.getElementById('sendInvitations').classList.add('h-hidden');
     }
 }
@@ -263,5 +289,11 @@ function duplicateEmailFound(inviteInputId) {
     const inviteEmailInput = document.getElementById(inviteInputId);
     outputErrorBadge(inviteEmailInput);
     outputRedundantEmailMessage(inviteInputId);
+}
+
+function invalidEmailFound(inviteInputId) {
+    const inviteEmailInput = document.getElementById(inviteInputId);
+    outputErrorBadge(inviteEmailInput);
+    outputInvalidEmailMessage(inviteInputId);
 }
 
