@@ -57,16 +57,44 @@ export function outputInviteSection() {
 }
 
 /**
- * @description email successfully sent for invited user
+ * @description output successfully invited user to DOM
  * @param {string} id
  * @param {string} email
  */
 export function outputInvitedUser({id, email}) {
-    let invite = document.getElementById(id).parentNode;
+    if(!document.getElementById('inviteList')) outputInvitedList();
+    let invite = document.createElement('div');
     invite.innerHTML = `<span class="badge badge-success">SENT</span>${email}`;
     invite.className = "user";
     invite.setAttribute("id", email);
+    document.getElementById('inviteList').addChild(invite);
     if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
+}
+
+export function outputAllInvitedUsers(invitedUsers) {
+    if(invitedUserEmails === 0) return;
+    if(!document.getElementById('invitedList')) outputInvitedList();
+    invitedUserEmails.forEach(user => {
+
+    });
+}
+
+/**
+ * @description output invited user list to DOM
+ */
+export function outputInvitedList() {
+    if(document.getElementById('invitedList')) return;
+    let invitedList = document.createElement('div');
+    invitedList.id = "invitedList";
+    invitedList.className = "invited-list";
+    document.getElementById('users').appendChild(invitedList);
+}
+/**
+ * @description remove invited user list from DOM
+ */
+export function removeInvitedList() {
+    const invitedList = document.getElementById('invitedList');
+    document.getElementById('users').removeChild(invitedList);
 }
 
 /**
@@ -74,7 +102,7 @@ export function outputInvitedUser({id, email}) {
  * @param {Object} users
  */
 export function updateInvitedList(users) {
-
+        if(invitedUserEmails.length === 0) return removeInvitedList();
         for (let user in users) {
             if (invitedUserEmails.includes(users[user].email)) {
                 console.log("user in users:", users[user].email);

@@ -130,7 +130,8 @@ module.exports = class User {
      * @return {array} - array of user objects
      */
     static getRoomUsers(room) {
-        return users.filter(user => user.room === room);
+        if(getIsAdmin()) return users.filter(user => user.room === room);
+        return users.filter(user => user.room === room && user.status !== "SENT");
     }
 
     /**
