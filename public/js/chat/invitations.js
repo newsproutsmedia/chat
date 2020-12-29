@@ -62,7 +62,7 @@ export function outputInviteSection() {
  * @param {string} email
  */
 export function outputInvitedUser({id, email}) {
-    if(!document.getElementById('inviteList')) outputInvitedList();
+    if(!document.getElementById('inviteList')) outputInvitedListSection();
     let invite = document.createElement('div');
     invite.innerHTML = `<span class="badge badge-success">SENT</span>${email}`;
     invite.className = "user";
@@ -71,18 +71,19 @@ export function outputInvitedUser({id, email}) {
     if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
-export function outputAllInvitedUsers(invitedUsers) {
+export function outputAllInvitedUsers() {
     if(invitedUserEmails === 0) return;
-    if(!document.getElementById('invitedList')) outputInvitedList();
+    if(!document.getElementById('invitedList')) outputInvitedListSection();
+    document.getElementById('invitedList').innerHTML = '';
     invitedUserEmails.forEach(user => {
-
+        outputInvitedUser({...user.id, ...user.email});
     });
 }
 
 /**
  * @description output invited user list to DOM
  */
-export function outputInvitedList() {
+export function outputInvitedListSection() {
     if(document.getElementById('invitedList')) return;
     let invitedList = document.createElement('div');
     invitedList.id = "invitedList";
@@ -92,7 +93,7 @@ export function outputInvitedList() {
 /**
  * @description remove invited user list from DOM
  */
-export function removeInvitedList() {
+export function removeInvitedListSection() {
     const invitedList = document.getElementById('invitedList');
     document.getElementById('users').removeChild(invitedList);
 }
@@ -102,7 +103,7 @@ export function removeInvitedList() {
  * @param {Object} users
  */
 export function updateInvitedList(users) {
-        if(invitedUserEmails.length === 0) return removeInvitedList();
+        if(invitedUserEmails.length === 0) return removeInvitedListSection();
         for (let user in users) {
             if (invitedUserEmails.includes(users[user].email)) {
                 console.log("user in users:", users[user].email);
@@ -115,6 +116,7 @@ export function updateInvitedList(users) {
 
     //if(invitedUserEmails.length === 0) document.getElementById("invited").remove();
     console.log(invitedUserEmails);
+    outputAllInvitedUsers(invitedUserEmails);
 }
 
 /**

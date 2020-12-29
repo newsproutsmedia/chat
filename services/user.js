@@ -8,10 +8,6 @@ let users = [];
 /**
  * @desc construct a new user
  * @param {Object} - User object containing id, username, email, room, type
- * @requires {string} id
- * @requires {string} username
- * @requires {string} room
- * @requires {string} type
  */
 module.exports = class User {
 
@@ -130,8 +126,7 @@ module.exports = class User {
      * @return {array} - array of user objects
      */
     static getRoomUsers(room) {
-        if(getIsAdmin()) return users.filter(user => user.room === room);
-        return users.filter(user => user.room === room && user.status !== "SENT");
+        return users.filter(user => user.room === room);
     }
 
     /**
@@ -220,7 +215,7 @@ module.exports = class User {
         logger.info('[service.user.userDisconnected]', {rooms});
         if(!rooms) {
             User.destroyRoom(socketIO, currentUser.room);
-        };
+        }
     }
 
     /**
@@ -234,7 +229,8 @@ module.exports = class User {
 
     /**
      * @desc update user id
-     * @param {string} id
+     * @param {string} oldSocketId
+     * @param {string} newSocketId
      */
     static updateUserId(oldSocketId, newSocketId) {
         const index = users.findIndex(user => user.id === oldSocketId);
@@ -249,6 +245,14 @@ module.exports = class User {
     static setUserStatus(id, status) {
         const index = users.findIndex(user => user.id === id);
         users[index].status = status;
+    }
+
+    /** is the passed user an admin
+     * @param {Object} user
+     * @return boolean
+     */
+    static userIsAdmin(user) {
+        return user.type === "admin";
     }
 
 }
