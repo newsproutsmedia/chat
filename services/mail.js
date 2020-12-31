@@ -42,13 +42,12 @@ module.exports = class Mail {
 
                 if(err || info.rejected.length > 0) {
                     logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem", {"id": mailRecipient.id, "email": mailRecipient.email});
-                    this.allSentSuccessfully = false;
                     this._emitInviteSendFailure(mailRecipient);
                     return;
                 }
 
                 logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
-                Invitations.incrementRoomInvites(this.user.room);
+                Invitations.addEmailToInvitationList(this.user.room, recipient.email);
                 this._emitInviteSendSuccess(mailRecipient);
             });
         });

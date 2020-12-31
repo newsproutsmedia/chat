@@ -2,7 +2,14 @@
 import {logout} from "../utils/logout.js";
 import {outputRoomName, updateUrlRoom} from "../rooms.js";
 import {incrementMaxUsers, outputUsers} from "../users.js";
-import {outputInvitedUser, outputSendErrorMessage, outputSendFailureMessage, updateInvitedList, outputInvitedListSection, setInviteButtonStateAfterSend} from "../invitations.js";
+import {
+    outputInvitedUser,
+    outputSendErrorMessage,
+    outputSendFailureMessage,
+    setInviteButtonStateAfterSend,
+    removeInviteField,
+    outputAllInvitedUsers
+} from "../invitations.js";
 import {outputMessage, outputUpdatedMessageCount} from "../messages.js";
 import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
@@ -10,7 +17,8 @@ import {redirectToError} from "../errors.js";
 import {getIsAdmin} from "../admin.js";
 
 const roomName = document.getElementById('roomName');
-const userList = document.getElementById('users');
+const userList = document.getElementById('usersList');
+const invitedList = document.getElementById('invitedList');
 
 // Get username and room from URL
 export let { username, email, room } = Qs.parse(location.search, {
@@ -104,12 +112,13 @@ export class SocketListeners {
     }
 
     onRoomUsers() {
-        socket.on('roomUsers', ({ room, users }) => {
+        socket.on('roomUsers', ({ room, users, invites }) => {
             console.log('received room users', users);
+            console.log('received invites', invites);
             outputRoomName(roomName, room);
             outputUsers(userList, users);
 
-            if(getIsAdmin()) updateInvitedList(users);
+            if(getIsAdmin()) outputAllInvitedUsers(invitedList, invites);
         });
     }
 
@@ -146,8 +155,9 @@ export class SocketListeners {
 
     onInviteSendSuccess() {
         socket.on('inviteSendSuccess', ({id, email}) => {
-            console.log("inviteSendSuccess");
-            outputInvitedUser({id, email});
+            console.log("inviteSendSuccess: ", id);
+            removeInviteField(id);
+            outputInvitedUser(invitedList, email);
             incrementMaxUsers();
         });
     }

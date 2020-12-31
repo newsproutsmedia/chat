@@ -37,5 +37,6 @@ module.exports = class MessageHistory {
         });
         messages = newMessageArray;
         logger.info('service.messageHistory.deleteRoomMessages', {messages});
+        return messages;
     }
 }

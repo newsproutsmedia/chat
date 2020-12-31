@@ -3,7 +3,11 @@ let {bot, userTypes} = require('../loaders/globals');
 const MessageEmitter = require('../emitters/messageEmitter');
 const MessageHistory = require('./messageHistory');
 const Invitations = require('./invitations');
+const roomList = require('./roomList');
+
 let users = [];
+let timer;
+let timerOn = false;
 
 /**
  * @desc construct a new user
@@ -146,12 +150,13 @@ module.exports = class User {
      * @emits object containing room id and array of users in room
      */
     static sendRoomUsers(room, socketIO) {
-        let roomUsers = {
+        const roomUsersAndInvites = {
             room: room,
-            users: User.getRoomUsers(room)
+            users: User.getRoomUsers(room),
+            invites: Invitations.getRoomInvitations(room)
         };
-        logger.info("[service.room.sendRoomUsers]", {socket: socketIO.socket.id, room, roomUsers});
-        new MessageEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsers);
+        logger.info("[service.room.sendRoomUsers]", {socket: socketIO.socket.id, room, roomUsers: roomUsersAndInvites});
+        new MessageEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsersAndInvites);
     }
 
     /**
@@ -187,6 +192,7 @@ module.exports = class User {
         MessageHistory.deleteRoomMessages(room);
         Invitations.deleteRoomFromInvitationList(room);
         User.deleteRoomUsers(room);
+        roomList.deleteRoom(room);
     }
 
     /**
@@ -214,7 +220,7 @@ module.exports = class User {
         const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
         logger.info('[service.user.userDisconnected]', {rooms});
         if(!rooms) {
-            User.destroyRoom(socketIO, currentUser.room);
+            User.startTimer(socketIO, currentUser.room);
         }
     }
 
@@ -248,11 +254,32 @@ module.exports = class User {
     }
 
     /** is the passed user an admin
-     * @param {Object} user
+     * @param {string} socket
      * @return boolean
      */
-    static userIsAdmin(user) {
+    static userIsAdmin(socket) {
+        const user = User.getCurrentUserById(socket);
         return user.type === "admin";
+    }
+
+    static startTimer(socketIO, room) {
+        logger.info('[service.user.startTimer]', {message: "Starting Disconnect Timer"});
+        if(!timerOn) {
+            timerOn = true;
+            timer = setTimeout(() => {
+                User.destroyRoom(socketIO, room);
+            }, 60000);
+        }
+    }
+
+    static stopTimer() {
+        logger.info('[service.user.stopTimer]', {message: "Stopping Disconnect Timer"});
+        clearTimeout(timer);
+        timerOn = false;
+    }
+
+    static roomTimerIsOn() {
+        return timerOn;
     }
 
 }

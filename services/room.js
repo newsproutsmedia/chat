@@ -1,10 +1,12 @@
-const {validate: validateUUID, v4: uuid} = require('uuid');
+const {v4: uuid} = require('uuid');
 const User = require('./user');
+const roomList = require('./roomList');
 const MessageEmitter = require('../emitters/messageEmitter');
 const MessageHistory = require('./messageHistory');
 const Invitations = require('./invitations');
 const logger = require('../loaders/logger');
 let {bot} = require('../loaders/globals');
+
 
 /**
  * @desc construct a new or existing room for the current user
@@ -24,26 +26,25 @@ module.exports = class Room {
         logger.info("service.room.constructor", {socket: this.socket.id, username: username, email: email, room: room});
 
         // if room value is not set, create a new room
-        if (!room) {
+        if (!this.room || !roomList.roomExists(this.room)) {
             this.room = this._create();
             this._emitRoomCreated(this.room);
-            Invitations.addRoomToInvitationList(this.room);
+            Invitations.addRoomToInvitationList(this.room, this.email);
             this.type = User.setUserType('admin');
         }
 
     }
 
     join() {
-        if(this._roomIsFull()) return this._emitRoomFull(this.room);;
+        if(this._roomIsFull()) return this._emitRoomFull(this.room);
 
         // create user object
         const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type}).addUser();
 
-        // check if roomID is valid
-        if(!this._validateRoomId(this.room)) return this._roomInvalid();
-
         logger.info("service.room.joinRoom", {room: this.room});
         this.socket.join(this.room);
+
+        if(!roomList.roomExists(this.room)) roomList.addRoom(this.room);
 
         // welcome current user
         this._emitWelcome(user);
@@ -51,6 +52,8 @@ module.exports = class Room {
         this._broadcastJoinedMessage(user);
         // set up admin tools
         if(this.type === 'admin') this._emitSetupAdmin(user);
+
+        Invitations.removeEmailFromInvitationList(this.room, this.email);
         // send users and room info to front end
         User.sendRoomUsers(this.room, this.socketIO);
         // send message history to front end
@@ -59,6 +62,9 @@ module.exports = class Room {
     }
 
     reconnect() {
+        // stop disconnect countdown
+        if(User.roomTimerIsOn()) User.stopTimer();
+
         // update userID
         const user = User.getCurrentUserByRoomAndEmail(this.room, this.email);
         logger.info("service.room.reconnect", {user});
@@ -67,35 +73,35 @@ module.exports = class Room {
         // update connection status
         User.setUserStatus(this.socket.id, "ONLINE");
 
+        // rejoin room
         logger.info("service.room.reconnect", {room: this.room});
         this.socket.join(this.room);
 
+        if(!roomList.roomExists(this.room)) roomList.addRoom(this.room);
+
         // emit reconnect event
         this._emitReconnect(user);
+
         // broadcast to everyone (except user) when user connects
         this._broadcastReconnectMessage(user);
+
         // set up admin tools
         if(user.type === 'admin') this._emitSetupAdmin(user);
+
         // send users and room info to front end
         User.sendRoomUsers(this.room, this.socketIO);
+
         // send message history to front end
         new MessageHistory().sendMessageHistoryToUser(this.room, this.socketIO);
     }
 
-    _validateRoomId(room) {
-        const isValidRoomId = validateUUID(room);
-        logger.info("service.room.validate", {room:room, isValid:isValidRoomId});
-        return isValidRoomId;
-    }
 
-    _roomInvalid() {
-        logger.warn("service.room.join.validateRoomId", {message: "Room ID is invalid, disconnecting socket", room: this.room});
-        this._emitInvalidRoom(this.room);
-    }
 
     _roomIsFull() {
-        const newRoomUsersLength = User.getRoomUsers(this.room).length + 1;
-        if(newRoomUsersLength > Invitations.getInviteCount(this.room)) {
+        const userCount = User.getRoomUsers(this.room);
+        const inviteCount = Invitations.getInvitationCount(this.room);
+        const newRoomUsersLength = userCount + 1;
+        if(newRoomUsersLength > userCount + inviteCount) {
             logger.warn("service.room.join._roomIsFull", {message: "Room is full", room: this.room});
             return true;
         }
@@ -111,11 +117,6 @@ module.exports = class Room {
     _emitRoomCreated(uniqueRoomId) {
         logger.info("service.room.emitRoomCreated", {uniqueRoomId});
         new MessageEmitter(this.socketIO).emitEventToSender('roomCreated', uniqueRoomId);
-    }
-
-    _emitInvalidRoom(room) {
-        logger.info("service.room.emitInvalidRoom", {room});
-        new MessageEmitter(this.socketIO).emitEventToSender('invalidRoom', room);
     }
 
     _emitRoomFull(room) {
@@ -160,6 +161,4 @@ module.exports = class Room {
         logger.info("service.room.emitSetupAdmin", {user});
         new MessageEmitter(this.socketIO).emitEventToSender('setupAdmin', user);
     }
-
-
 }

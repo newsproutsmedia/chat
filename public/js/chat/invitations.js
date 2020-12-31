@@ -20,7 +20,7 @@ export function outputInviteField() {
     console.log("Add Chat Member Clicked");
     let recipient = document.createElement('div');
     let randId = generateShortId();
-    let inviteInputId = `inviteInput_${randId}`;
+    let inviteInputId = `${randId}`;
     recipient.id = "inviteWrapper_" + randId;
     recipient.className = "inviteWrapper";
     recipient.innerHTML = `
@@ -42,6 +42,11 @@ export function outputInviteField() {
     addedUsers = addedUsers + 1;
 }
 
+export function removeInviteField(id) {
+    const inviteField = document.getElementById("inviteWrapper_" + id);
+    document.getElementById("inviteWrapper_" + id).parentNode.removeChild(inviteField);
+}
+
 /**
  * @description add invite section to DOM
  */
@@ -58,65 +63,34 @@ export function outputInviteSection() {
 
 /**
  * @description output successfully invited user to DOM
- * @param {string} id
+ * @param {Element} inviteListElement
  * @param {string} email
  */
-export function outputInvitedUser({id, email}) {
-    if(!document.getElementById('inviteList')) outputInvitedListSection();
-    let invite = document.createElement('div');
+export function outputInvitedUser(inviteListElement, email) {
+    if(!email) return;
+    const invite = document.createElement('div');
     invite.innerHTML = `<span class="badge badge-success">SENT</span>${email}`;
     invite.className = "user";
     invite.setAttribute("id", email);
-    document.getElementById('inviteList').addChild(invite);
+    inviteListElement.appendChild(invite);
     if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
-export function outputAllInvitedUsers() {
-    if(invitedUserEmails === 0) return;
-    if(!document.getElementById('invitedList')) outputInvitedListSection();
-    document.getElementById('invitedList').innerHTML = '';
-    invitedUserEmails.forEach(user => {
-        outputInvitedUser({...user.id, ...user.email});
+export function outputAllInvitedUsers(inviteListElement, invites) {
+    console.log("outputAllInvitedUsers: ", invites);
+    if(inviteListElement) inviteListElement.innerHTML = '';
+    if(!invites) return;
+    invites[0].emails.forEach(email => {
+        console.log("outputting invited user: ", email.email);
+        outputInvitedUser(inviteListElement, email.email);
     });
 }
 
 /**
- * @description output invited user list to DOM
+ * @description empty invited user list
  */
-export function outputInvitedListSection() {
-    if(document.getElementById('invitedList')) return;
-    let invitedList = document.createElement('div');
-    invitedList.id = "invitedList";
-    invitedList.className = "invited-list";
-    document.getElementById('users').appendChild(invitedList);
-}
-/**
- * @description remove invited user list from DOM
- */
-export function removeInvitedListSection() {
-    const invitedList = document.getElementById('invitedList');
-    document.getElementById('users').removeChild(invitedList);
-}
-
-/**
- * @description remove users who have logged in from invited user list
- * @param {Object} users
- */
-export function updateInvitedList(users) {
-        if(invitedUserEmails.length === 0) return removeInvitedListSection();
-        for (let user in users) {
-            if (invitedUserEmails.includes(users[user].email)) {
-                console.log("user in users:", users[user].email);
-                let thisChildId = users[user].email;
-                console.log("removing child: ", thisChildId);
-                document.getElementById(thisChildId).remove();
-                invitedUserEmails = invitedUserEmails.filter(a => a !== users[user].email);
-            }
-        }
-
-    //if(invitedUserEmails.length === 0) document.getElementById("invited").remove();
-    console.log(invitedUserEmails);
-    outputAllInvitedUsers(invitedUserEmails);
+export function clearInvitedList() {
+    document.getElementById('invitedList').innerHTML = '';
 }
 
 /**

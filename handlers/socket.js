@@ -1,4 +1,4 @@
-const validateUserOnConnect = require("../security/validation");
+const {validateUserOnConnect, validateRoomIdOnConnect} = require("../security/validation");
 const socketio = require('socket.io');
 const Room = require('../services/room');
 const Message = require('../services/message');
@@ -18,6 +18,10 @@ module.exports = function(server) {
         logger.info("[socket.connection.event.connection]", {message: "Socket connected", socketID: socket.id});
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
+
+            logger.info("[socket.connection.event.joinRoom]", {message: "Validating Room Id", currentUser});
+            validateRoomIdOnConnect(socketIO, currentUser);
+
             logger.info("[socket.connection.event.joinRoom]", {message: "Attempting to join room", currentUser});
 
             if(validateUserOnConnect(socketIO, currentUser)) {
