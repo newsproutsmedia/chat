@@ -9,7 +9,7 @@ module.exports = class MessageHistory {
      * @param {Object} message - object containing message user and text
      */
     static addMessageToHistory(message) {
-        logger.info('service.messageHistory.addMessageToHistory', {message: message.text});
+        logger.info('service.messageHistory.addMessageToHistory', {message: "Adding message to history", text: message.text});
         messages.push(message);
     }
 
@@ -31,11 +31,10 @@ module.exports = class MessageHistory {
     }
 
     static deleteRoomMessages(room) {
-        logger.info('service.messageHistory.deleteRoomMessages', {message: 'deleting room messages', room});
-        const newMessageArray = messages.filter(message => {
-            return this.getRoomMessages(room).indexOf(message) === -1;
+        logger.info('service.messageHistory.deleteRoomMessages', {message: 'deleting room messages', room: room, messages: messages});
+        messages = messages.filter(message => {
+            return MessageHistory.getRoomMessages(room).indexOf(message) === -1;
         });
-        messages = newMessageArray;
         logger.info('service.messageHistory.deleteRoomMessages', {messages});
         return messages;
     }

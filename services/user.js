@@ -253,15 +253,6 @@ module.exports = class User {
         users[index].status = status;
     }
 
-    /** is the passed user an admin
-     * @param {string} socket
-     * @return boolean
-     */
-    static userIsAdmin(socket) {
-        const user = User.getCurrentUserById(socket);
-        return user.type === "admin";
-    }
-
     static startTimer(socketIO, room) {
         logger.info('[service.user.startTimer]', {message: "Starting Disconnect Timer"});
         if(!timerOn) {
@@ -270,6 +261,7 @@ module.exports = class User {
                 User.destroyRoom(socketIO, room);
             }, 60000);
         }
+        timerOn = false;
     }
 
     static stopTimer() {

@@ -5,11 +5,10 @@ const User = require('../../../services/user');
 const MessageHistory = require('../../../services/messageHistory');
 const Invitations = require('../../../services/invitations');
 const logger = require('../../../loaders/logger');
-const { disconnectTimeout } = require('../../../loaders/globals');
+
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
 const appName = process.env.PORT || "ChatApp";
-const roomTimer = require('../../../services/roomTimer');
 const roomList = require('../../../services/roomList');
 
 let options = {
@@ -25,7 +24,6 @@ let client1;
 let client2;
 
 const uniqueRoomId = '76b27bed-cfe5-4a2f-9615-90533a8942d8';
-const uniqueRoomId2 = '8d940814-0612-4ec6-9118-ed725c7ee704';
 // mock entire uuid module, but only allow overwriting of v4 function
 jest.mock("uuid", () => ({
     ...jest.requireActual("uuid"),
@@ -33,6 +31,8 @@ jest.mock("uuid", () => ({
 }));
 
 describe("Socket.IO Server-Side Events", () => {
+
+
 
     describe("joinRoom", () => {
         let server;
@@ -48,7 +48,7 @@ describe("Socket.IO Server-Side Events", () => {
 
         afterEach(done => {
             roomFullSpy.mockRestore();
-            setTimeout(() => done(), 1000);
+            setTimeout(() => done(), 2000);
         })
 
         function validateRoom(room) {
@@ -596,6 +596,59 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
+
+    });
+
+    describe('reconnect', () => {
+
+        let server;
+        let roomFullSpy;
+        let inviteCountSpy;
+
+        beforeEach(done => {
+            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
+            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
+            inviteCountSpy = jest.spyOn(Invitations, 'getInvitationCount').mockReturnValue(1).mockReturnValue(2);
+            server = require('../../../server').server;
+            done();
+        });
+
+        afterEach(done => {
+            roomFullSpy.mockRestore();
+            inviteCountSpy.mockRestore();
+            setTimeout(() => done(), 2000);
+        });
+
+        it('should destroy room after user disconnect times out', done => {
+            jest.useFakeTimers("legacy");
+            const destroyRoomSpy = jest.spyOn(User, "destroyRoom");
+            const messageHistorySpy = jest.spyOn(MessageHistory, "deleteRoomMessages");
+            const deleteRoomUsersSpy = jest.spyOn(User, "deleteRoomUsers");
+            const roomListSpy = jest.spyOn(roomList, "deleteRoom");
+            const deleteRoomFromInvitationListSpy = jest.spyOn(Invitations, "deleteRoomFromInvitationList");
+
+            let roomId = '8017f699-b0cd-40a1-8d23-19ffb1a8af9b';
+            uuid.v4.mockReturnValue(roomId);
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('roomUsers', roomUsers => {
+
+                    client1.disconnect();
+                    jest.runAllTimers();
+                    jest.useRealTimers();
+                    expect(destroyRoomSpy).toHaveBeenCalled();
+                    expect(roomListSpy).toHaveBeenCalled();
+                    expect(deleteRoomFromInvitationListSpy).toHaveBeenCalled();
+                    expect(deleteRoomUsersSpy).toHaveBeenCalled();
+                    expect(messageHistorySpy).toHaveBeenCalled();
+
+                    done();
+                });
+
+                client1.emit('joinRoom', chatUser1);
+            });
+        });
     });
 
     describe('uncaughtException test', () => {
@@ -778,5 +831,7 @@ describe("Socket.IO Server-Side Events", () => {
         }, 100000);
 
     });
+
+
 });
 
