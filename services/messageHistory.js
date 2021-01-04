@@ -9,20 +9,20 @@ module.exports = class MessageHistory {
      * @param {Object} message - object containing message user and text
      */
     static addMessageToHistory(message) {
-        logger.info('service.messageHistory.addMessageToHistory', {message: "Adding message to history", text: message.text});
+        logger.info('[service.messageHistory.addMessageToHistory]', {message: "Adding message to history", text: message.text});
         messages.push(message);
     }
 
     static getRoomMessages(room) {
         const roomMessages = messages.filter(e => e.user.room.includes(room));
-        logger.info('service.messageHistory.getRoomMessages', {messagesArrayLength: roomMessages.length});
+        logger.info('[service.messageHistory.getRoomMessages]', {messagesArrayLength: roomMessages.length});
         return roomMessages;
     }
 
     sendMessageHistoryToUser(room, socketIO) {
         const roomMessages = MessageHistory.getRoomMessages(room);
         if(!roomMessages) return false;
-        logger.info('service.messageHistory.sendMessageHistoryToUser', {message: "sending message history"});
+        logger.info('[service.messageHistory.sendMessageHistoryToUser]', {message: "sending message history"});
         roomMessages.forEach(message => {
             new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text);
         });
@@ -31,11 +31,9 @@ module.exports = class MessageHistory {
     }
 
     static deleteRoomMessages(room) {
-        logger.info('service.messageHistory.deleteRoomMessages', {message: 'deleting room messages', room: room, messages: messages});
-        messages = messages.filter(message => {
-            return MessageHistory.getRoomMessages(room).indexOf(message) === -1;
-        });
-        logger.info('service.messageHistory.deleteRoomMessages', {messages});
+        logger.info('[service.messageHistory.deleteRoomMessages]', {message: 'deleting room messages', room: room, messages: messages});
+        messages = messages.filter(message => !message.user.room.includes(room));
+        logger.info('[service.messageHistory.deleteRoomMessages]', {messages});
         return messages;
     }
 }

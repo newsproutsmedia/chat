@@ -8,9 +8,9 @@ module.exports = class Invitations {
      * @param {string} roomId - object containing message user and text
      */
     static addRoomToInvitationList(roomId, email) {
-        logger.info('service.invitations.addRoomToInvitationList', {message: "Adding room to invitation list", roomId});
+        logger.info('[service.invitations.addRoomToInvitationList]', {message: "Adding room to invitation list", roomId});
         invitations.push({id: roomId, emails: [{email: email}]});
-        logger.info('service.invitations.addRoomToInvitationList', {message: "Room Added", invitations});
+        logger.info('[service.invitations.addRoomToInvitationList]', {message: "Room Added", invitations});
         return invitations;
     }
 
@@ -21,7 +21,7 @@ module.exports = class Invitations {
      */
     static getInvitationCount(roomId) {
         const roomIndex = Invitations.getRoomIndex(roomId);
-        logger.info('service.invitations.getInvitationCount', {count: invitations[roomIndex].emails.length});
+        logger.info('[service.invitations.getInvitationCount]', {count: invitations[roomIndex].emails.length});
         return invitations[roomIndex].emails.length;
     }
 
@@ -32,14 +32,14 @@ module.exports = class Invitations {
      */
     static getRoomInvitations(roomId) {
         const roomInvitations = invitations.filter(room => room.id.includes(roomId));
-        logger.info('service.invitations.getRoomInvitations', {roomInvitations: roomInvitations});
+        logger.info('[service.invitations.getRoomInvitations]', {roomInvitations: roomInvitations});
         return roomInvitations;
     }
 
     static addEmailToInvitationList(roomId, email) {
         const roomIndex = Invitations.getRoomIndex(roomId);
         invitations[roomIndex].emails.push({email: email});
-        logger.info('service.invitations.addEmailToInvitationList', {invitations: invitations});
+        logger.info('[service.invitations.addEmailToInvitationList]', {invitations: invitations});
         return invitations;
     }
 
@@ -53,7 +53,7 @@ module.exports = class Invitations {
         const roomIndex = Invitations.getRoomIndex(roomId);
         const emailIndex = invitations[roomIndex].emails.map(email => email.email).indexOf(emailToRemove);
         invitations[roomIndex].emails.splice(emailIndex, 1);
-        logger.info('service.invitations.removeEmailFromInvitationList', {removedEmail: emailToRemove, updatedInvitationList: invitations});
+        logger.info('[service.invitations.removeEmailFromInvitationList]', {removedEmail: emailToRemove, updatedInvitationList: invitations});
         return invitations;
     }
 
@@ -63,11 +63,11 @@ module.exports = class Invitations {
      * @returns {*[]}
      */
     static deleteRoomFromInvitationList(roomId) {
-        logger.info('service.invitations.deleteRoomFromInvitationList', {message: 'deleting room invitations', roomId});
+        logger.info('[service.invitations.deleteRoomFromInvitationList]', {message: 'deleting room invitations', roomId});
         invitations = invitations.filter(invite => {
             return this.getRoomInvitations(roomId).indexOf(invite) === -1;
         });
-        logger.info('service.invitations.deleteRoomFromInvitationList', {message: 'deleted room invitations', newInvitationList: invitations});
+        logger.info('[service.invitations.deleteRoomFromInvitationList]', {message: 'deleted room invitations', newInvitationList: invitations});
         return invitations;
     }
 

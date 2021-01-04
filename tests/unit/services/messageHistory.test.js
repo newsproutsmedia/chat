@@ -13,29 +13,29 @@ describe('messageHistory', ()=> {
         const room1Message =
             {
                 user: {
-                    id: "1",
-                    username: "test1",
-                    room: "room1",
-                    email: "email1",
-                    messageCount: 1,
-                    status: "active",
-                    type: "user"
-                },
+                        id: "1",
+                        username: "user1",
+                        room: "room1",
+                        email: "email1",
+                        messageCount: 1,
+                        status: "ONLINE",
+                        type: "admin"
+                    },
                 text: "test message room 1"
             };
         const room2Message =
             {
                 user: {
                     id: "2",
-                    username: "test2",
+                    username: "user2",
                     room: "room2",
                     email: "email2",
                     messageCount: 1,
-                    status: "active",
-                    type: "user"
+                    status: "ONLINE",
+                    type: "admin"
                 },
                 text: "test message room 2"
-            }
+            };
         MessageHistory.addMessageToHistory(room1Message);
         MessageHistory.addMessageToHistory(room2Message);
         expect(MessageHistory.deleteRoomMessages("room2")).toEqual(

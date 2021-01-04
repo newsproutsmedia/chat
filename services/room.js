@@ -4,6 +4,7 @@ const roomList = require('./roomList');
 const MessageEmitter = require('../emitters/messageEmitter');
 const MessageHistory = require('./messageHistory');
 const Invitations = require('./invitations');
+const EventEmitter = require('events');
 const logger = require('../loaders/logger');
 let {bot} = require('../loaders/globals');
 
@@ -23,7 +24,7 @@ module.exports = class Room {
         this.socketIO = {socket, io};
         this.type = User.setUserType('user');
 
-        logger.info("service.room.constructor", {socket: this.socket.id, username: username, email: email, room: room});
+        logger.info("[service.room.constructor]", {socket: this.socket.id, username: username, email: email, room: room});
 
         // if room value is not set, create a new room
         if (!this.room || !roomList.roomExists(this.room)) {
@@ -41,7 +42,7 @@ module.exports = class Room {
         // create user object
         const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type}).addUser();
 
-        logger.info("service.room.joinRoom", {room: this.room});
+        logger.info("[service.room.joinRoom]", {room: this.room});
         this.socket.join(this.room);
 
         if(!roomList.roomExists(this.room)) roomList.addRoom(this.room);
@@ -63,18 +64,19 @@ module.exports = class Room {
 
     reconnect() {
         // stop disconnect countdown
-        if(User.roomTimerIsOn()) User.stopTimer();
+        const stopTimerEmitter = new EventEmitter();
+        stopTimerEmitter.emit("stopTimer");
 
         // update userID
         const user = User.getCurrentUserByRoomAndEmail(this.room, this.email);
-        logger.info("service.room.reconnect", {user});
+        logger.info("[service.room.reconnect]", {user});
         User.updateUserId(user.id, this.socket.id);
 
         // update connection status
         User.setUserStatus(this.socket.id, "ONLINE");
 
         // rejoin room
-        logger.info("service.room.reconnect", {room: this.room});
+        logger.info("[service.room.reconnect]", {room: this.room});
         this.socket.join(this.room);
 
         if(!roomList.roomExists(this.room)) roomList.addRoom(this.room);
@@ -102,7 +104,7 @@ module.exports = class Room {
         const inviteCount = Invitations.getInvitationCount(this.room);
         const newRoomUsersLength = userCount + 1;
         if(newRoomUsersLength > userCount + inviteCount) {
-            logger.warn("service.room.join._roomIsFull", {message: "Room is full", room: this.room});
+            logger.warn("[service.room.join._roomIsFull]", {message: "Room is full", room: this.room});
             return true;
         }
         return false;
@@ -110,12 +112,12 @@ module.exports = class Room {
 
     _create() {
         let uniqueRoomId = uuid();
-        logger.info("service.room.create", {uniqueRoomId});
+        logger.info("[service.room.create]", {uniqueRoomId});
         return uniqueRoomId;
     }
 
     _emitRoomCreated(uniqueRoomId) {
-        logger.info("service.room.emitRoomCreated", {uniqueRoomId});
+        logger.info("[service.room.emitRoomCreated]", {uniqueRoomId});
         new MessageEmitter(this.socketIO).emitEventToSender('roomCreated', uniqueRoomId);
     }
 
@@ -123,21 +125,21 @@ module.exports = class Room {
         const message = {
             message: "roomFull"
         }
-        logger.info("service.room.emitRoomFull", {message: "Room Full", room});
+        logger.info("[service.room.emitRoomFull]", {message: "Room Full", room});
         new MessageEmitter(this.socketIO).emitEventToSender('accessDenied', message);
     }
 
     _emitWelcome({id, email, room}) {
         const user = {...bot, room};
         const text = 'Welcome to Chat!';
-        logger.info("service.room.emitWelcome", {id, email, room});
+        logger.info("[service.room.emitWelcome]", {id, email, room});
         new MessageEmitter(this.socketIO).sendMessageToSender(user, text);
     }
 
     _emitReconnect({room}) {
         const user = {...bot, room};
         const text = 'Welcome Back';
-        logger.info("service.room.emitReconnect.welcomeBack", {user, text});
+        logger.info("[service.room.emitReconnect.welcomeBack]", {user, text});
         new MessageEmitter(this.socketIO).sendMessageToSender(user, text);
         logger.info("service.room.emitReconnect.reconnect", {room});
         new MessageEmitter(this.socketIO).emitEventToSender('reconnect', {message: text});
@@ -146,19 +148,19 @@ module.exports = class Room {
     _broadcastJoinedMessage({id, username, email, room}) {
         const user = {...bot, room};
         const text = `${username} has joined the chat`;
-        logger.info("service.room.emitJoinedMessage", {id, username, email, room});
+        logger.info("[service.room.emitJoinedMessage]", {id, username, email, room});
         new MessageEmitter(this.socketIO).sendMessageToAllOthersInRoom(user, text);
     }
 
     _broadcastReconnectMessage({id, username, email, room}) {
         const user = {...bot, room};
         const text = `${username} has rejoined the chat`;
-        logger.info("service.room.emitReconnectMessage", {id, username, email, room});
+        logger.info("[service.room.emitReconnectMessage]", {id, username, email, room});
         new MessageEmitter(this.socketIO).sendMessageToAllOthersInRoom(user, text);
     }
 
     _emitSetupAdmin(user) {
-        logger.info("service.room.emitSetupAdmin", {user});
+        logger.info("[service.room.emitSetupAdmin]", {user});
         new MessageEmitter(this.socketIO).emitEventToSender('setupAdmin', user);
     }
 }

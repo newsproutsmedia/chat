@@ -3,11 +3,10 @@ let {bot, userTypes} = require('../loaders/globals');
 const MessageEmitter = require('../emitters/messageEmitter');
 const MessageHistory = require('./messageHistory');
 const Invitations = require('./invitations');
+const EventEmitter = require('events');
 const roomList = require('./roomList');
 
 let users = [];
-let timer;
-let timerOn = false;
 
 /**
  * @desc construct a new user
@@ -70,9 +69,10 @@ module.exports = class User {
     /**
      * @desc set user status to DISCONNECTED and notify other users when user leaves chat
      * @param {Object} socketIO - socket and io params
+     * @param {LogoutTimer} logoutTimer
      * @emits User.emitUserHasLeft, User.sendRoomUsers
      */
-    static userDisconnected({socket, io}) {
+    static userDisconnected({socket, io}, logoutTimer) {
         const socketIO = {socket, io};
         logger.info('[service.user.userDisconnected]', {socketID: socketIO.socket.id});
         if(!User.getCurrentUserById(socket.id)) return;
@@ -93,7 +93,7 @@ module.exports = class User {
         User.sendRoomUsers(currentUser.room, socketIO);
 
         // check if current user is the last one in the room and destroy the room if it is
-        User.destroyRoomOnLastUserDisconnected(socketIO);
+        User.destroyRoomOnLastUserDisconnected(socketIO, logoutTimer);
     }
 
     /**
@@ -174,7 +174,7 @@ module.exports = class User {
      * @return string
      */
     static setUserType(type) {
-        logger.info("service.user.setUserType", {type});
+        logger.info("[service.user.setUserType]", {type});
         if (!User.validateUserType(type)) {
             logger.warn("[service.user.setUserType]", {message: `INVALID USER TYPE: ${type} is not a valid user type`, type});
             return 'user';
@@ -210,17 +210,18 @@ module.exports = class User {
     /**
      * @desc if disconnected user is last in room, destroy the room
      * @param {Object} socketIO - socket and io params
+     * @param {Object} logoutTimer
      * @requires {Object} socketIO.socket
      * @requires {Object} socketIO.io
      */
-    static destroyRoomOnLastUserDisconnected({socket, io}) {
+    static destroyRoomOnLastUserDisconnected(socketIO, logoutTimer) {
         logger.info('[service.user.userDisconnected]', {message: 'Checking number of room users'});
-        const socketIO = {socket, io};
+        const {socket, io} = socketIO;
         const currentUser = User.getCurrentUserById(socket.id);
         const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
         logger.info('[service.user.userDisconnected]', {rooms});
         if(!rooms) {
-            User.startTimer(socketIO, currentUser.room);
+            logoutTimer.startLogoutTimer(socketIO, currentUser.room);
         }
     }
 
@@ -251,27 +252,6 @@ module.exports = class User {
     static setUserStatus(id, status) {
         const index = users.findIndex(user => user.id === id);
         users[index].status = status;
-    }
-
-    static startTimer(socketIO, room) {
-        logger.info('[service.user.startTimer]', {message: "Starting Disconnect Timer"});
-        if(!timerOn) {
-            timerOn = true;
-            timer = setTimeout(() => {
-                User.destroyRoom(socketIO, room);
-            }, 60000);
-        }
-        timerOn = false;
-    }
-
-    static stopTimer() {
-        logger.info('[service.user.stopTimer]', {message: "Stopping Disconnect Timer"});
-        clearTimeout(timer);
-        timerOn = false;
-    }
-
-    static roomTimerIsOn() {
-        return timerOn;
     }
 
 }

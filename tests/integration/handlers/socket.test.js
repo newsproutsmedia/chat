@@ -2,6 +2,7 @@ const io = require('socket.io-client');
 const uuid = require('uuid');
 const Room = require('../../../services/room');
 const User = require('../../../services/user');
+const LogoutTimer = require('../../../services/logoutTimer');
 const MessageHistory = require('../../../services/messageHistory');
 const Invitations = require('../../../services/invitations');
 const logger = require('../../../loaders/logger');
@@ -596,30 +597,6 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-
-    });
-
-    describe('reconnect', () => {
-
-        let server;
-        let roomFullSpy;
-        let inviteCountSpy;
-
-        beforeEach(done => {
-            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
-            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
-            roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
-            inviteCountSpy = jest.spyOn(Invitations, 'getInvitationCount').mockReturnValue(1).mockReturnValue(2);
-            server = require('../../../server').server;
-            done();
-        });
-
-        afterEach(done => {
-            roomFullSpy.mockRestore();
-            inviteCountSpy.mockRestore();
-            setTimeout(() => done(), 2000);
-        });
-
         it('should destroy room after user disconnect times out', done => {
             jest.useFakeTimers("legacy");
             const destroyRoomSpy = jest.spyOn(User, "destroyRoom");
@@ -649,7 +626,43 @@ describe("Socket.IO Server-Side Events", () => {
                 client1.emit('joinRoom', chatUser1);
             });
         });
+
+        it('should stop disconnect timer if only remaining user reconnects before timeout', done => {
+
+            const destroyRoomSpy = jest.spyOn(User, 'destroyRoom');
+            const stopTimerSpy = jest.spyOn(LogoutTimer.prototype, 'stopLogoutTimer');
+            let roomId = '1f8e27df-f05f-448b-be16-cd240394deef';
+            uuid.v4.mockReturnValue(roomId);
+
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                chatUser1.room = roomId;
+                client1.on('roomUsers', roomUsers => {
+
+                    client1.disconnect();
+                });
+
+                client1.emit('joinRoom', chatUser1);
+
+                setTimeout(() => {
+
+                    client1 = io.connect(socketURL, options);
+                    client1.on('connect', () => {
+                        client1.once('roomUsers', roomUsers => {
+
+                            expect(stopTimerSpy).toHaveBeenCalled();
+
+                            client1.disconnect();
+                            done();
+                        });
+                        client1.emit('joinRoom', chatUser1);
+                    });
+                }, 2000);
+            });
+        });
     });
+
+
 
     describe('uncaughtException test', () => {
         let server;
