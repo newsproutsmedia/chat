@@ -10,12 +10,10 @@ module.exports = class LogoutTimer {
 
     startLogoutTimer(socketIO, room) {
         logger.info('[emitters.timeoutEmitter.stopLogoutTimer]', {message: "Starting Disconnect Timer"});
-        if(!this.timerIsOn()) {
             this.timer = setTimeout(() => {
                 User.destroyRoom(socketIO, room);
             }, disconnectTimeout);
             this.timerStatus = true;
-        }
     }
 
     stopLogoutTimer() {

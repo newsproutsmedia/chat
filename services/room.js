@@ -79,8 +79,6 @@ module.exports = class Room {
         logger.info("[service.room.reconnect]", {room: this.room});
         this.socket.join(this.room);
 
-        if(!roomList.roomExists(this.room)) roomList.addRoom(this.room);
-
         // emit reconnect event
         this._emitReconnect(user);
 
