@@ -22,8 +22,4 @@ module.exports = class LogoutTimer {
         this.timerStatus = false;
     }
 
-    timerIsOn() {
-        return this.timerStatus;
-    }
-
 }
