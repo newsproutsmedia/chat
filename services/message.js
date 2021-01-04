@@ -19,7 +19,7 @@ module.exports = class Message {
     }
 
     send() {
-        logger.info("service.message.sendMessage", {info: "Sending Message"});
+        logger.info("[service.message.sendMessage]", {info: "Sending Message"});
         // send message to user
         new MessageEmitter(this.socketIO).sendMessageToSender(this.user, this.text);
         // send message to everyone else

@@ -1,10 +1,11 @@
-const validateUserOnConnect = require("../security/validation");
+const {validateUserOnConnect, validateRoomIdOnConnect} = require("../security/validation");
 const socketio = require('socket.io');
 const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
 const User = require('../services/user');
 const BlockUser = require('../services/blockUser');
+const LogoutTimer = require('../services/logoutTimer');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
@@ -15,13 +16,19 @@ module.exports = function(server) {
     // Run when client connects
     io.on('connection', socket => {
         const socketIO = {socket, io};
+        const logoutTimer = new LogoutTimer();
         logger.info("[socket.connection.event.connection]", {message: "Socket connected", socketID: socket.id});
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
+
+            logger.info("[socket.connection.event.joinRoom]", {message: "Validating Room Id", currentUser});
+            validateRoomIdOnConnect(socketIO, currentUser);
+
             logger.info("[socket.connection.event.joinRoom]", {message: "Attempting to join room", currentUser});
 
             if(validateUserOnConnect(socketIO, currentUser)) {
                 logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User validated, attempting to reconnect", currentUser});
+                logoutTimer.stopLogoutTimer();
                 return new Room({...currentUser, ...socketIO}).reconnect();
             }
 
@@ -51,7 +58,7 @@ module.exports = function(server) {
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
-            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : User.userDisconnected(socketIO);
+            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : User.userDisconnected(socketIO, logoutTimer);
         });
 
     });

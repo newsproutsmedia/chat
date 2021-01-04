@@ -35,20 +35,19 @@ module.exports = class Mail {
 
         this.recipients.forEach(recipient => {
             let mailRecipient = {id: recipient.id, email: recipient.email};
-            logger.info(`service.mail.sendAll.forEach.recipient`, {email: recipient.email});
+            logger.info(`[service.mail.sendAll.forEach.recipient]`, {email: recipient.email});
             this.sender.to = recipient.email;
             let formattedMessage = this._formatMail(this.sender);
             emailTransporter.sendMail(formattedMessage, (err, info) => {
 
                 if(err || info.rejected.length > 0) {
-                    logger.error("service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem", {"id": mailRecipient.id, "email": mailRecipient.email});
-                    this.allSentSuccessfully = false;
+                    logger.error("[service.mail.sendAll.forEach.recipient.sendMail.inviteSendProblem]", {"id": mailRecipient.id, "email": mailRecipient.email});
                     this._emitInviteSendFailure(mailRecipient);
                     return;
                 }
 
-                logger.info("service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess:", {"info": info.response});
-                Invitations.incrementRoomInvites(this.user.room);
+                logger.info("[service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess]", {"info": info.response});
+                Invitations.addEmailToInvitationList(this.user.room, recipient.email);
                 this._emitInviteSendSuccess(mailRecipient);
             });
         });
@@ -56,17 +55,17 @@ module.exports = class Mail {
     }
 
     _emitMailNotAllowed() {
-        logger.warn("service.mail.emitInviteSendSuccess", {"message": "email not allowed"});
+        logger.warn("[service.mail.emitInviteSendSuccess]", {"message": "email not allowed"});
         new SocketEmitter(this.socketIO).emitEventToSender('inviteNotAllowed', this.user.type);
     }
 
     _emitInviteSendFailure(recipient) {
-        logger.warn("service.mail.emitInviteSendFailure", {"message": "send failed"});
+        logger.warn("[service.mail.emitInviteSendFailure]", {"message": "send failed"});
         new SocketEmitter(this.socketIO).emitEventToSender('inviteSendFailure', recipient);
     }
 
     _emitInviteSendSuccess(recipient) {
-        logger.info("service.mail.emitInviteSendSuccess", {"message": "send successful"});
+        logger.info("[service.mail.emitInviteSendSuccess]", {"message": "send successful"});
         new SocketEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
     }
 
