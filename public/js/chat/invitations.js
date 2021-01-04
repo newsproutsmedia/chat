@@ -56,7 +56,7 @@ export function outputInviteSection() {
     inviteSection.className = "dash-section";
     inviteSection.innerHTML = `<div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i></a></div>
                             <div id="recipients"></div>
-                <button id="sendInvitations" class="btn send-invitations-btn h-hidden">Send Invites</button>`;
+                <button id="sendInvitations" class="btn dash-btn h-hidden">Send Invites</button>`;
     document.querySelector('#dashMenu').appendChild(inviteSection);
     new InviteListeners();
 }
