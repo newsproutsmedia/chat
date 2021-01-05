@@ -55,3 +55,26 @@ body > dashboard > button.leave-room {
   width: 100%;
   text-align: center;
 }
+
+#viewMenu {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.view-menu-item {
+  font-size: 2em;
+  color: $primary;
+
+  &.selected {
+    @extend .view-menu-item;
+    color: $accent;
+  }
+
+  &:hover {
+    @extend .view-menu-item;
+    color: $accent;
+    cursor: pointer;
+  }
+}

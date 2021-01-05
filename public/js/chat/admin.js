@@ -1,5 +1,5 @@
 import {outputInviteSection} from "./invitations.js";
-import {InviteListeners} from "./listeners/inviteListeners.js";
+import {outputDashboardMenu} from "./dashboard.js";
 
 let isAdmin = false;
 
@@ -14,6 +14,7 @@ export function setIsAdmin(bool) {
 
 export function setupAdmin(user) {
     setIsAdmin(true);
+    outputDashboardMenu();
     outputInviteSection(user);
 }
 
