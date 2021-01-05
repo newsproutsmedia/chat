@@ -197,7 +197,8 @@ ul {
   grid-area: header; }
 
 #navMenu {
-  grid-area: nav; }
+  grid-area: nav;
+  overflow: auto; }
 
 .main-content {
   grid-area: main; }
@@ -482,6 +483,10 @@ body > dashboard > button.leave-room {
   font-size: 150%;
   text-align: center;
   background-color: #61D9FA; }
+
+.dash-btn {
+  width: 100%;
+  text-align: center; }
 
 invite {
   display: flex;

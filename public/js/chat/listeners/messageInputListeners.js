@@ -9,8 +9,9 @@ export class MessageInputListeners {
     constructor() {
         this.messageInputBlurListener();
         this.messageInputFocusListener();
-        this.messageSubmitButtonListener();
+        this.messageSubmitButtonClickListener();
         this.messageInputEnterListener();
+        this.messageSubmitButtonEnterListener();
     }
 
     messageInputBlurListener() {
@@ -29,8 +30,24 @@ export class MessageInputListeners {
         });
     };
 
-    messageSubmitButtonListener() {
+    messageSubmitButtonClickListener() {
         messageSubmitBtn.addEventListener('click', submitMessage);
+    };
+
+    messageSubmitButtonEnterListener() {
+        messageSubmitBtn.addEventListener("keydown", function(event) {
+            console.log('message submit keydown');
+            if (event.code === 'Enter') {
+                return false;
+            }
+        });
+        messageSubmitBtn.addEventListener("keyup", function(event) {
+            console.log('message submit keyup');
+            if (event.code === 'Enter') {
+                return false;
+                messageSubmitBtn.click();
+            }
+        });
     };
 
     messageInputEnterListener() {
