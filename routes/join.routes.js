@@ -39,7 +39,7 @@ router.post('/validate', async (req, res) => {
     } else {
         logger.info('[routes.join.validate]', {message: "No errors found, redirecting to chat page"});
         res.redirect(url.format({
-            pathname:"/chat.html",
+            pathname:"/chat",
             query: {
                 "username": username,
                 "email": email,
@@ -55,14 +55,16 @@ router.post('/validate', async (req, res) => {
 
 });
 
-router.get('/', function (req, res) {
+router.get('/',  (req, res) => {
     const email = req.query.email;
     const room = req.query.room;
+    const username = req.query.room;
 
     res.render('join', {
         layout: 'index',
         email: email,
-        room: room
+        room: room,
+        username: username
     });
 });
 

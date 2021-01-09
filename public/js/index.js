@@ -43,38 +43,6 @@ $(function() {
         nextField($usernameField, $emailField, $emailInput);
     });
 
-    $roomBtn.on('click', () => {
-        // get room from input
-        room = cleanInput($roomInput.val().trim());
-        // validate room
-        // add to user object
-        user.room = room;
-        // show next step
-        window.location.replace(`chat.html?username=${user.username}&email=${user.email}&room=${user.room}`);
-    });
-
-    $joinBtn.on('click', () => {
-        // get email from input
-        email = cleanInput($emailInput.val().trim());
-        // validate email
-
-        // if valid, add to user object
-        user.email = email;
-        // show next step
-        nextField($emailField, $roomField, $roomInput);
-    });
-
-    $emailBtn.on('click', () => {
-        // get email from input
-        email = cleanInput($emailInput.val().trim());
-        // validate email
-
-        // if valid, add to user object
-        user.email = email;
-        // update window location with form params from user object
-        window.location.replace(`chat.html?username=${user.username}&email=${user.email}`);
-    });
-
     // Prevents input from having injected markup
     const cleanInput = (input) => {
         return $('<div/>').text(input).html();

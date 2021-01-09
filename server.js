@@ -13,6 +13,7 @@ const handlebars = require('express-handlebars');
 const index = require('./routes/index.routes');
 const login = require('./routes/login.routes');
 const join = require('./routes/join.routes');
+const chat = require('./routes/chat.routes');
 
 // Initialize App
 const app = express();
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse key=value pairs (ty
 app.use('/', index);
 app.use('/login', login);
 app.use('/join', join);
+app.use('/chat', chat);
 
 // Logging
 const logger = require('./loaders/logger');
