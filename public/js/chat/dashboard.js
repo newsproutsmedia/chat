@@ -29,7 +29,7 @@ export function outputMenuIcon({id, fontAwesome, section}, isSelected) {
     menuIcon.id = id;
     menuIcon.classList.add("view-menu-item");
     if(isSelected) menuIcon.classList.add("selected");
-    menuIcon.innerHTML = `<i id="${id}-image" class="fas ${fontAwesome} fa-lg"></i>`;
+    menuIcon.innerHTML = `<i id="${id}-image" class="fas ${fontAwesome} fa-md"></i>`;
     menuIcon.setAttribute("section", section);
     menu.appendChild(menuIcon);
     addMenuIconListener(id);

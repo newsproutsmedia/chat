@@ -111,11 +111,10 @@ module.exports = class Mail {
             subject: "ChatApp Invite", // Subject line
             text: "You received this from ChatApp" // plain text body
             //html: //TODO Add Sasquatch Chat logo to top of email
-                //"<h1>You're invited to join a Chat</h1>" +
-                //"<p>Follow these steps to join the chat:</p>" +
-                //"<ul><li>1. Click on the link below<li>2. Paste the encrypted message into the message box<li>3. Use your pre-arranged passcode to decrypt your chatroom id and room password.</ul>" +
-                //"<h2><u>Your ChatApp Invitation</u></h2>" +
-                //`<p>Room ID: ${sender.room}</p>`
+                `<h1>${this.sender.username} invited you to join a Chat</h1>` +
+                `<p>Click on the link below, then enter a nickname to join the chat:</p>` +
+                `<p><a href="http://localhost:3000/join?email=${sender.to}&room=${sender.room}">http://localhost:3000/join?email=${sender.to}&room=${sender.room}</a></p>` +
+                `<p>Room ID: ${sender.room}</p>`
             //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
             //TODO Create Option to Decline Invitation
         }

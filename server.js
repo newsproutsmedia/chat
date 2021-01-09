@@ -22,15 +22,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // parse key=value pairs (typically used for form processing)
 
-app.use(cors());
-
-app.use(cookieParser());
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    saveUninitialized: false,
-    resave: false
-}));
-
 // use routes
 app.use('/', index);
 app.use('/login', login);
@@ -44,14 +35,6 @@ new UncaughtException();
 
 // Serve static resources
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Render View
-/*app.engine('hbs', hbs.express4({
-    partialsDir: __dirname + '/views/partials'
-}));
-app.set('view engine', 'hbs');
-app.set('views', __dirname + '/views/partials');*/
-
 
 app.set('view engine', 'hbs');
 //Sets handlebars configurations (we will go through them later on)

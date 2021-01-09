@@ -1,6 +1,5 @@
 const url = require('url');
 const express = require('express');
-const session = require('express-session');
 const router = express.Router();
 const logger = require('../loaders/logger');
 const { validateRoomId } = require('../security/validation');
@@ -24,25 +23,21 @@ router.post('/validate', async (req, res) => {
         return validateRoomId(value);
     }).withMessage('Room ID is invalid, please enter a valid room id').trim().escape().run(req);
 
-    const errors = validationResult(req);
+    const errors = validationResult(req).array();
 
     logger.info('[routes.join.validate]', {message: "Checking validation errors"});
 
-    if (errors) {
+    if (errors.length > 0) {
         logger.info('[routes.join.validate]', {message: "Errors found", errors});
-        req.session.errors = errors;
-        req.session.success = false;
         res.render('join', {
-            layout: 'index',
             errors: errors,
-            success: req.session.success,
+            layout: 'index',
             username: username,
             email: email,
             room: room
         });
     } else {
         logger.info('[routes.join.validate]', {message: "No errors found, redirecting to chat page"});
-        req.session.sucess = true;
         res.redirect(url.format({
             pathname:"/chat.html",
             query: {
@@ -67,11 +62,8 @@ router.get('/', function (req, res) {
     res.render('join', {
         layout: 'index',
         email: email,
-        room: room,
-        success: req.session.success,
-        errors: req.session.errors
+        room: room
     });
-    req.session.errors = null;
 });
 
 
