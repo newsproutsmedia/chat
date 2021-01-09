@@ -12,7 +12,7 @@
     />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css" />
-    <title>ChatApp!</title>
+    <title>Join A Chat</title>
 </head>
 <body>
 
@@ -25,38 +25,18 @@
     <div class="login">
         <div id="usernameField" class="form-control">
             <div class="userinput">
+                <h1>Join A Chat</h1>
                 <h3 class="title">What's your nickname?</h3>
+                <form id="joinForm" method="post" action="/login/join">
                 <input id="usernameInput" class="username-input"
                        type="text"
                        name="username"
                        required
-                />
-            </div>
-            <div><button id="usernameBtn" class="btn">Continue</button></div>
-        </div>
-        <div id="emailField" class="form-control">
-            <div class="userinput">
-                <h3 class="title">What's your email address?</h3>
-                <input id="emailInput" class="username-input"
-                       type="text"
-                       name="email"
-                       required
-                />
-            </div>
-            <div class="login-email-buttons"><button id="emailBtn" class="btn">Create New Room</button><button id="joinBtn" class="btn-link">or, join existing room</button></div>
-        </div>
-        <div id="roomField" class="form-control">
-            <div class="userinput">
-                <h3 class="title">Join an existing room?</h3>
-                <input id="roomInput" class="username-input"
-                       type="text"
-                       name="room"
                 /><br>
-                <label for="roomInput" class="input-label">Enter room id or leave blank for new room</label>
+                    <button type="submit" id="usernameBtn" class="btn">Join Chat</button>
+                </form>
             </div>
-            <div><button id="roomBtn" class="btn">Enter Room</button></div>
         </div>
-
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -64,6 +44,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="js/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js" integrity="sha512-BHtomM5XDcUy7tDNcrcX1Eh0RogdWiMdXl3wJcKB3PFekXb3l5aDzymaTher61u6vEZySnoC/SAj2Y/p918Y3w==" crossorigin="anonymous"></script>
+<script type="module" src="js/join.js"></script>
 </body>
 </html>

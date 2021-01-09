@@ -71,4 +71,4 @@ function emitInvalidRoom(socketIO, room) {
     new MessageEmitter(socketIO).emitEventToSender('invalidRoom', room);
 }
 
-module.exports = { validateUserOnConnect, validateRoomIdOnConnect };
+module.exports = { validateUserOnConnect, validateRoomIdOnConnect, validateRoomId };

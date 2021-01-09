@@ -19,11 +19,6 @@
   }
 
   .username-input {
-    color: $text-primary;
-    font-weight: 100;
-  }
-
-  input {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid $white;
@@ -34,11 +29,6 @@
     max-width: 80%;
     font-size: 200%;
     letter-spacing: 3px;
-  }
-
-  label {
-    color: $text-primary;
-    margin-top: 0.5em;
   }
 
   button {
