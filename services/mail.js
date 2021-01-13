@@ -1,6 +1,6 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
-const User = require('./user');
+const User = require('../models/user');
 const Invitations = require('./invitations');
 const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');

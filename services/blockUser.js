@@ -1,4 +1,4 @@
-const User = require('../services/user');
+const User = require('../models/user');
 const logger = require('../loaders/logger');
 
 module.exports = class BlockUser {

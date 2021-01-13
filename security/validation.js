@@ -1,6 +1,6 @@
 const {validate: validateUUID} = require('uuid');
 const MessageEmitter = require('../emitters/messageEmitter');
-const User = require('../services/user');
+const User = require('../models/user');
 const logger = require('../loaders/logger');
 const roomList = require('../services/roomList');
 

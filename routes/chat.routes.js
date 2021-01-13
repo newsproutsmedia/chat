@@ -2,7 +2,8 @@ const url = require('url');
 const express = require('express');
 const router = express.Router();
 const logger = require('../loaders/logger');
-const User = require('../services/user');
+const User = require('../models/user');
+const UserRepository = require('../repositories/user.repository');
 
 router.get('/', function (req, res) {
     const username = req.query.username;
@@ -10,7 +11,7 @@ router.get('/', function (req, res) {
     const room = req.query.room;
     let admin = false;
 
-    const user = User.getUsersByEmailAndRoom(room, email);
+    const user = UserRepository.getUsersByEmailAndRoom(room, email);
 
     if(user && user.type === "admin") {
         admin = true;

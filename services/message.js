@@ -1,5 +1,5 @@
 const logger = require('../loaders/logger');
-const User = require('./user');
+const User = require('../models/user');
 const MessageEmitter = require('../emitters/messageEmitter');
 const MessageHistory = require('../services/messageHistory');
 

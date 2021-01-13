@@ -3,7 +3,7 @@ const socketio = require('socket.io');
 const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
-const User = require('../services/user');
+const UserService = require('../services/user.service');
 const BlockUser = require('../services/blockUser');
 const LogoutTimer = require('../services/logoutTimer');
 const logger = require('../loaders/logger');
@@ -58,7 +58,7 @@ module.exports = function(server) {
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
-            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : User.userDisconnected(socketIO, logoutTimer);
+            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : UserService.userDisconnected(socketIO, logoutTimer);
         });
 
     });

@@ -1,5 +1,5 @@
 const logger = require('../loaders/logger');
-const User = require('./user');
+const RoomService = require('../services/room.service');
 const { disconnectTimeout } = require('../loaders/globals');
 
 module.exports = class LogoutTimer {
@@ -11,7 +11,7 @@ module.exports = class LogoutTimer {
     startLogoutTimer(socketIO, room) {
         logger.info('[emitters.timeoutEmitter.stopLogoutTimer]', {message: "Starting Disconnect Timer"});
             this.timer = setTimeout(() => {
-                User.destroyRoom(socketIO, room);
+                RoomService.destroyRoom(socketIO, room);
             }, disconnectTimeout);
             this.timerStatus = true;
     }
