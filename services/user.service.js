@@ -1,7 +1,8 @@
-const UserRepository = require('../repositories/user.repository');
-const {bot, userTypes} = require('../loaders/globals');
+const userRepository = require('../repositories/user.repository');
+const {bot} = require('../loaders/globals');
 const logger = require('../loaders/logger');
 const MessageEmitter = require('../emitters/messageEmitter');
+const SocketEmitter = require('../emitters/socketEmitter');
 const Invitations = require('../services/invitations');
 
 /**
@@ -13,16 +14,16 @@ const Invitations = require('../services/invitations');
 function userDisconnected({socket, io}, logoutTimer) {
     const socketIO = {socket, io};
     logger.info('[service.user.userDisconnected]', {socketID: socketIO.socket.id});
-    if(!UserRepository.getCurrentUserById(socket.id)) return;
-    const currentUser = UserRepository.getCurrentUserById(socket.id);
+    if(!userRepository.getCurrentUserById(socket.id)) return;
+    const currentUser = userRepository.getCurrentUserById(socket.id);
     logger.info('[service.user.userDisconnected]', {message: `User (${currentUser.username}) leaving room`, room: currentUser.room});
 
     // notify other chat participants that user has left
     emitUserHasLeft(currentUser, socketIO);
 
     // set user status to DISCONNECTED
-    const index = UserRepository.getUserIndexById(socket.id);
-    UserRepository.setUserStatus(index,"DISCONNECTED");
+    const index = userRepository.getUserIndexById(socket.id);
+    userRepository.setUserStatus(index,"DISCONNECTED");
     logger.info("[service.user.userDisconnected]", {message: "Status Changed", userStatus: currentUser.status});
 
     // send updated users and room info
@@ -69,21 +70,14 @@ function emitLogoutUser(user, socketIO, message) {
 function sendRoomUsers(room, socketIO) {
     const roomUsersAndInvites = {
         room: room,
-        users: UserRepository.getRoomUsers(room),
+        users: userRepository.getRoomUsers(room),
         invites: Invitations.getRoomInvitations(room)
     };
     logger.info("[service.room.sendRoomUsers]", {socket: socketIO.socket.id, room, roomUsers: roomUsersAndInvites});
-    new MessageEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsersAndInvites);
+    new SocketEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsersAndInvites);
 }
 
-/**
- * @desc check if user type exists in global userTypes Set
- * @param {string} type
- * @return boolean
- */
-function validateUserType(type) {
-    return userTypes.has(type);
-}
+
 
 /**
  * @desc if disconnected user is last in room, destroy the room
@@ -95,12 +89,12 @@ function validateUserType(type) {
 function destroyRoomOnLastUserDisconnected(socketIO, logoutTimer) {
     logger.info('[service.user.userDisconnected]', {message: 'Checking number of room users'});
     const {socket, io} = socketIO;
-    const currentUser = UserRepository.getCurrentUserById(socket.id);
+    const currentUser = userRepository.getCurrentUserById(socket.id);
     const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
     logger.info('[service.user.userDisconnected]', {rooms});
     if(!rooms) {
-        logoutTimer.startLogoutTimer(socketIO, currentUser.room);
+        logoutTimer.start(socketIO, currentUser.room);
     }
 }
 
-module.exports = { userDisconnected, emitLogoutUser, emitUserHasLeft, sendRoomUsers, validateUserType}
+module.exports = { userDisconnected, emitLogoutUser, emitUserHasLeft, sendRoomUsers }

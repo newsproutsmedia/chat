@@ -1,4 +1,4 @@
-let messages = [];
+let { messages } = require('../data/messages.data');
 const MessageEmitter = require('../emitters/messageEmitter');
 const logger = require('../loaders/logger');
 

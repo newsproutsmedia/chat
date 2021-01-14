@@ -1,4 +1,5 @@
-const User = require('../models/user');
+const userRepository = require('../repositories/user.repository');
+const userService = require('../services/user.service');
 const logger = require('../loaders/logger');
 
 module.exports = class BlockUser {
@@ -11,16 +12,16 @@ module.exports = class BlockUser {
 
     blockUser() {
         const message = "userBlocked";
-        User.setUserBlocked(this.blockedUserId);
-        const user = User.getCurrentUserById(this.blockedUserId);
+        userRepository.setUserBlocked(this.blockedUserId);
+        const user = userRepository.getCurrentUserById(this.blockedUserId);
 
         if(this.io.sockets.sockets[this.blockedUserId] === undefined) {
             logger.info('[service.blockUser.blockUser]', {message: 'User socket is undefined. User already disconnected.'});
-            return User.sendRoomUsers(user.room, this.socketIO);
+            return userService.sendRoomUsers(user.room, this.socketIO);
         }
 
         logger.info('[service.blockUser.blockUser]', {message: 'User socket found. Emitting logout and disconnect.'});
-        User.emitLogoutUser(user, this.socketIO, message);
+        userService.emitLogoutUser(user, this.socketIO, message);
     }
 
     /**
@@ -30,7 +31,7 @@ module.exports = class BlockUser {
      */
     static userIsBlocked(socket) {
         logger.info('[service.blockUser.userIsBlocked]', {message: 'Checking if user is blocked'});
-        const user = User.getCurrentUserById(socket.id);
+        const user = userRepository.getCurrentUserById(socket.id);
         // check that user exists, in case client was denied access to room and user never created
         if(user) return user.status === "BLOCKED";
         return false;
@@ -43,8 +44,8 @@ module.exports = class BlockUser {
     static cleanUpAfterBlockedUserDisconnected(socketIO) {
         logger.info('[service.blockUser.blockUser]', {message: 'Cleaning up after blocked user disconnected.'});
         const {socket: {id}, io} = socketIO;
-        const currentUser = User.getCurrentUserById(id);
-        User.emitUserHasLeft(currentUser, socketIO);
-        User.sendRoomUsers(currentUser.room, socketIO);
+        const currentUser = userRepository.getCurrentUserById(id);
+        userService.emitUserHasLeft(currentUser, socketIO);
+        userService.sendRoomUsers(currentUser.room, socketIO);
     }
 }

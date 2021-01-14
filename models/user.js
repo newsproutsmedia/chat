@@ -9,74 +9,73 @@ module.exports = class User extends Entity {
 
     constructor({id, username, email, room, type, messageCount = 0, status = "ONLINE"}) {
         super(id);
-        this._id = id;
-        this._username = username;
-        this._email = email;
-        this._room = room;
-        this._type = type;
-        this._messageCount = messageCount;
-        this._status = status;
+        this.username = username;
+        this.email = email;
+        this.room = room;
+        this.type = type;
+        this.messageCount = messageCount;
+        this.status = status;
     }
 
 
-    get id() {
-        return this._id;
+    get _id() {
+        return this.id;
     }
 
-    set id(value) {
-        this._id = value;
+    set _id(value) {
+        this.id = value;
     }
 
-    get username() {
-        return this._username;
+    get _username() {
+        return this.username;
     }
 
-    set username(value) {
-        this._username = value;
+    set _username(value) {
+        this.username = value;
     }
 
-    get email() {
-        return this._email;
+    get _email() {
+        return this.email;
     }
 
-    set email(value) {
-        this._email = value;
+    set _email(value) {
+        this.email = value;
     }
 
-    get room() {
-        return this._room;
+    get _room() {
+        return this.room;
     }
 
-    set room(value) {
-        this._room = value;
+    set _room(value) {
+        this.room = value;
     }
 
-    get type() {
-        return this._type;
+    get _type() {
+        return this.type;
     }
 
-    set type(value) {
-        this._type = value;
+    set _type(value) {
+        this.type = value;
     }
 
-    get messageCount() {
-        return this._messageCount;
+    get _messageCount() {
+        return this.messageCount;
     }
 
-    set messageCount(value) {
-        this._messageCount = value;
+    set _messageCount(value) {
+        this.messageCount = value;
     }
 
-    get status() {
-        return this._status;
+    get _status() {
+        return this.status;
     }
 
     /**
      * @desc set status
      * @param {string} value
      */
-    set status(value) {
-        this._status = value;
+    set _status(value) {
+        this.status = value;
     }
 }
 

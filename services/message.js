@@ -1,6 +1,7 @@
 const logger = require('../loaders/logger');
-const User = require('../models/user');
+const userRepository = require('../repositories/user.repository');
 const MessageEmitter = require('../emitters/messageEmitter');
+const SocketEmitter = require('../emitters/socketEmitter');
 const MessageHistory = require('../services/messageHistory');
 
 /**
@@ -14,8 +15,8 @@ module.exports = class Message {
         this.io = io;
         this.socketIO = {socket, io};
         this.text = text;
-        this.user = User.getCurrentUserById(this.socket.id);
-        this.messageCount = User.incrementUserMessageCount(this.user.id);
+        this.user = userRepository.getCurrentUserById(this.socket.id);
+        this.messageCount = userRepository.incrementUserMessageCount(this.user.id);
     }
 
     send() {
@@ -25,7 +26,7 @@ module.exports = class Message {
         // send message to everyone else
         new MessageEmitter(this.socketIO).sendMessageToAllOthersInRoom(this.user, this.text);
         // update message count for everyone
-        new MessageEmitter(this.socketIO).emitToAllInRoom('updatedMessageCount', this.user.room, this.messageCount);
+        new SocketEmitter(this.socketIO).emitToAllInRoom('updatedMessageCount', this.user.room, this.messageCount);
         // add message to history
         MessageHistory.addMessageToHistory({user: this.user, text: this.text});
     }

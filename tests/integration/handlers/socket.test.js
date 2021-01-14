@@ -1,7 +1,10 @@
 const io = require('socket.io-client');
 const uuid = require('uuid');
 const Room = require('../../../services/room');
+const roomService = require('../../../services/room.service');
 const User = require('../../../models/user');
+const userService = require('../../../services/user.service');
+const userRepository = require('../../../repositories/user.repository');
 const LogoutTimer = require('../../../services/logoutTimer');
 const MessageHistory = require('../../../services/messageHistory');
 const Invitations = require('../../../services/invitations');
@@ -599,9 +602,9 @@ describe("Socket.IO Server-Side Events", () => {
 
         it('should destroy room after user disconnect times out', done => {
             jest.useFakeTimers("legacy");
-            const destroyRoomSpy = jest.spyOn(User, "destroyRoom");
+            const destroyRoomSpy = jest.spyOn(roomService, "destroyRoom");
             const messageHistorySpy = jest.spyOn(MessageHistory, "deleteRoomMessages");
-            const deleteRoomUsersSpy = jest.spyOn(User, "deleteRoomUsers");
+            const deleteRoomUsersSpy = jest.spyOn(userRepository, "deleteAllUsersFromRoom");
             const roomListSpy = jest.spyOn(roomList, "deleteRoom");
             const deleteRoomFromInvitationListSpy = jest.spyOn(Invitations, "deleteRoomFromInvitationList");
 
@@ -613,13 +616,12 @@ describe("Socket.IO Server-Side Events", () => {
 
                     client1.disconnect();
                     jest.runAllTimers();
-                    jest.useRealTimers();
                     expect(destroyRoomSpy).toHaveBeenCalled();
                     expect(roomListSpy).toHaveBeenCalled();
                     expect(deleteRoomFromInvitationListSpy).toHaveBeenCalled();
                     expect(deleteRoomUsersSpy).toHaveBeenCalled();
                     expect(messageHistorySpy).toHaveBeenCalled();
-
+                    jest.useRealTimers();
                     done();
                 });
 
@@ -629,8 +631,8 @@ describe("Socket.IO Server-Side Events", () => {
 
         it('should stop disconnect timer if only remaining user reconnects before timeout', done => {
 
-            const destroyRoomSpy = jest.spyOn(User, 'destroyRoom');
-            const stopTimerSpy = jest.spyOn(LogoutTimer.prototype, 'stopLogoutTimer');
+            const destroyRoomSpy = jest.spyOn(roomService, 'destroyRoom');
+            const stopTimerSpy = jest.spyOn(LogoutTimer.prototype, 'stop');
             let roomId = '1f8e27df-f05f-448b-be16-cd240394deef';
             uuid.v4.mockReturnValue(roomId);
 

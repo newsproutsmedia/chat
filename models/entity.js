@@ -4,7 +4,7 @@ module.exports = class Entity {
     }
 
     equals (other) {
-        if (other instanceof Entity === false) {
+        if (!(other instanceof Entity)) {
             return false
         }
 
