@@ -1,7 +1,10 @@
 const {v4: uuid} = require('uuid');
-const User = require('./user');
+const User = require('../models/user');
+const userService = require('../services/user.service');
+const userRepository = require('../repositories/user.repository');
 const roomList = require('./roomList');
 const MessageEmitter = require('../emitters/messageEmitter');
+const SocketEmitter = require('../emitters/socketEmitter');
 const MessageHistory = require('./messageHistory');
 const Invitations = require('./invitations');
 const EventEmitter = require('events');
@@ -22,7 +25,7 @@ module.exports = class Room {
         this.socket = socket;
         this.io = io;
         this.socketIO = {socket, io};
-        this.type = User.setUserType('user');
+        this.type = userRepository.setType('user');
 
         logger.info("[service.room.constructor]", {socket: this.socket.id, username: username, email: email, room: room});
 
@@ -37,7 +40,7 @@ module.exports = class Room {
             this.room = this._create();
             this._emitRoomCreated(this.room);
             Invitations.addRoomToInvitationList(this.room, this.email);
-            this.type = User.setUserType('admin');
+            this.type = userRepository.setType('admin');
             return;
         }
 
@@ -45,7 +48,7 @@ module.exports = class Room {
         if (!roomList.roomExists(this.room)) {
             logger.info("[service.room.checkRoom.roomExists]", {message: "Room does not exist yet, adding it to the list"});
             Invitations.addRoomToInvitationList(this.room, this.email);
-            this.type = User.setUserType('admin');
+            this.type = userRepository.setType('admin');
         }
     }
 
@@ -53,7 +56,8 @@ module.exports = class Room {
         if(this._roomIsFull()) return this._emitRoomFull(this.room);
 
         // create user object
-        const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type}).addUser();
+        const user = new User({id: this.socket.id, username: this.username, email: this.email, room: this.room, type: this.type})
+        userRepository.addUser(user);
 
         logger.info("[service.room.joinRoom]", {room: this.room});
         this.socket.join(this.room);
@@ -69,7 +73,7 @@ module.exports = class Room {
 
         Invitations.removeEmailFromInvitationList(this.room, this.email);
         // send users and room info to front end
-        User.sendRoomUsers(this.room, this.socketIO);
+        userService.sendRoomUsers(this.room, this.socketIO);
         // send message history to front end
         new MessageHistory().sendMessageHistoryToUser(this.room, this.socketIO);
 
@@ -81,12 +85,12 @@ module.exports = class Room {
         stopTimerEmitter.emit("stopTimer");
 
         // update userID
-        const user = User.getCurrentUserByRoomAndEmail(this.room, this.email);
+        const user = userRepository.getCurrentUserByRoomAndEmail(this.room, this.email);
         logger.info("[service.room.reconnect]", {user});
-        User.updateUserId(user.id, this.socket.id);
+        userRepository.updateUserId(user.id, this.socket.id);
 
         // update connection status
-        User.setUserStatus(this.socket.id, "ONLINE");
+        userRepository.setUserStatus(userRepository.getUserIndexById(this.socket.id), "ONLINE");
 
         // rejoin room
         logger.info("[service.room.reconnect]", {room: this.room});
@@ -102,7 +106,7 @@ module.exports = class Room {
         if(user.type === 'admin') this._emitSetupAdmin(user);
 
         // send users and room info to front end
-        User.sendRoomUsers(this.room, this.socketIO);
+        userService.sendRoomUsers(this.room, this.socketIO);
 
         // send message history to front end
         new MessageHistory().sendMessageHistoryToUser(this.room, this.socketIO);
@@ -111,7 +115,7 @@ module.exports = class Room {
 
 
     _roomIsFull() {
-        const userCount = User.getRoomUsers(this.room);
+        const userCount = userRepository.getRoomUsers(this.room);
         const inviteCount = Invitations.getInvitationCount(this.room);
         const newRoomUsersLength = userCount + 1;
         if(newRoomUsersLength > userCount + inviteCount) {
@@ -129,7 +133,7 @@ module.exports = class Room {
 
     _emitRoomCreated(uniqueRoomId) {
         logger.info("[service.room.emitRoomCreated]", {uniqueRoomId});
-        new MessageEmitter(this.socketIO).emitEventToSender('roomCreated', uniqueRoomId);
+        new SocketEmitter(this.socketIO).emitEventToSender('roomCreated', uniqueRoomId);
     }
 
     _emitRoomFull(room) {
@@ -137,7 +141,7 @@ module.exports = class Room {
             message: "roomFull"
         }
         logger.info("[service.room.emitRoomFull]", {message: "Room Full", room});
-        new MessageEmitter(this.socketIO).emitEventToSender('accessDenied', message);
+        new SocketEmitter(this.socketIO).emitEventToSender('accessDenied', message);
     }
 
     _emitWelcome({id, email, room}) {
@@ -153,7 +157,7 @@ module.exports = class Room {
         logger.info("[service.room.emitReconnect.welcomeBack]", {user, text});
         new MessageEmitter(this.socketIO).sendMessageToSender(user, text);
         logger.info("service.room.emitReconnect.reconnect", {room});
-        new MessageEmitter(this.socketIO).emitEventToSender('reconnect', {message: text});
+        new SocketEmitter(this.socketIO).emitEventToSender('reconnect', {message: text});
     }
 
     _broadcastJoinedMessage({id, username, email, room}) {

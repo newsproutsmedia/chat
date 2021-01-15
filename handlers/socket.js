@@ -3,7 +3,7 @@ const socketio = require('socket.io');
 const Room = require('../services/room');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
-const User = require('../services/user');
+const userService = require('../services/user.service');
 const BlockUser = require('../services/blockUser');
 const LogoutTimer = require('../services/logoutTimer');
 const SocketEmitter = require('../emitters/socketEmitter');
@@ -13,11 +13,10 @@ module.exports = function(server) {
     const io = socketio(server, {
         pingTimeout: 30000
     });
-
+    const logoutTimer = new LogoutTimer(false);
     // Run when client connects
     io.on('connection', socket => {
         const socketIO = {socket, io};
-        const logoutTimer = new LogoutTimer();
         logger.info("[socket.connection.event.connection]", {message: "Socket connected", socketID: socket.id});
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
@@ -29,7 +28,7 @@ module.exports = function(server) {
 
             if(validateUserOnConnect(socketIO, currentUser)) {
                 logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User validated, attempting to reconnect", currentUser});
-                logoutTimer.stopLogoutTimer();
+                logoutTimer.stop();
                 return new Room({...currentUser, ...socketIO}).reconnect();
             }
 
@@ -60,7 +59,7 @@ module.exports = function(server) {
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
-            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : User.userDisconnected(socketIO, logoutTimer);
+            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : userService.userDisconnected(socketIO, logoutTimer);
         });
 
         process.on('exit', (code) => {

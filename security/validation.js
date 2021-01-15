@@ -1,6 +1,6 @@
 const {validate: validateUUID} = require('uuid');
-const MessageEmitter = require('../emitters/messageEmitter');
-const User = require('../services/user');
+const SocketEmitter = require('../emitters/socketEmitter');
+const userRepository = require('../repositories/user.repository');
 const logger = require('../loaders/logger');
 const roomList = require('../services/roomList');
 
@@ -39,7 +39,7 @@ function roomIdExists(io, currentUser) {
 
 function userExistsInRoom(currentUser) {
     // check if user exists in room
-    if(User.getUsersByEmailAndRoom(currentUser.room, currentUser.email).length > 0) {
+    if(userRepository.getUsersByEmailAndRoom(currentUser.room, currentUser.email).length > 0) {
         logger.info("[security.validation.userExistsInRoom]", {userExists: true});
         return true;
     }
@@ -49,7 +49,7 @@ function userExistsInRoom(currentUser) {
 
 function userDisconnected(currentUser) {
     // if user exists, check that their status is set to "DISCONNECTED"
-    const user = User.getCurrentUserByRoomAndEmail(currentUser.room, currentUser.email);
+    const user = userRepository.getCurrentUserByRoomAndEmail(currentUser.room, currentUser.email);
     const userDisconnected = user.status === "DISCONNECTED";
     logger.info("[security.validation.userDisconnected]", {userDisconnected});
     return userDisconnected;
@@ -68,7 +68,7 @@ function roomInvalid(socketIO, room) {
 
 function emitInvalidRoom(socketIO, room) {
     logger.info("service.room.emitInvalidRoom", {room});
-    new MessageEmitter(socketIO).emitEventToSender('invalidRoom', room);
+    new SocketEmitter(socketIO).emitEventToSender('invalidRoom', room);
 }
 
 module.exports = { validateUserOnConnect, validateRoomIdOnConnect, validateRoomId };
