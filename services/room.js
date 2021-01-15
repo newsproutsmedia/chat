@@ -30,13 +30,26 @@ module.exports = class Room {
         logger.info("[service.room.constructor]", {socket: this.socket.id, username: username, email: email, room: room});
 
         // if room value is not set, create a new room
-        if (!this.room || !roomList.roomExists(this.room)) {
+        this.checkRoom();
+    }
+
+    checkRoom() {
+        if (!this.room) {
+            logger.info("[service.room.checkRoom.notSet]", {message: "Room not set, creating a new one"});
+
             this.room = this._create();
             this._emitRoomCreated(this.room);
             Invitations.addRoomToInvitationList(this.room, this.email);
             this.type = userRepository.setType('admin');
+            return;
         }
 
+        // if room is set, but not in room list, add it to the room list
+        if (!roomList.roomExists(this.room)) {
+            logger.info("[service.room.checkRoom.roomExists]", {message: "Room does not exist yet, adding it to the list"});
+            Invitations.addRoomToInvitationList(this.room, this.email);
+            this.type = userRepository.setType('admin');
+        }
     }
 
     join() {

@@ -109,8 +109,8 @@ module.exports = class Mail {
             from: process.env.EMAIL, // sender address
             to: sender.to, // message recipient (could be an array)
             subject: "ChatApp Invite", // Subject line
-            text: "You received this from ChatApp" // plain text body
-            //html: //TODO Add Sasquatch Chat logo to top of email
+            //text: "You received this from ChatApp" // plain text body
+            html: //TODO Add Sasquatch Chat logo to top of email
                 `<h1>${this.sender.username} invited you to join a Chat</h1>` +
                 `<p>Click on the link below, then enter a nickname to join the chat:</p>` +
                 `<p><a href="http://localhost:3000/join?email=${sender.to}&room=${sender.room}">http://localhost:3000/join?email=${sender.to}&room=${sender.room}</a></p>` +

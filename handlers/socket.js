@@ -6,6 +6,7 @@ const Mail = require('../services/mail');
 const userService = require('../services/user.service');
 const BlockUser = require('../services/blockUser');
 const LogoutTimer = require('../services/logoutTimer');
+const SocketEmitter = require('../emitters/socketEmitter');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
@@ -51,13 +52,19 @@ module.exports = function(server) {
 
         // listen for block user event
         socket.on('blockUser', id => {
-          new BlockUser({...socketIO, id}).blockUser();
+            logger.info("[socket.connection.event.blockUser]", {message: "Block user event for user: ", id});
+            new BlockUser({...socketIO, id}).blockUser();
         });
 
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
             BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : userService.userDisconnected(socketIO, logoutTimer);
+        });
+
+        process.on('exit', (code) => {
+            logger.info("[socket.connection.event.process.exit]", {message: "NodeJs Shutting Down", code});
+            new SocketEmitter(socketIO).emitToAllConnectedClients('systemCrash', 'systemCrash');
         });
 
     });

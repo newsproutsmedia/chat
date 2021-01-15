@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse key=value pairs (ty
 app.use('/', index);
 app.use('/login', login);
 app.use('/join', join);
-app.use('/chat', chat);
+app.use(['/chat', '/chat.html'], chat);
 
 // Logging
 const logger = require('./loaders/logger');

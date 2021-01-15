@@ -115,7 +115,7 @@ export class SocketListeners {
         socket.on('roomUsers', ({ room, users, invites }) => {
             console.log('received room users', users);
             console.log('received invites', invites);
-            outputRoomName(roomName, room);
+            //outputRoomName(roomName, room);
             outputUsers(userList, users);
 
             if(getIsAdmin()) outputAllInvitedUsers(invitedList, invites);

@@ -7,7 +7,7 @@ const { validateRoomId } = require('../security/validation');
 // Include Express Validator Functions
 const { check, validationResult } = require('express-validator');
 
-router.post('/validate', async (req, res) => {
+router.post('/', async (req, res) => {
     const username = req.body.username;
     const email = req.body.email;
     const room = req.body.room;

@@ -2,22 +2,33 @@ const url = require('url');
 const express = require('express');
 const router = express.Router();
 const logger = require('../loaders/logger');
-const User = require('../models/user');
 const UserRepository = require('../repositories/user.repository');
+const roomList = require('../services/roomList');
+const Invitations = require('../services/invitations');
 
 router.get('/', function (req, res) {
     const username = req.query.username;
     const email = req.query.email;
     const room = req.query.room;
-    let admin = false;
+  
+    if(username && email && room) {
 
-    const user = UserRepository.getUsersByEmailAndRoom(room, email);
+        let admin = true;
+        let invite = false;
 
-    if(user && user.type === "admin") {
-        admin = true;
-    }
+        const user = UserRepository.getUsersByEmailAndRoom(room, email);
+        const roomInvitations = Invitations.getRoomInvitations(room);
 
-    if(username && email) {
+        if(room && user.length < 1 && roomInvitations.length > 0) {
+            invite = roomInvitations.emails.map(email => email.email.includes(email));
+        }
+
+        const roomExists = roomList.roomExists(room);
+
+        if((room && roomExists && invite) || (user.length > 0 && user.type !== "admin")) {
+            admin = false;
+        }
+        logger.info('[routes.chat.paramsSet]', {message: "Params set, entering chat", user, invite, admin, roomExists, roomInvitations: roomInvitations});
         res.render('chat', {
             layout: 'index',
             username: username,

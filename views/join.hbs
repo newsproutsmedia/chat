@@ -10,7 +10,7 @@
         <div id="joinSection" class="form-control join">
             <div class="user-input">
                 <h1 class="title">Join A Chat</h1>
-                <form id="joinForm" method="post" action="/join/validate">
+                <form id="joinForm" method="post" action="/join">
                     <span class="input-label">What's your nickname?</span>
                     {{# if errors }}
                         {{#each errors }}
@@ -19,7 +19,7 @@
                             {{/when}}
                         {{/each}}
                     {{/if}}
-                    <input id="usernameInputJoin" class="form-input-rounded" type="text" name="username" {{# if username }}value="{{this.username}}"{{/if}} required>
+                    <input id="usernameInputJoin" class="form-input-rounded" type="text" name="username" {{# if this.username }}value="{{this.username}}"{{/if}} required>
 
                     <span class="input-label">Email Address</span>
                     {{# if errors }}
@@ -29,7 +29,7 @@
                             {{/when}}
                         {{/each}}
                     {{/if}}
-                    <input id="emailInputJoin" class="form-input-rounded" type="text" name="email" {{# if email }}value="{{this.email}}"{{/if}} required>
+                    <input id="emailInputJoin" class="form-input-rounded" type="text" name="email" {{# if this.email }}value="{{this.email}}"{{/if}} required>
 
                     <span class="input-label">Room ID</span>
                     {{# if errors }}
@@ -39,7 +39,7 @@
                             {{/when}}
                         {{/each}}
                     {{/if}}
-                    <input id="roomInputJoin" class="form-input-rounded break-after" type="text" name="room" {{# if room }}value="{{this.room}}"{{/if}} required>
+                    <input id="roomInputJoin" class="form-input-rounded break-after" type="text" name="room" {{# if this.room }}value="{{this.room}}"{{/if}} required>
                     <br>
                     <button type="submit" id="usernameBtn" class="btn">Join Chat</button>
 

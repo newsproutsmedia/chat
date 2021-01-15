@@ -10,25 +10,36 @@
         <dashmenu id="dashMenu">
             <view class="dash-section">
                 <span id="viewMenu" class="">
+                    <span id="chatIcon" class="view-menu-item selected" section="messagePanel"><i id="chatIcon-image" class="fas fa-comments fa-md"></i></span>
+                    <span id="roomIcon" class="view-menu-item" section="room"><i id="roomIcon-image" class="fas fa-door-closed fa-md"></i></span>
+                    <span id="usersIcon" class="view-menu-item selected" section="users"><i id="usersIcon-image" class="fas fa-user-friends fa-md"></i></span>
+                    {{#when this.admin 'eq' true}}
+                    <span id="inviteIcon" class="view-menu-item selected" section="invite"><i id="inviteIcon-image" class="fas fa-paper-plane fa-md"></i></span>
+                    {{/when}}
                 </span>
             </view>
             <room id="room" class="dash-section h-hidden">
                 <h4>Room</h4>
-                <p id="roomName">JavaScript</p>
+                <p id="roomName">{{ this.room }}</p>
                 <button id="logoutBtn" class="btn dash-btn">Leave Room</button>
             </room>
 
             <users id="users" class="dash-section">
-                {{#if admin}}<p>Admin</p>{{/if}}
                 <div id="usersList">
 
                 </div>
-                <div id="invitedList">
 
+                <div id="invitedList">
                 </div>
 
             </users>
-
+            {{#when this.admin 'eq' true}}
+            <invite id="invite" class="dash-section">
+                <div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i></a></div>
+                <div id="recipients"></div>
+                <button id="sendInvitations" class="btn dash-btn h-hidden">Send Invites</button>
+            </invite>
+            {{/when}}
         </dashmenu>
     </nav>
     <main id="main" class="main-content">
