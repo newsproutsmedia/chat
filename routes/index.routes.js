@@ -6,7 +6,7 @@ const { createRoomId } = require('../utils/roomId');
 // Include Express Validator Functions
 const { check, validationResult } = require('express-validator');
 
-router.get('/',  (req, res) => {
+router.get(['/', '/index', 'index.html', 'home', 'home.html'],  (req, res) => {
     res.render('home');
 });
 

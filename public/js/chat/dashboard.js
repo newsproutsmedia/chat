@@ -6,12 +6,12 @@ const roomIcon = {id: "roomIcon", fontAwesome: "fa-door-closed", section: "room"
 const usersIcon = {id: "usersIcon", fontAwesome: "fa-user-friends", section: "users"};
 const inviteIcon = {id: "inviteIcon", fontAwesome: "fa-paper-plane", section: "invite"};
 
-export function outputDashboardMenu() {
+export function setupDashboardMenu() {
 
-    outputMenuIcon(chatIcon, true);
-    outputMenuIcon(roomIcon, false);
-    outputMenuIcon(usersIcon, true);
-    if(getIsAdmin()) outputMenuIcon(inviteIcon, true);
+    addMenuIconListener(chatIcon.id);
+    addMenuIconListener(roomIcon.id);
+    addMenuIconListener(usersIcon.id);
+    if(getIsAdmin()) addMenuIconListener(inviteIcon.id);
 
 }
 
