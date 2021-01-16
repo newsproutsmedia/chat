@@ -7,9 +7,9 @@ module.exports = class Invitations {
      * @description add invitation to queue
      * @param {string} roomId - object containing message user and text
      */
-    static addRoomToInvitationList(roomId, email) {
+    static addRoomToInvitationList(roomId) {
         logger.info('[service.invitations.addRoomToInvitationList]', {message: "Adding room to invitation list", roomId});
-        invitations.push({id: roomId, emails: [{email: email}]});
+        invitations.push({id: roomId, emails: []});
         logger.info('[service.invitations.addRoomToInvitationList]', {message: "Room Added", invitations});
         return invitations;
     }
@@ -31,7 +31,7 @@ module.exports = class Invitations {
      * @returns {*[]}
      */
     static getRoomInvitations(roomId) {
-        const roomInvitations = invitations.filter(room => room.id.includes(roomId));
+        const roomInvitations = invitations.filter(room => room.id === roomId);
         logger.info('[service.invitations.getRoomInvitations]', {roomInvitations: roomInvitations});
         return roomInvitations;
     }

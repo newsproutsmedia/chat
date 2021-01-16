@@ -1,4 +1,4 @@
-const {userTypes} = require('../loaders/globals');
+const {getUserTypes} = require('../loaders/globals');
 
 /**
  * @desc check if user type exists in global userTypes Set
@@ -6,7 +6,7 @@ const {userTypes} = require('../loaders/globals');
  * @return boolean
  */
 function validateUserType(type) {
-    return userTypes.has(type);
+    return getUserTypes().has(type);
 }
 
 module.exports = { validateUserType };

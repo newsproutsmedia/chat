@@ -12,5 +12,5 @@ Handlebars.registerHelper( "when",function(operand_1, operator, operand_2, optio
         , result = operators[operator](operand_1,operand_2);
 
     if (result) return options.fn(this);
-    else  return options.inverse(this);
+    else return options.inverse(this);
 });

@@ -1,6 +1,7 @@
 const {validateUserOnConnect, validateRoomIdOnConnect} = require("../security/validation");
 const socketio = require('socket.io');
-const Room = require('../services/room');
+const Room = require('../models/room');
+const roomService = require('../services/room.service');
 const Message = require('../services/message');
 const Mail = require('../services/mail');
 const userService = require('../services/user.service');
@@ -29,11 +30,11 @@ module.exports = function(server) {
             if(validateUserOnConnect(socketIO, currentUser)) {
                 logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User validated, attempting to reconnect", currentUser});
                 logoutTimer.stop();
-                return new Room({...currentUser, ...socketIO}).reconnect();
+                return roomService.reconnect({...currentUser, ...socketIO});
             }
 
             // if room and/or user don't exist
-            new Room({...currentUser, ...socketIO}).join();
+            roomService.join({...currentUser, ...socketIO});
         });
 
         // listen for chatMessage

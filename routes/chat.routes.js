@@ -3,13 +3,13 @@ const express = require('express');
 const router = express.Router();
 const logger = require('../loaders/logger');
 const UserRepository = require('../repositories/user.repository');
-const roomList = require('../services/roomList');
+const roomRepository = require('../repositories/room.repository');
 const Invitations = require('../services/invitations');
 
-router.get('/', function (req, res) {
-    const username = req.query.username;
-    const email = req.query.email;
-    const room = req.query.room;
+router.get('/:room/:email/:username', function (req, res) {
+    const username = req.params.username;
+    const email = req.params.email;
+    const room = req.params.room;
   
     if(username && email && room) {
 
@@ -23,7 +23,7 @@ router.get('/', function (req, res) {
             invite = roomInvitations.emails.map(email => email.email.includes(email));
         }
 
-        const roomExists = roomList.roomExists(room);
+        const roomExists = roomRepository.roomExists(room);
 
         if((room && roomExists && invite) || (user.length > 0 && user.type !== "admin")) {
             admin = false;

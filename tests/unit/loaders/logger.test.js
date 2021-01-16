@@ -1,4 +1,6 @@
 const os = require('os');
+const {getAppName} = require('../../../loaders/globals');
+
 jest.mock('winston', () => {
     const mFormat = {
         combine: jest.fn(),
@@ -29,7 +31,7 @@ describe("test logger", () => {
     })
 
     it('should set metadataString to empty if metadata = null', done => {
-        const initialAppName = process.env.APP_NAME;
+        const initialAppName = getAppName();
         process.env.APP_NAME = "testApp";
         const templateFunctions = [];
         format.printf.mockImplementation((templateFn) => {

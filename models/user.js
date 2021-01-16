@@ -7,7 +7,7 @@ const Entity = require('./entity');
  */
 module.exports = class User extends Entity {
 
-    constructor({id, username, email, room, type, messageCount = 0, status = "ONLINE"}) {
+    constructor({id, username, email, room, type, messageCount = 0, status = "ONLINE", firstConnect = true}) {
         super(id);
         this.username = username;
         this.email = email;
@@ -15,15 +15,7 @@ module.exports = class User extends Entity {
         this.type = type;
         this.messageCount = messageCount;
         this.status = status;
-    }
-
-
-    get _id() {
-        return this.id;
-    }
-
-    set _id(value) {
-        this.id = value;
+        this.firstConnect = firstConnect;
     }
 
     get _username() {

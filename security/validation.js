@@ -2,7 +2,7 @@ const {validate: validateUUID} = require('uuid');
 const SocketEmitter = require('../emitters/socketEmitter');
 const userRepository = require('../repositories/user.repository');
 const logger = require('../loaders/logger');
-const roomList = require('../services/roomList');
+const roomRepository = require('../repositories/room.repository');
 
 /**
  * @description check if room value is valid UUID
@@ -28,7 +28,7 @@ function validateUserOnConnect(socketIO, currentUser) {
 
 function roomIdExists(io, currentUser) {
     // check if room with that id exists
-    if(io.nsps['/'].adapter.rooms[currentUser.room] || roomList.roomExists(currentUser.room)) {
+    if(io.nsps['/'].adapter.rooms[currentUser.room] || roomRepository.roomExists(currentUser.room)) {
         logger.info("[security.validation.roomIdExists]", {roomExists: true});
         return true;
     }

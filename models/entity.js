@@ -3,18 +3,22 @@ module.exports = class Entity {
         this.id = id;
     }
 
+    getId() {
+        return this.id;
+    }
+
     equals (other) {
         if (!(other instanceof Entity)) {
             return false
         }
 
-        return other.id
-            ? this.referenceEquals(other.id)
+        return other._id
+            ? this.referenceEquals(other._id)
             : this === other
     }
 
     referenceEquals (id) {
-        if (!this.id) {
+        if (!this._id) {
             // Try object equality
             return this.equals(id)
         }
@@ -23,10 +27,10 @@ module.exports = class Entity {
             ? id.toString()
             : id
 
-        return this.id === reference
+        return this._id === reference
     }
 
     toString () {
-        return this.id
+        return this._id
     }
 }

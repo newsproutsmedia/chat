@@ -2,9 +2,11 @@ const url = require('url');
 const express = require('express');
 const router = express.Router();
 const logger = require('../loaders/logger');
-const { createRoomId } = require('../utils/roomId');
+const { createRoom } = require('../services/room.service');
 // Include Express Validator Functions
 const { check, validationResult } = require('express-validator');
+const User = require('../models/user');
+const userRepository = require('../repositories/user.repository');
 
 router.get(['/', '/index', 'index.html', 'home', 'home.html'],  (req, res) => {
     res.render('home');
@@ -37,10 +39,17 @@ router.post('/', async (req, res) => {
         logger.info('[routes.index.post]', {message: "No errors found, redirecting to chat page"});
 
         // create room id
-        const room = createRoomId();
+        const room = createRoom();
+
+        // create user and add to users datastore
+        // change UID from socket id to random UID
+        // socket will be added on.connect
+        const user = new User({id: createUserId(), username: username, email: email, room: room, type: type});
+        userRepository.addUser(user);
+        // create user
 
         res.redirect(url.format({
-            pathname:"/chat",
+            pathname:`/chat/${room}/${email}/${username}`,
             query: {
                 "username": username,
                 "email": email,

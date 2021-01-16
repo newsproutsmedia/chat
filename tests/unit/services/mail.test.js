@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Mail = require('../../../services/mail');
-const User = require('../../../models/user');
+const userRepository = require('../../../repositories/user.repository');
 
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
@@ -11,7 +11,7 @@ describe('getGoogleAccessToken', () => {
 
         // GIVEN
         const oAuth2Client = new OAuth2("clientId", "clientSecret", "redirectUri");
-        const userSpy = jest.spyOn(User, 'getCurrentUserById').mockImplementation(() => {
+        const userSpy = jest.spyOn(userRepository, 'getCurrentUserById').mockImplementation(() => {
             return {
                 username: "testUser",
                 email: "test@user.email",
@@ -41,7 +41,7 @@ describe('getGoogleAccessToken', () => {
         const socket = {id: 1};
         const io = {id: 1};
 
-        const userSpy = jest.spyOn(User, 'getCurrentUserById').mockImplementation(() => {
+        const userSpy = jest.spyOn(userRepository, 'getCurrentUserById').mockImplementation(() => {
             return {
                 username: "testUser",
                 email: "test@user.email",

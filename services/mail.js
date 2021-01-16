@@ -1,8 +1,7 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
-const User = require('../models/user');
+const userRepository = require('../repositories/user.repository');
 const Invitations = require('./invitations');
-const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
 
 const { google } = require("googleapis");
@@ -19,7 +18,7 @@ module.exports = class Mail {
         this.io = io;
         this.socketIO = {socket, io};
         this.recipients = recipients;
-        this.user = User.getCurrentUserById(this.socket.id);
+        this.user = userRepository.getCurrentUserById(this.socket.id);
         this.sender = {
             username: this.user.username,
             email: this.user.email,

@@ -1,18 +1,17 @@
 const io = require('socket.io-client');
 const uuid = require('uuid');
-const Room = require('../../../services/room');
+const Room = require('../../../models/room');
 const roomService = require('../../../services/room.service');
-const User = require('../../../models/user');
-const userService = require('../../../services/user.service');
 const userRepository = require('../../../repositories/user.repository');
 const LogoutTimer = require('../../../services/logoutTimer');
 const MessageHistory = require('../../../services/messageHistory');
 const Invitations = require('../../../services/invitations');
 const logger = require('../../../loaders/logger');
+const globals = require('../../../loaders/globals');
 
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
-const appName = process.env.PORT || "ChatApp";
+const appName = globals.getAppName();
 const roomList = require('../../../services/roomList');
 
 let options = {
@@ -533,13 +532,13 @@ describe("Socket.IO Server-Side Events", () => {
             done();
         });
 
-        afterEach(done => {
+        afterEach(() => {
             roomFullSpy.mockRestore();
             inviteCountSpy.mockRestore();
-            setTimeout(() => done(), 2000);
+            //setTimeout(() => done(), 2000);
         });
 
-        it('should notify remaining chat participants that a user left', done => {
+        it('should notify remaining chat participants that a user left', () => {
             let roomId = 'bfae795a-3815-42f4-b7a0-73ca8de8b060';
             uuid.v4.mockReturnValue(roomId);
             client1 = io.connect(socketURL, options);
@@ -550,7 +549,6 @@ describe("Socket.IO Server-Side Events", () => {
                         client1.once('message', message => {
                             expect(message.text).toBe(`${chatUser2.username} has left the chat`);
                             client1.disconnect();
-                            done();
                         });
                     });
                 });
@@ -567,7 +565,8 @@ describe("Socket.IO Server-Side Events", () => {
                 });
             });
         });
-        it('should send updated users and room info when a user leaves', done => {
+        it('should send updated users and room info when a user leaves', () => {
+
             let roomId = '4494d412-9d1a-4195-a9a7-aaaf5cad0263';
             uuid.v4.mockReturnValue(roomId);
             client1 = io.connect(socketURL, options);
@@ -581,7 +580,6 @@ describe("Socket.IO Server-Side Events", () => {
                             expect(roomUsers.users.length).toBe(2);
                             expect(roomUsers.users[1].status).toBe("DISCONNECTED");
                             client1.disconnect();
-                            done();
                         });
                     });
                 });
@@ -600,38 +598,10 @@ describe("Socket.IO Server-Side Events", () => {
             });
         });
 
-        it('should destroy room after user disconnect times out', done => {
-            jest.useFakeTimers("legacy");
-            const destroyRoomSpy = jest.spyOn(roomService, "destroyRoom");
-            const messageHistorySpy = jest.spyOn(MessageHistory, "deleteRoomMessages");
-            const deleteRoomUsersSpy = jest.spyOn(userRepository, "deleteAllUsersFromRoom");
-            const roomListSpy = jest.spyOn(roomList, "deleteRoom");
-            const deleteRoomFromInvitationListSpy = jest.spyOn(Invitations, "deleteRoomFromInvitationList");
 
-            let roomId = '8017f699-b0cd-40a1-8d23-19ffb1a8af9b';
-            uuid.v4.mockReturnValue(roomId);
-            client1 = io.connect(socketURL, options);
-            client1.on('connect', () => {
-                client1.once('roomUsers', roomUsers => {
-
-                    client1.disconnect();
-                    jest.runAllTimers();
-                    expect(destroyRoomSpy).toHaveBeenCalled();
-                    expect(roomListSpy).toHaveBeenCalled();
-                    expect(deleteRoomFromInvitationListSpy).toHaveBeenCalled();
-                    expect(deleteRoomUsersSpy).toHaveBeenCalled();
-                    expect(messageHistorySpy).toHaveBeenCalled();
-                    jest.useRealTimers();
-                    done();
-                });
-
-                client1.emit('joinRoom', chatUser1);
-            });
-        });
 
         it('should stop disconnect timer if only remaining user reconnects before timeout', done => {
 
-            const destroyRoomSpy = jest.spyOn(roomService, 'destroyRoom');
             const stopTimerSpy = jest.spyOn(LogoutTimer.prototype, 'stop');
             let roomId = '1f8e27df-f05f-448b-be16-cd240394deef';
             uuid.v4.mockReturnValue(roomId);
@@ -662,6 +632,35 @@ describe("Socket.IO Server-Side Events", () => {
                 }, 2000);
             });
         });
+
+        it('should destroy room after user disconnect times out', () => {
+            const disconnectTimeoutSpy = jest.spyOn(globals, "getDisconnectTimeout").mockImplementation(() => 50);
+            const destroyRoomSpy = jest.spyOn(roomService, "destroyRoom");
+            const messageHistorySpy = jest.spyOn(MessageHistory, "deleteRoomMessages");
+            const deleteRoomUsersSpy = jest.spyOn(userRepository, "deleteAllUsersFromRoom");
+            const roomListSpy = jest.spyOn(roomList, "deleteRoom");
+            const deleteRoomFromInvitationListSpy = jest.spyOn(Invitations, "deleteRoomFromInvitationList");
+
+            let roomId = '8017f699-b0cd-40a1-8d23-19ffb1a8af9b';
+            uuid.v4.mockReturnValue(roomId);
+            client1 = io.connect(socketURL, options);
+            client1.on('connect', () => {
+                client1.once('roomUsers', roomUsers => {
+
+                    client1.disconnect();
+                    setTimeout(() => {
+                        expect(destroyRoomSpy).toHaveBeenCalled();
+                        expect(roomListSpy).toHaveBeenCalled();
+                        expect(deleteRoomFromInvitationListSpy).toHaveBeenCalled();
+                        expect(deleteRoomUsersSpy).toHaveBeenCalled();
+                        expect(messageHistorySpy).toHaveBeenCalled();
+                        disconnectTimeoutSpy.mockRestore();
+                    }, 2000);
+                });
+
+                client1.emit('joinRoom', chatUser1);
+            });
+        });
     });
 
 
@@ -670,12 +669,11 @@ describe("Socket.IO Server-Side Events", () => {
         let server;
         let roomFullSpy;
 
-        beforeEach(done => {
+        beforeEach(() => {
             chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
             chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
             roomFullSpy = jest.spyOn(Room.prototype, '_roomIsFull').mockImplementation(() => false);
             server = require('../../../server').server;
-            done();
         });
 
         afterEach(done => {
@@ -689,7 +687,8 @@ describe("Socket.IO Server-Side Events", () => {
             }
         }
 
-        it('should catch an unhandled exception', done => {
+        it('should catch an unhandled exception', () => {
+            const disconnectTimeoutSpy = jest.spyOn(globals, "getDisconnectTimeout").mockImplementation(() => 50);
             let roomId = '348b457f-cfe3-46c4-aaed-a50500297e5e';
             uuid.v4.mockReturnValue(roomId);
             const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
@@ -699,7 +698,7 @@ describe("Socket.IO Server-Side Events", () => {
                     myFunc(true);
                     expect(mockExit).toHaveBeenCalledWith(1);
                     client1.disconnect();
-                    done();
+                    disconnectTimeoutSpy.mockRestore();
                 });
 
                 client1.emit('joinRoom', chatUser1);

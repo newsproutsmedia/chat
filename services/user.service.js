@@ -1,5 +1,5 @@
 const userRepository = require('../repositories/user.repository');
-const {bot} = require('../loaders/globals');
+const {getBot} = require('../loaders/globals');
 const logger = require('../loaders/logger');
 const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
@@ -44,7 +44,7 @@ function userDisconnected({socket, io}, logoutTimer) {
  * @emits message
  */
 function emitUserHasLeft(user, socketIO) {
-    const sysUser = {...bot, room: user.room};
+    const sysUser = {...getBot(), room: user.room};
     const text = `${user.username} has left the chat`;
     logger.info('[service.user.emitUserHasLeft]', {message: "Sending user has left notice to room", text});
     new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(sysUser, text);
