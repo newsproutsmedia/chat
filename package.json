@@ -17,6 +17,7 @@
   "author": "New Sprouts Media, LLC",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -30,6 +31,7 @@
     "handlebars": "^4.7.6",
     "helmet": "^4.1.1",
     "moment": "^2.29.0",
+    "nanoid": "^3.1.20",
     "node-sass": "^5.0.0",
     "nodemailer": "^6.4.13",
     "os": "^0.1.1",

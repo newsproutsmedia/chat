@@ -45,9 +45,18 @@ function incrementUserMessageCount(id) {
  * @param {string} room
  * @return {array} - array of user objects
  */
-function getRoomUsers(room) {
-    return users.filter(user => user.room === room);
+function getRoomUsers(room, socketIO) {
+    let user = getUserBySocket(socketIO);
+    if(user.type === "admin") {
+        return users.filter(user => user.room === room);
+    }
+    return users.filter(user => user.room === room && (user.status === "ONLINE" || user.status === "DISCONNECTED"));
 }
+
+function getUserBySocket({socket}) {
+    return users.filter(user => user.socket = socket);
+}
+
 
 /**
  * @desc returns index of user by email
@@ -113,9 +122,34 @@ function setUserStatus(index, status) {
     users[index].status = status;
 }
 
+/**
+ * @desc set socket id of user object
+ * @param {number} index
+ * @param {string} socket
+ */
+function setUserSocket(index, socket) {
+    users[index].socket = socket;
+}
+
 function getUserIndexById(id) {
     return users.findIndex(user => user.id === id);
 }
 
-module.exports = { addUser, getUserIndexById,getCurrentUserById, getCurrentUserByRoomAndEmail, getRoomUsers, getUsersByEmailAndRoom, setUserStatus, setType, setUserBlocked, updateUserId, deleteAllUsersFromRoom, incrementUserMessageCount}
+function usernameExistsInRoom(roomId, username) {
+    const user = users.filter(user => user.room === roomId && user.username === username);
+    return !!user.length;
+
+}
+
+function updateUsername({username, room, email}) {
+    const user = getCurrentUserByRoomAndEmail(room, email);
+    const index = getUserIndexById(user.id);
+    users[index].username = username;
+}
+
+module.exports = { addUser, getUserIndexById,getCurrentUserById,
+    getCurrentUserByRoomAndEmail, getRoomUsers, getUsersByEmailAndRoom,
+    setUserStatus, setUserSocket, setType, setUserBlocked,
+    updateUserId, deleteAllUsersFromRoom, incrementUserMessageCount,
+    usernameExistsInRoom, updateUsername}
 

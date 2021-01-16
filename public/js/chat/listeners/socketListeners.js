@@ -15,15 +15,17 @@ import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
 import {redirectToError} from "../errors.js";
 import {getIsAdmin} from "../admin.js";
+import {getURLParams} from "../utils/parseURL.js";
 
-const roomName = document.getElementById('roomName');
 const userList = document.getElementById('usersList');
 const invitedList = document.getElementById('invitedList');
 
 // Get username and room from URL
-export let { username, email, room } = Qs.parse(location.search, {
-    ignoreQueryPrefix: true // ignores non key/value data
-});
+let urlParams = getURLParams();
+export let room = urlParams[0];
+export let email = urlParams[1];
+export let username = urlParams[2];
+
 
 export const socket = io({
     reconnection: true,
@@ -118,7 +120,7 @@ export class SocketListeners {
             //outputRoomName(roomName, room);
             outputUsers(userList, users);
 
-            if(getIsAdmin()) outputAllInvitedUsers(invitedList, invites);
+            if(getIsAdmin()) outputAllInvitedUsers(invitedList, users);
         });
     }
 

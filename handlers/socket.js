@@ -1,4 +1,4 @@
-const {validateUserOnConnect, validateRoomIdOnConnect} = require("../security/validation");
+const {validateOnConnect, validateUserDisconnected} = require("../security/validation");
 const socketio = require('socket.io');
 const Room = require('../models/room');
 const roomService = require('../services/room.service');
@@ -22,13 +22,13 @@ module.exports = function(server) {
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
 
-            logger.info("[socket.connection.event.joinRoom]", {message: "Validating Room Id", currentUser});
-            validateRoomIdOnConnect(socketIO, currentUser);
+            logger.info("[socket.connection.event.joinRoom]", {message: "Validating Current User", currentUser});
+            validateOnConnect(currentUser);
 
             logger.info("[socket.connection.event.joinRoom]", {message: "Attempting to join room", currentUser});
 
-            if(validateUserOnConnect(socketIO, currentUser)) {
-                logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User validated, attempting to reconnect", currentUser});
+            if(validateUserDisconnected(currentUser)) {
+                logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User invited, attempting to reconnect", currentUser});
                 logoutTimer.stop();
                 return roomService.reconnect({...currentUser, ...socketIO});
             }

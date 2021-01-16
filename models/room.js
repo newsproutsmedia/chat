@@ -1,6 +1,6 @@
 const logger = require('../loaders/logger');
 const Entity = require('./entity');
-const { createRoomId } = require('../utils/roomId');
+const { createRoomId } = require('../utils/generateId');
 
 
 /**
@@ -13,7 +13,5 @@ module.exports = class Room extends Entity {
         super(createRoomId());
         logger.info("[service.room.constructor]", {message: "Creating new room"});
     }
-
-
 
 }

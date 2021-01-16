@@ -3,7 +3,12 @@ const {getBot} = require('../loaders/globals');
 const logger = require('../loaders/logger');
 const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
-const Invitations = require('../services/invitations');
+const User = require('../models/user');
+
+function createUser({username, email, room, type}) {
+    const user = new User({username: username, email: email, room: room, type: type});
+    userRepository.addUser(user);
+}
 
 /**
  * @desc set user status to DISCONNECTED and notify other users when user leaves chat
@@ -68,16 +73,13 @@ function emitLogoutUser(user, socketIO, message) {
  * @emits object containing room id and array of users in room
  */
 function sendRoomUsers(room, socketIO) {
-    const roomUsersAndInvites = {
+    const roomUsers = {
         room: room,
-        users: userRepository.getRoomUsers(room),
-        invites: Invitations.getRoomInvitations(room)
+        users: userRepository.getRoomUsers(room, socketIO)
     };
-    logger.info("[service.room.sendRoomUsers]", {socket: socketIO.socket.id, room, roomUsers: roomUsersAndInvites});
-    new SocketEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsersAndInvites);
+    logger.info("[service.room.sendRoomUsers]", {socket: socketIO.socket.id, room, roomUsers: roomUsers});
+    new SocketEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsers);
 }
-
-
 
 /**
  * @desc if disconnected user is last in room, destroy the room
@@ -97,4 +99,4 @@ function destroyRoomOnLastUserDisconnected(socketIO, logoutTimer) {
     }
 }
 
-module.exports = { userDisconnected, emitLogoutUser, emitUserHasLeft, sendRoomUsers }
+module.exports = { createUser, userDisconnected, emitLogoutUser, emitUserHasLeft, sendRoomUsers }

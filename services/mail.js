@@ -1,7 +1,7 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
 const userRepository = require('../repositories/user.repository');
-const Invitations = require('./invitations');
+const userService = require('../services/user.service');
 const SocketEmitter = require('../emitters/socketEmitter');
 
 const { google } = require("googleapis");
@@ -46,8 +46,8 @@ module.exports = class Mail {
                 }
 
                 logger.info("[service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess]", {"info": info.response});
-                Invitations.addEmailToInvitationList(this.user.room, recipient.email);
-                this._emitInviteSendSuccess(mailRecipient);
+                userService.createUser({username: mailRecipient.email, email: mailRecipient.email, room: this.sender.room, type: "user"});
+                userService.sendRoomUsers(this.sender.room, this.socketIO);
             });
         });
 
@@ -62,15 +62,6 @@ module.exports = class Mail {
         logger.warn("[service.mail.emitInviteSendFailure]", {"message": "send failed"});
         new SocketEmitter(this.socketIO).emitEventToSender('inviteSendFailure', recipient);
     }
-
-    _emitInviteSendSuccess(recipient) {
-        logger.info("[service.mail.emitInviteSendSuccess]", {"message": "send successful"});
-        new SocketEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
-    }
-
-
-
-
 
     // create reusable transporter object using the default SMTP transport
     _getMailTransporter = async () => {

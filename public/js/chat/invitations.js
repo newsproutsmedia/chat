@@ -78,6 +78,9 @@ export function outputInvitedUser(inviteListElement, email) {
 }
 
 export function outputAllInvitedUsers(inviteListElement, invites) {
+
+    // OUTPUT users with "INVITED" status
+
     console.log("outputAllInvitedUsers: ", invites);
     if(inviteListElement) inviteListElement.innerHTML = '';
     if(!invites) return;

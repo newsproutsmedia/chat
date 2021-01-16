@@ -10,7 +10,7 @@ let connectedUsers = [];
  * @param {array} users - array of users in chat room
  */
 export function outputUsers(elementId, users) {
-    //removeDisconnectUserButtonListeners(connectedUsers);
+    // Output "ONLINE" and "DISCONNECTED" users
     connectedUsers = [];
     elementId.innerHTML = "";
     const usersTitle = document.createElement("h4");
