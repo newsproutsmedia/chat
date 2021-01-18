@@ -20,15 +20,15 @@ function createUser({username, email, room, type}) {
 function userDisconnected({socket, io}, logoutTimer) {
     const socketIO = {socket, io};
     logger.info('[service.user.userDisconnected]', {socketID: socketIO.socket.id});
-    if(!userRepository.getCurrentUserById(socket.id)) return;
-    const currentUser = userRepository.getCurrentUserById(socket.id);
+    if(!userRepository.getUserBySocketId(socket.id)) return;
+    const currentUser = userRepository.getUserBySocketId(socket.id);
     logger.info('[service.user.userDisconnected]', {message: `User (${currentUser.username}) leaving room`, room: currentUser.room});
 
     // notify other chat participants that user has left
     emitUserHasLeft(currentUser, socketIO);
 
     // set user status to DISCONNECTED
-    const index = userRepository.getUserIndexById(socket.id);
+    const index = userRepository.getUserIndexById(currentUser.id);
     userRepository.setUserStatus(index,"DISCONNECTED");
     logger.info("[service.user.userDisconnected]", {message: "Status Changed", userStatus: currentUser.status});
 
@@ -92,7 +92,7 @@ function sendRoomUsers(room, socketIO) {
 function destroyRoomOnLastUserDisconnected(socketIO, logoutTimer) {
     logger.info('[service.user.userDisconnected]', {message: 'Checking number of room users'});
     const {socket, io} = socketIO;
-    const currentUser = userRepository.getCurrentUserById(socket.id);
+    const currentUser = userRepository.getUserBySocketId(socket.id);
     const rooms = io.nsps['/'].adapter.rooms[currentUser.room];
     logger.info('[service.user.userDisconnected]', {rooms});
     if(!rooms) {

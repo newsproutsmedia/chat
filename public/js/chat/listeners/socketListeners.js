@@ -160,7 +160,6 @@ export class SocketListeners {
         socket.on('inviteSendSuccess', ({id, email}) => {
             console.log("inviteSendSuccess: ", id);
             removeInviteField(id);
-            outputInvitedUser(invitedList, email);
             incrementMaxUsers();
         });
     }

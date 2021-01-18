@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
 
 });
 
-router.get('/:room/:email/:username',  (req, res) => {
+router.get(['/:room/:email/:username', '/:room/:email'],  (req, res) => {
     const email = req.params.email;
     const room = req.params.room;
     const username = req.params.username;

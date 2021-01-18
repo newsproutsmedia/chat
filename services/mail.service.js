@@ -18,7 +18,7 @@ module.exports = class Mail {
         this.io = io;
         this.socketIO = {socket, io};
         this.recipients = recipients;
-        this.user = userRepository.getCurrentUserById(this.socket.id);
+        this.user = userRepository.getUserBySocketId(this.socket.id);
         this.sender = {
             username: this.user.username,
             email: this.user.email,
@@ -47,7 +47,7 @@ module.exports = class Mail {
 
                 logger.info("[service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess]", {"info": info.response});
                 userService.createUser({username: mailRecipient.email, email: mailRecipient.email, room: this.sender.room, type: "user"});
-                userService.sendRoomUsers(this.sender.room, this.socketIO);
+                this._emitInviteSendSuccess(mailRecipient);
             });
         });
 
@@ -61,6 +61,12 @@ module.exports = class Mail {
     _emitInviteSendFailure(recipient) {
         logger.warn("[service.mail.emitInviteSendFailure]", {"message": "send failed"});
         new SocketEmitter(this.socketIO).emitEventToSender('inviteSendFailure', recipient);
+    }
+
+    _emitInviteSendSuccess(recipient) {
+        logger.info("[service.mail.emitInviteSendSuccess]", {"message": "send successful"});
+        new SocketEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
+        userService.sendRoomUsers(this.sender.room, this.socketIO);
     }
 
     // create reusable transporter object using the default SMTP transport
@@ -103,7 +109,7 @@ module.exports = class Mail {
             html: //TODO Add Sasquatch Chat logo to top of email
                 `<h1>${this.sender.username} invited you to join a Chat</h1>` +
                 `<p>Click on the link below, then enter a nickname to join the chat:</p>` +
-                `<p><a href="http://localhost:3000/join?email=${sender.to}&room=${sender.room}">http://localhost:3000/join?email=${sender.to}&room=${sender.room}</a></p>` +
+                `<p><a href="http://localhost:3000/join/${sender.room}/${sender.to}">http://localhost:3000/join/${sender.room}/${sender.to}</a></p>` +
                 `<p>Room ID: ${sender.room}</p>`
             //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
             //TODO Create Option to Decline Invitation

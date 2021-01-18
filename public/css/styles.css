@@ -88,6 +88,9 @@ p {
 .online {
   background-color: #61D9FA; }
 
+.invited {
+  background-color: #5cb85c; }
+
 .btn {
   border-radius: 30px;
   padding: 10px 40px;
