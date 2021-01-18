@@ -1,7 +1,6 @@
-const {validate: validateUUID} = require('uuid');
-const SocketEmitter = require('../emitters/socketEmitter');
 const userRepository = require('../repositories/user.repository');
 const logger = require('../loaders/logger');
+const {getBaseURL} = require('../loaders/globals');
 const roomRepository = require('../repositories/room.repository');
 const axios = require('axios');
 
@@ -11,9 +10,32 @@ const axios = require('axios');
  */
 function validateOnConnect(currentUser) {
     // check if roomID is valid
-    if(currentUser.room && !validateRoomId(currentUser.room)) return invalid(currentUser, "Room");
-    if(!userRoomIdExists(currentUser) || !userExistsInRoom(currentUser) || !usernameMatches(currentUser)) return invalid(currentUser, "User");
-    if(!userDisconnected(currentUser) || !userInvited(currentUser)) return invalid(currentUser, "User Status");
+    return userStatusIsValid(currentUser) && roomIsValid(currentUser) && roomUserIsValid(currentUser);
+}
+
+function roomIsValid(currentUser) {
+    const roomSet = !!currentUser.room;
+    const roomIdValid = validateRoomId(currentUser.room);
+    const roomValidated = roomSet && roomIdValid;
+    logger.info("[security.validation.roomIsValid]", {roomSet, roomIdValid, roomValidated});
+    return roomValidated;
+}
+
+function roomUserIsValid(currentUser) {
+    const roomIdExists = userRoomIdExists(currentUser);
+    const userExists = userExistsInRoom(currentUser);
+    const nameMatches = usernameMatches(currentUser);
+    const userValidated = roomIdExists && userExists && nameMatches;
+    logger.info("[security.validation.roomUserIsValid]", {roomIdExists, userExists, nameMatches, userValidated});
+    return userValidated;
+}
+
+function userStatusIsValid(currentUser) {
+    const userStatusDisconnect = userDisconnected(currentUser);
+    const userStatusInvited = userInvited(currentUser);
+    const statusValidated = userStatusDisconnect || userStatusInvited;
+    logger.info("[security.validation.roomIsValid]", {userStatusDisconnect, userStatusInvited, statusValidated});
+    return statusValidated;
 }
 
 /**
@@ -55,12 +77,12 @@ function userExistsInRoom(currentUser) {
  * @param {Object} currentUser - room and email
  */
 function usernameMatches(currentUser) {
-    const user = userRepository.getUsersByEmailAndRoom(currentUser.room, currentUser.email);
+    const user = userRepository.getCurrentUserByRoomAndEmail(currentUser.room, currentUser.email);
     if(currentUser.username === user.username) {
-        logger.info("[security.validation.usernameMatches]", {message: "Usernames match"});
+        logger.info("[security.validation.usernameMatches]", {usernameMatches: true});
         return true;
     }
-    logger.info("[security.validation.usernameMatches]", {message: "Usernames do NOT match"});
+    logger.info("[security.validation.usernameMatches]", {usernameIsUnique: false, currentUsername: currentUser.username, userInRoom: user, roomUsername: user.username});
     return false;
 }
 
@@ -98,15 +120,20 @@ function validateRoomId(roomId) {
     return isValidRoomId;
 }
 
+
+
 function invalid({room, email, username}, message) {
     logger.warn("security.validation.invalid", {message: `${message} is invalid, redirecting to join page`, room, email, username});
-    axios
-        .post('/join', {
+    const baseURL = getBaseURL();
+    axios({
+        method: 'post',
+        url: `${baseURL}/join`,
+        data: {
             room: room,
-            email: email,
-            username: username
-        })
-        .catch(error => {
+            username: username,
+            email: email
+        }
+    }).catch(error => {
             console.error(error);
         })
 }

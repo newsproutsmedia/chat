@@ -1,4 +1,4 @@
-const MessageHistory = require('../../../services/messageHistory');
+const MessageHistory = require('../../../services/messageHistory.service');
 
 describe('messageHistory', ()=> {
 

@@ -59,10 +59,10 @@ router.post('/', async (req, res) => {
 
 });
 
-router.get('/',  (req, res) => {
-    const email = req.query.email;
-    const room = req.query.room;
-    const username = req.query.username;
+router.get('/:room/:email/:username',  (req, res) => {
+    const email = req.params.email;
+    const room = req.params.room;
+    const username = req.params.username;
 
     res.render('join', {
         layout: 'index',

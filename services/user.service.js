@@ -8,6 +8,7 @@ const User = require('../models/user');
 function createUser({username, email, room, type}) {
     const user = new User({username: username, email: email, room: room, type: type});
     userRepository.addUser(user);
+    return user;
 }
 
 /**
@@ -75,9 +76,9 @@ function emitLogoutUser(user, socketIO, message) {
 function sendRoomUsers(room, socketIO) {
     const roomUsers = {
         room: room,
-        users: userRepository.getRoomUsers(room, socketIO)
+        users: userRepository.getRoomUsersByUserType(room, socketIO)
     };
-    logger.info("[service.room.sendRoomUsers]", {socket: socketIO.socket.id, room, roomUsers: roomUsers});
+    logger.info("[service.room.sendRoomUsers]", {roomUsers: roomUsers});
     new SocketEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsers);
 }
 
@@ -98,5 +99,7 @@ function destroyRoomOnLastUserDisconnected(socketIO, logoutTimer) {
         logoutTimer.start(socketIO, currentUser.room);
     }
 }
+
+
 
 module.exports = { createUser, userDisconnected, emitLogoutUser, emitUserHasLeft, sendRoomUsers }

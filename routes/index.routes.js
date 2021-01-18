@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const logger = require('../loaders/logger');
 const { createRoom } = require('../services/room.service');
+const { getAllRooms } = require('../repositories/room.repository');
 // Include Express Validator Functions
 const { check, validationResult } = require('express-validator');
 const { createUser } = require('../services/user.service');
@@ -39,11 +40,13 @@ router.post('/', async (req, res) => {
 
         // create room
         const room = createRoom();
-        const user = createUser({username: username, email: email, room: room, type: "admin"});
+        logger.info('[routes.index.post]', {rooms: getAllRooms()});
+
+        const user = createUser({username: username, email: email, room: room.getId(), type: "admin"});
         logger.info('[routes.index.post]', {message: "User created:", user});
 
         res.redirect(url.format({
-            pathname:`/chat/${room}/${email}/${username}`
+            pathname:`/chat/${room.getId()}/${email}/${username}`
         }));
     }
 })

@@ -51,14 +51,14 @@ export function removeInviteField(id) {
  * @description add invite section to DOM
  */
 export function setupInviteSection() {
-/*    if(document.getElementsByTagName('invite').length > 0) return;
+    if(document.getElementsByTagName('invite').length > 0) return;
     const inviteSection = document.createElement('invite');
     inviteSection.id = "invite";
     inviteSection.className = "dash-section";
     inviteSection.innerHTML = `<div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i></a></div>
                             <div id="recipients"></div>
                 <button id="sendInvitations" class="btn dash-btn h-hidden">Send Invites</button>`;
-    document.querySelector('#dashMenu').appendChild(inviteSection);*/
+    document.querySelector('#dashMenu').appendChild(inviteSection);
     new InviteListeners();
 }
 
@@ -77,17 +77,18 @@ export function outputInvitedUser(inviteListElement, email) {
     if(allInvitationsProcessed()) setInviteButtonStateAfterSend(allInvitesSuccessful);
 }
 
-export function outputAllInvitedUsers(inviteListElement, invites) {
-
+export function outputAllInvitedUsers(inviteListElement, users) {
     // OUTPUT users with "INVITED" status
-
-    console.log("outputAllInvitedUsers: ", invites);
+    console.log("outputAllInvitedUsers: ", users);
     if(inviteListElement) inviteListElement.innerHTML = '';
-    if(!invites) return;
-    invites[0].emails.forEach(email => {
-        console.log("outputting invited user: ", email.email);
-        outputInvitedUser(inviteListElement, email.email);
-    });
+    if(!users) return;
+    const invites = users.filter(user => user.status === "INVITED")
+    if(invites.length) {
+        invites.emails.forEach(email => {
+            console.log("outputting invited user: ", email.email);
+            outputInvitedUser(inviteListElement, email.email);
+        });
+    }
 }
 
 /**

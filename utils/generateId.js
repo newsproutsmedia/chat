@@ -3,13 +3,13 @@ const logger = require('../loaders/logger');
 
 function createRoomId() {
     let uniqueRoomId = nanoid();
-    logger.info("[utils.roomId.create]", {uniqueRoomId});
+    logger.info("[utils.generateId.createRoomId]", {uniqueRoomId});
     return uniqueRoomId;
 }
 
 function createShortId() {
     let shortId = nanoid(10);
-    logger.info("[utils.shortId.create]", {shortId});
+    logger.info("[utils.generateId.createShortId]", {shortId});
     return shortId;
 }
 

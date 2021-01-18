@@ -4,6 +4,10 @@ function addRoom(roomId) {
     rooms.push(roomId);
 }
 
+function getAllRooms() {
+    return rooms;
+}
+
 /**
  * @desc remove room from rooms array
  * @param {string} room
@@ -16,4 +20,4 @@ function roomExists(room) {
     return rooms.includes(room);
 }
 
-module.exports = { addRoom, deleteRoom, roomExists }
+module.exports = { addRoom, getAllRooms, deleteRoom, roomExists }

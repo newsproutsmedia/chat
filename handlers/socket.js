@@ -1,12 +1,11 @@
 const {validateOnConnect, validateUserDisconnected} = require("../security/validation");
 const socketio = require('socket.io');
-const Room = require('../models/room');
 const roomService = require('../services/room.service');
-const Message = require('../services/message');
-const Mail = require('../services/mail');
+const Message = require('../services/message.service');
+const Mail = require('../services/mail.service');
 const userService = require('../services/user.service');
-const BlockUser = require('../services/blockUser');
-const LogoutTimer = require('../services/logoutTimer');
+const {blockUser, userIsBlocked, cleanUpAfterBlockedUserDisconnected} = require('../services/blockUser.service');
+const LogoutTimer = require('../services/logoutTimer.service');
 const SocketEmitter = require('../emitters/socketEmitter');
 const logger = require('../loaders/logger');
 
@@ -23,7 +22,9 @@ module.exports = function(server) {
         socket.on('joinRoom', currentUser => {
 
             logger.info("[socket.connection.event.joinRoom]", {message: "Validating Current User", currentUser});
-            validateOnConnect(currentUser);
+            if(!validateOnConnect(currentUser)) {
+                return new SocketEmitter(socketIO).emitEventToSender('invalidUser', currentUser);
+            }
 
             logger.info("[socket.connection.event.joinRoom]", {message: "Attempting to join room", currentUser});
 
@@ -54,13 +55,13 @@ module.exports = function(server) {
         // listen for block user event
         socket.on('blockUser', id => {
             logger.info("[socket.connection.event.blockUser]", {message: "Block user event for user: ", id});
-            new BlockUser({...socketIO, id}).blockUser();
+            blockUser({...socketIO, id});
         });
 
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
-            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : userService.userDisconnected(socketIO, logoutTimer);
+            userIsBlocked(socket) ? cleanUpAfterBlockedUserDisconnected(socketIO) : userService.userDisconnected(socketIO, logoutTimer);
         });
 
         process.on('exit', (code) => {

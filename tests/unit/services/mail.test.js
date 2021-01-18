@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Mail = require('../../../services/mail');
+const Mail = require('../../../services/mail.service');
 const userRepository = require('../../../repositories/user.repository');
 
 const { google } = require("googleapis");

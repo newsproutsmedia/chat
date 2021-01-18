@@ -22,9 +22,10 @@ const invitedList = document.getElementById('invitedList');
 
 // Get username and room from URL
 let urlParams = getURLParams();
-export let room = urlParams[0];
-export let email = urlParams[1];
-export let username = urlParams[2];
+console.log(urlParams);
+export let room = urlParams[2];
+export let email = urlParams[3];
+export let username = urlParams[4];
 
 
 export const socket = io({
@@ -49,7 +50,7 @@ let currentUser = {
 export class SocketListeners {
 
     constructor() {
-        this.onInvalidRoom();
+        this.onInvalidUser();
         this.onAccessDenied();
         this.onConnect();
         this.onDestroyRoom();
@@ -92,10 +93,10 @@ export class SocketListeners {
         });
     }
 
-    onInvalidRoom() {
-        socket.on('invalidRoom', () => {
-            console.log('invalid room');
-            logout('invalidRoom');
+    onInvalidUser() {
+        socket.on('invalidUser', currentUser => {
+            console.log('invalid user');
+            window.location.href = `/join/${currentUser.room}/${currentUser.email}/${currentUser.username}`;
         });
     }
 
@@ -117,7 +118,7 @@ export class SocketListeners {
         socket.on('roomUsers', ({ room, users, invites }) => {
             console.log('received room users', users);
             console.log('received invites', invites);
-            //outputRoomName(roomName, room);
+
             outputUsers(userList, users);
 
             if(getIsAdmin()) outputAllInvitedUsers(invitedList, users);

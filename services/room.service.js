@@ -1,6 +1,5 @@
 const logger = require('../loaders/logger');
-const MessageHistory = require('./messageHistory');
-const Invitations = require('./invitations');
+const MessageHistory = require('./messageHistory.service');
 const Room = require('../models/room');
 const userService = require('../services/user.service');
 const userRepository = require('../repositories/user.repository');
@@ -13,7 +12,7 @@ let {getBot} = require('../loaders/globals');
 function createRoom() {
     const room = new Room();
     roomRepository.addRoom(room.getId());
-    Invitations.addRoomToInvitationList(room.getId());
+    logger.info("[service.room.createRoom]", {room: room.getId()});
     return room;
 }
 
@@ -34,8 +33,8 @@ function join({email, room, socket, io}) {
     // broadcast to everyone (except user) when user connects
     broadcastJoinedMessage(user, socketIO);
     // set up admin tools
-    if(user.type === 'admin') emitSetupAdmin(user);
-    userRepository.setUserSocket(userIndex, socket);
+    if(user.type === 'admin') emitSetupAdmin(user, socketIO);
+    userRepository.setUserSocket(userIndex, socket.id);
     userRepository.setUserStatus(userIndex, "ONLINE");
     // send users and room info to front end
     userService.sendRoomUsers(room, socketIO);
@@ -83,7 +82,7 @@ function reconnect({email, room, socket, io}) {
 
 function roomIsFull(roomId) {
     const userCount = userRepository.getRoomUsers(roomId);
-    const inviteCount = Invitations.getInvitationCount(roomId);
+    const inviteCount = userRepository.getInvitedUsersByRoom(roomId).length;
     const newRoomUsersLength = userCount + 1;
     if(newRoomUsersLength > userCount + inviteCount) {
         logger.warn("[service.room.join.roomIsFull]", {message: "Room is full", room: roomId});
@@ -147,4 +146,4 @@ function emitSetupAdmin(user, socketIO) {
     new SocketEmitter(socketIO).emitEventToSender('setupAdmin', user);
 }
 
-module.exports = { createRoom, join, reconnect, destroyRoom };
+module.exports = { createRoom, join, reconnect, destroyRoom, roomIsFull };

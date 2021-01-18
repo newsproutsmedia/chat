@@ -14,7 +14,7 @@ export function setIsAdmin(bool) {
 
 export function setupAdmin(user) {
     setIsAdmin(true);
-    //setupDashboardMenu();
+    setupDashboardMenu();
     setupInviteSection();
 }
 

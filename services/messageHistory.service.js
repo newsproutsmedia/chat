@@ -21,7 +21,10 @@ module.exports = class MessageHistory {
 
     sendMessageHistoryToUser(room, socketIO) {
         const roomMessages = MessageHistory.getRoomMessages(room);
-        if(!roomMessages) return false;
+        if(!roomMessages.length) {
+            logger.info('[service.messageHistory.sendMessageHistoryToUser]', {message: "no messages to send"});
+            return false;
+        }
         logger.info('[service.messageHistory.sendMessageHistoryToUser]', {message: "sending message history"});
         roomMessages.forEach(message => {
             new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text);

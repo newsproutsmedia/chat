@@ -1,6 +1,7 @@
 let { users } = require('../data/users.data');
 const logger = require('../loaders/logger');
-const { validateUserType } = require('../services/userType.service');
+const {getUserTypes} = require('../loaders/globals');
+
 
 function addUser(user) {
     users.push(user);
@@ -33,6 +34,7 @@ function getCurrentUserByRoomAndEmail(room, email) {
  */
 function incrementUserMessageCount(id) {
     const userIndex = users.findIndex(user => user.id === id);
+    logger.info('[service.user.incrementUserMessageCount]', {id, userIndex});
     users[userIndex].messageCount = users[userIndex].messageCount + 1;
     return {
         userId: id,
@@ -43,18 +45,30 @@ function incrementUserMessageCount(id) {
 /**
  * @desc returns array of room user objects
  * @param {string} room
+ * @param {Object} socketIO
  * @return {array} - array of user objects
  */
-function getRoomUsers(room, socketIO) {
-    let user = getUserBySocket(socketIO);
-    if(user.type === "admin") {
+function getRoomUsersByUserType(room, socketIO) {
+    let user = getUserBySocketId(socketIO.socket.id);
+    if(user && user.type === "admin") {
         return users.filter(user => user.room === room);
     }
     return users.filter(user => user.room === room && (user.status === "ONLINE" || user.status === "DISCONNECTED"));
 }
 
-function getUserBySocket({socket}) {
-    return users.filter(user => user.socket = socket);
+/**
+ * @desc returns array of room user objects
+ * @param {string} room
+ * @return {array} - array of user objects
+ */
+function getRoomUsers(room) {
+    return users.filter(user => user.room === room);
+}
+
+function getUserBySocketId(id) {
+    const user = users.filter(user => user.socket === id);
+    logger.info('[service.user.getUserBySocketId]', {id});
+    return user[0];
 }
 
 
@@ -66,6 +80,10 @@ function getUserBySocket({socket}) {
  */
 function getUsersByEmailAndRoom(room, email) {
     return users.filter(user => user.room === room && user.email === email);
+}
+
+function getInvitedUsersByRoom(room) {
+    return users.filter(user => user.status === "INVITED");
 }
 
 /**
@@ -119,6 +137,7 @@ function updateUserId(oldSocketId, newSocketId) {
  * @param {string} status
  */
 function setUserStatus(index, status) {
+    logger.info("[service.user.setUserStatus]", {status});
     users[index].status = status;
 }
 
@@ -128,6 +147,7 @@ function setUserStatus(index, status) {
  * @param {string} socket
  */
 function setUserSocket(index, socket) {
+    logger.info("[service.user.setUserSocket]", {socket});
     users[index].socket = socket;
 }
 
@@ -147,9 +167,18 @@ function updateUsername({username, room, email}) {
     users[index].username = username;
 }
 
+/**
+ * @desc check if user type exists in global userTypes Set
+ * @param {string} type
+ * @return boolean
+ */
+function validateUserType(type) {
+    return getUserTypes().has(type);
+}
+
 module.exports = { addUser, getUserIndexById,getCurrentUserById,
-    getCurrentUserByRoomAndEmail, getRoomUsers, getUsersByEmailAndRoom,
-    setUserStatus, setUserSocket, setType, setUserBlocked,
+    getCurrentUserByRoomAndEmail, getInvitedUsersByRoom, getRoomUsers, getRoomUsersByUserType, getUsersByEmailAndRoom,
+    getUserBySocketId, setUserStatus, setUserSocket, setType, setUserBlocked,
     updateUserId, deleteAllUsersFromRoom, incrementUserMessageCount,
     usernameExistsInRoom, updateUsername}
 

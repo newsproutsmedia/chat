@@ -10,12 +10,12 @@ let connectedUsers = [];
  * @param {array} users - array of users in chat room
  */
 export function outputUsers(elementId, users) {
-    // Output "ONLINE" and "DISCONNECTED" users
+
+    // Sort users array by Username and Email
+    users.sort((a, b) => (a.username > b.username) ? 1 : (a.username === b.username) ? ((a.email > b.email) ? 1 : -1) : -1 );
+
     connectedUsers = [];
     elementId.innerHTML = "";
-    const usersTitle = document.createElement("h4");
-    usersTitle.innerText = "Users";
-    elementId.appendChild(usersTitle);
 
     users.forEach(user => {
         const userDiv = document.createElement("div");

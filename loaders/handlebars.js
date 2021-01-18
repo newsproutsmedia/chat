@@ -1,4 +1,5 @@
 const Handlebars = require('handlebars');
+const logger = require('./logger');
 
 Handlebars.registerHelper( "when",function(operand_1, operator, operand_2, options) {
     const operators = {
@@ -10,7 +11,7 @@ Handlebars.registerHelper( "when",function(operand_1, operator, operand_2, optio
         '%': function(l,r) { return (l % r) === 0; }
     }
         , result = operators[operator](operand_1,operand_2);
-
+    logger.info("[loaders.handlebars.registerHelper]", {result});
     if (result) return options.fn(this);
     else return options.inverse(this);
 });

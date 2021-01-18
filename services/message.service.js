@@ -2,7 +2,7 @@ const logger = require('../loaders/logger');
 const userRepository = require('../repositories/user.repository');
 const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
-const MessageHistory = require('../services/messageHistory');
+const MessageHistory = require('./messageHistory.service');
 
 /**
  * @desc construct a chat message
@@ -15,7 +15,8 @@ module.exports = class Message {
         this.io = io;
         this.socketIO = {socket, io};
         this.text = text;
-        this.user = userRepository.getCurrentUserById(this.socket.id);
+        this.user = userRepository.getUserBySocketId(this.socket.id);
+        logger.info("[service.message.constructor]", {user: this.user});
         this.messageCount = userRepository.incrementUserMessageCount(this.user.id);
     }
 
