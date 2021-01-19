@@ -3,15 +3,11 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const UncaughtException = require('./handlers/uncaughtException');
 const handlebars = require('express-handlebars');
 
 // load route modules
 const index = require('./routes/index.routes');
-const login = require('./routes/login.routes');
 const join = require('./routes/join.routes');
 const chat = require('./routes/chat.routes');
 
@@ -25,7 +21,6 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse key=value pairs (ty
 
 // use routes
 app.use('/', index);
-app.use('/login', login);
 app.use('/join', join);
 app.use(['/chat', '/chat.html'], chat);
 
@@ -51,11 +46,12 @@ require('./loaders/handlebars');
 
 // Server
 const PORT = process.env.PORT || 3000;
-const server = http.createServer(app).listen(PORT, () => {
-    logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
-});
-
-
+const server = http.createServer(app);
+if (process.env.NODE_ENV !== "test") {
+        server.listen(PORT, () => {
+            logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
+        });
+}
 
 // Globals
 require('./loaders/globals');

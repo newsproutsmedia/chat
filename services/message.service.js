@@ -21,7 +21,7 @@ function send({user, text, socket, io}) {
 
 function sendMessageHistoryToUser(room, socketIO) {
     const roomMessages = messageRepository.getMessagesByRoom(room);
-    if(!roomMessages.length) {
+    if(!roomMessages) {
         logger.info('[service.messageHistory.sendMessageHistoryToUser]', {message: "no messages to send"});
         return false;
     }

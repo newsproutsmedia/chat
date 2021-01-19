@@ -82,10 +82,6 @@ function getUsersByEmailAndRoom(room, email) {
     return users.filter(user => user.room === room && user.email === email);
 }
 
-function getInvitedUsersByRoom(room) {
-    return users.filter(user => user.status === "INVITED");
-}
-
 /**
  * @desc set user type
  * @param {string} type
@@ -167,7 +163,7 @@ function validateUserType(type) {
 }
 
 module.exports = { addUser, getUserIndexById,getCurrentUserById,
-    getCurrentUserByRoomAndEmail, getInvitedUsersByRoom, getRoomUsers, getRoomUsersByUserType, getUsersByEmailAndRoom,
+    getCurrentUserByRoomAndEmail, getRoomUsers, getRoomUsersByUserType, getUsersByEmailAndRoom,
     getUserBySocketId, setUserStatus, setUserSocket, setType, setUserBlocked,
     deleteAllUsersFromRoom, incrementUserMessageCount,
     usernameExistsInRoom, updateUsername}

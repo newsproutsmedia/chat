@@ -9,7 +9,7 @@ const { check, validationResult } = require('express-validator');
 const { createUser } = require('../services/user.service');
 
 router.get(['/', '/index', 'index.html', 'home', 'home.html'],  (req, res) => {
-    res.render('home');
+    res.status(200).render('home');
 });
 
 router.post('/', async (req, res) => {
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
 
     if (errors.length > 0) {
         logger.info('[routes.index.post]', {message: "Errors found", errors});
-        res.render('home', {
+        res.sendStatus(400).render('home', {
             errors: errors
         });
     } else {

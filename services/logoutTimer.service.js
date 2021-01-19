@@ -10,7 +10,7 @@ module.exports = class LogoutTimer {
 
     start(socketIO, room) {
         if(this.getTimerStatus()) return;
-        logger.info('[emitters.timeoutEmitter.stopLogoutTimer]', {message: "Starting Disconnect Timer"});
+        logger.info('[emitters.timeoutEmitter.startLogoutTimer]', {message: "Starting Disconnect Timer"});
         this.timer = setTimeout(() => {
                 roomService.destroyRoom(socketIO, room);
             }, getDisconnectTimeout());

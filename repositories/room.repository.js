@@ -10,10 +10,10 @@ function getAllRooms() {
 
 /**
  * @desc remove room from rooms array
- * @param {string} room
+ * @param {string} roomId
  */
 function deleteRoom(roomId) {
-    rooms = rooms.filter(room => !room === roomId);
+    rooms = rooms.filter(room => room !== roomId);
 }
 
 function roomExists(room) {

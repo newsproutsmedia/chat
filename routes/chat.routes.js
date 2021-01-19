@@ -15,7 +15,7 @@ router.get('/:room/:email/:username', function (req, res) {
     if(username && email && room && user && roomExists) {
 
         logger.info('[routes.chat.paramsSet]', {message: "Params set, entering chat", user, roomExists});
-        res.render('chat', {
+        res.sendStatus(200).render('chat', {
             layout: 'index',
             username: username,
             email: email,
@@ -23,7 +23,7 @@ router.get('/:room/:email/:username', function (req, res) {
             type: user.type
         });
     } else {
-        res.redirect(`/join/${room}/${email}/${username}`);
+        res.sendStatus(302).redirect(`/join/${room}/${email}/${username}`);
     }
 });
 

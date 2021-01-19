@@ -22,23 +22,25 @@ function join({email, room, socket, io}) {
     const socketIO = {socket, io};
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
     const userIndex = userRepository.getUserIndexById(user.id);
-    if(roomIsFull(room)) return emitRoomFull(room);
 
     logger.info("[service.room.joinRoom]", {room: room});
     socket.join(room);
 
-    // set user.firstConnect to false
+    userRepository.setUserSocket(userIndex, socket.id);
+    userRepository.setUserStatus(userIndex, "ONLINE");
 
     // welcome current user
     emitWelcome(user, socketIO);
+
     // broadcast to everyone (except user) when user connects
     broadcastJoinedMessage(user, socketIO);
+
     // set up admin tools
     emitSetupAdmin(user, socketIO);
-    userRepository.setUserSocket(userIndex, socket.id);
-    userRepository.setUserStatus(userIndex, "ONLINE");
+
     // send users and room info to front end
     userService.sendRoomUsers(room, socketIO);
+
     // send message history to front end
     messageService.sendMessageHistoryToUser(room, socketIO);
 
@@ -79,19 +81,6 @@ function reconnect({email, room, socket, io}) {
     messageService.sendMessageHistoryToUser(room, socketIO);
 }
 
-
-
-function roomIsFull(roomId) {
-    const userCount = userRepository.getRoomUsers(roomId);
-    const inviteCount = userRepository.getInvitedUsersByRoom(roomId).length;
-    const newRoomUsersLength = userCount + 1;
-    if(newRoomUsersLength > userCount + inviteCount) {
-        logger.warn("[service.room.join.roomIsFull]", {message: "Room is full", room: roomId});
-        return true;
-    }
-    return false;
-}
-
 /**
  * @desc remove all clients and destroy room
  * @param {Object} socketIO - socket and io params
@@ -102,14 +91,6 @@ function destroyRoom({socket, io}, room) {
     messageRepository.deleteMessagesByRoom(room);
     userRepository.deleteAllUsersFromRoom(room);
     roomRepository.deleteRoom(room);
-}
-
-function emitRoomFull(room, socketIO) {
-    const message = {
-        message: "roomFull"
-    }
-    logger.info("[service.room.emitRoomFull]", {message: "Room Full", room});
-    new SocketEmitter(socketIO).emitEventToSender('accessDenied', message);
 }
 
 function emitWelcome({id, email, room}, socketIO) {
@@ -147,4 +128,4 @@ function emitSetupAdmin(user, socketIO) {
     new SocketEmitter(socketIO).emitEventToSender('setupAdmin', user);
 }
 
-module.exports = { createRoom, join, reconnect, destroyRoom, roomIsFull };
+module.exports = { createRoom, join, reconnect, destroyRoom };

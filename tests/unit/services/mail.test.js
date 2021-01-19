@@ -11,7 +11,7 @@ describe('getGoogleAccessToken', () => {
 
         // GIVEN
         const oAuth2Client = new OAuth2("clientId", "clientSecret", "redirectUri");
-        const userSpy = jest.spyOn(userRepository, 'getCurrentUserById').mockImplementation(() => {
+        jest.spyOn(userRepository, 'getUserBySocketId').mockImplementation(() => {
             return {
                 username: "testUser",
                 email: "test@user.email",
@@ -33,7 +33,7 @@ describe('getGoogleAccessToken', () => {
     });
 
     it('should return a token', async () => {
-        // THEN
+        // GIVEN
         const recipients = [{
             id: 1,
             email: "test@test.com"
@@ -41,7 +41,7 @@ describe('getGoogleAccessToken', () => {
         const socket = {id: 1};
         const io = {id: 1};
 
-        const userSpy = jest.spyOn(userRepository, 'getCurrentUserById').mockImplementation(() => {
+        const userSpy = jest.spyOn(userRepository, 'getUserBySocketId').mockImplementation(() => {
             return {
                 username: "testUser",
                 email: "test@user.email",
@@ -49,7 +49,7 @@ describe('getGoogleAccessToken', () => {
             };
         });
 
-        // GIVEN
+        // WHEN
         const oauth2Client = new OAuth2(
             process.env.CLIENT_ID,
             process.env.CLIENT_SECRET,
@@ -61,6 +61,8 @@ describe('getGoogleAccessToken', () => {
         });
 
         const mail = new Mail({recipients, socket, io});
+
+        // THEN
         expect.assertions(1);
         return expect(mail._getGoogleAccessToken(oauth2Client)).resolves.toBeTruthy();
     });

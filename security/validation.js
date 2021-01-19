@@ -91,9 +91,12 @@ function usernameMatches(currentUser) {
 function userDisconnected({room, email}) {
     // if user exists, check that their status is set to "DISCONNECTED"
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
-    const userDisconnected = user.status === "DISCONNECTED";
-    logger.info("[security.validation.userDisconnected]", {userDisconnected});
-    return userDisconnected;
+    if(user && user.status === "DISCONNECTED") {
+        logger.info("[security.validation.userDisconnected]", {userDisconnected: true});
+        return true;
+    }
+    logger.info("[security.validation.userDisconnected]", {userDisconnected: false});
+    return false;
 }
 
 /**
@@ -104,9 +107,12 @@ function userInvited({room, email}) {
     logger.info("[security.validation.userInvited]", {room, email});
     // if user exists, check that their status is set to "INVITED"
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
-    const userInvited = user.status === "INVITED";
-    logger.info("[security.validation.userInvited]", {userInvited});
-    return userInvited;
+    if(user && user.status === "INVITED") {
+        logger.info("[security.validation.userInvited]", {userInvited: true});
+        return true
+    }
+    logger.info("[security.validation.userInvited]", {userInvited: false});
+    return false;
 }
 
 /**
