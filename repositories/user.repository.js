@@ -45,11 +45,11 @@ function incrementUserMessageCount(id) {
 /**
  * @desc returns array of room user objects
  * @param {string} room
- * @param {Object} socketIO
+ * @param {string} socketId
  * @return {array} - array of user objects
  */
-function getRoomUsersByUserType(room, socketIO) {
-    let user = getUserBySocketId(socketIO.socket.id);
+function getRoomUsersByUserType(room, socketId) {
+    let user = getUserBySocketId(socketId);
     if(user && user.type === "admin") {
         return users.filter(user => user.room === room);
     }
@@ -114,21 +114,11 @@ function deleteAllUsersFromRoom(room) {
 
 /**
  * @desc set user status to "BLOCKED"
- * @param {string} id
+ * @param {string} socketId
  */
-function setUserBlocked(id) {
-    const index = users.findIndex(user => user.id === id);
+function setUserBlocked(socketId) {
+    const index = users.findIndex(user => user.socket === socketId);
     users[index].status = "BLOCKED";
-}
-
-/**
- * @desc update user id
- * @param {string} oldSocketId
- * @param {string} newSocketId
- */
-function updateUserId(oldSocketId, newSocketId) {
-    const index = users.findIndex(user => user.id === oldSocketId);
-    users[index].id = newSocketId;
 }
 
 /**
@@ -179,6 +169,6 @@ function validateUserType(type) {
 module.exports = { addUser, getUserIndexById,getCurrentUserById,
     getCurrentUserByRoomAndEmail, getInvitedUsersByRoom, getRoomUsers, getRoomUsersByUserType, getUsersByEmailAndRoom,
     getUserBySocketId, setUserStatus, setUserSocket, setType, setUserBlocked,
-    updateUserId, deleteAllUsersFromRoom, incrementUserMessageCount,
+    deleteAllUsersFromRoom, incrementUserMessageCount,
     usernameExistsInRoom, updateUsername}
 

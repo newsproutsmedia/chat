@@ -12,9 +12,9 @@ export function setIsAdmin(bool) {
     return isAdmin;
 }
 
-export function setupAdmin(user) {
-    setIsAdmin(true);
+export function setupAdmin(isAdmin) {
+    setIsAdmin(isAdmin);
     setupDashboardMenu();
-    setupInviteSection();
+    if(getIsAdmin()) setupInviteSection();
 }
 

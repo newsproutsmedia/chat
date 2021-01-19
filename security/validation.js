@@ -1,8 +1,6 @@
 const userRepository = require('../repositories/user.repository');
 const logger = require('../loaders/logger');
-const {getBaseURL} = require('../loaders/globals');
 const roomRepository = require('../repositories/room.repository');
-const axios = require('axios');
 
 /**
  * @description check if currentUser params are valid
@@ -103,6 +101,7 @@ function userDisconnected({room, email}) {
  * @param {Object} currentUser - room and email
  */
 function userInvited({room, email}) {
+    logger.info("[security.validation.userInvited]", {room, email});
     // if user exists, check that their status is set to "INVITED"
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
     const userInvited = user.status === "INVITED";
@@ -118,24 +117,6 @@ function validateRoomId(roomId) {
     const isValidRoomId = roomRepository.roomExists(roomId);
     logger.info("security.validation.validateRoomId", {room:roomId, isValid:isValidRoomId});
     return isValidRoomId;
-}
-
-
-
-function invalid({room, email, username}, message) {
-    logger.warn("security.validation.invalid", {message: `${message} is invalid, redirecting to join page`, room, email, username});
-    const baseURL = getBaseURL();
-    axios({
-        method: 'post',
-        url: `${baseURL}/join`,
-        data: {
-            room: room,
-            username: username,
-            email: email
-        }
-    }).catch(error => {
-            console.error(error);
-        })
 }
 
 module.exports = { validateUserDisconnected, validateOnConnect, userDisconnected, userInvited };

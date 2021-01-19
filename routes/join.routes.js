@@ -22,11 +22,11 @@ router.post('/', async (req, res) => {
         }).withMessage('Room ID is invalid, please enter a valid room id')
         .trim().escape().run(req);
     await check('email').notEmpty().withMessage('Email cannot be blank')
-        .isEmail().withMessage('Email address is invalid')
-        .custom(value => {
-            return userInvited({room, value}) || userDisconnected({room, value});
-        }).withMessage('Email still connected or not invited to this room')
-        .trim().escape().normalizeEmail().run(req);
+        .isEmail().withMessage('Email address is invalid').custom(value => {
+            logger.info('[routes.join.validate.customEmailCheck]', {message: "Checking errors", room, value});
+            const email = value;
+            return userInvited({room, email}) || userDisconnected({room, email});
+        }).withMessage('Email still connected or not invited to this room').trim().escape().normalizeEmail().run(req);
     await check('room').notEmpty().withMessage('Room cannot be blank').custom(value => {
         return roomExists(value);
     }).withMessage('Room ID is invalid, please enter a valid room id').trim().escape().run(req);
@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
 
 });
 
-router.get(['/:room/:email/:username', '/:room/:email'],  (req, res) => {
+router.get(['/', '/:room/:email/:username', '/:room/:email'],  (req, res) => {
     const email = req.params.email;
     const room = req.params.room;
     const username = req.params.username;

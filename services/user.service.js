@@ -63,8 +63,8 @@ function emitUserHasLeft(user, socketIO) {
  * @param {string} message - reason for logout
  */
 function emitLogoutUser(user, socketIO, message) {
-    logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", socketID: user.id, logoutMessage: message});
-    new MessageEmitter(socketIO).emitEventToSocket('logoutUser', user.id, {message: message});
+    logger.info('[service.user.emitLogoutUser]', {message: "Sending logoutUser event", socketID: user.socket, logoutMessage: message});
+    new SocketEmitter(socketIO).emitEventToSocket('logoutUser', user.socket, {message: message});
 }
 
 /**
@@ -74,12 +74,19 @@ function emitLogoutUser(user, socketIO, message) {
  * @emits object containing room id and array of users in room
  */
 function sendRoomUsers(room, socketIO) {
-    const roomUsers = {
-        room: room,
-        users: userRepository.getRoomUsersByUserType(room, socketIO)
-    };
-    logger.info("[service.room.sendRoomUsers]", {roomUsers: roomUsers});
-    new SocketEmitter(socketIO).emitToAllInRoom('roomUsers', room, roomUsers);
+    const roomUserList = userRepository.getRoomUsers(room);
+    const {io} = socketIO;
+    roomUserList.forEach(user => {
+        const socketId = user.socket;
+        const userSocketIO = {socketId, io};
+        const roomUsers = {
+            room: room,
+            users: userRepository.getRoomUsersByUserType(room, socketId)
+        };
+        logger.info("[service.room.sendRoomUsers]", {roomUsers: roomUsers});
+        new SocketEmitter(userSocketIO).emitEventToSocket('roomUsers', socketId, roomUsers);
+    })
+
 }
 
 /**

@@ -144,7 +144,8 @@ export class SocketListeners {
         socket.on('setupAdmin', user => {
             // add "invite" section to DOM
             console.log('setting up admin');
-            setupAdmin(user);
+            const isAdmin = user.type === 'admin';
+            setupAdmin(isAdmin);
         });
     }
 

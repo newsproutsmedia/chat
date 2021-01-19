@@ -1,7 +1,12 @@
-import {validateUrlParams} from "./login/form.js";
+$(function() {
+    console.log('this is working');
 
-$(document).ready(function() {
+    const $joinLogoLink = $('#joinLogoLink');
 
-    //validateUrlParams();
+    $joinLogoLink.css('cursor', 'pointer');
+
+    $joinLogoLink.on('click', () => {
+        window.location="/";
+    })
 
 });

@@ -91,6 +91,9 @@ p {
 .invited {
   background-color: #5cb85c; }
 
+.blocked {
+  background-color: red; }
+
 .btn {
   border-radius: 30px;
   padding: 10px 40px;
@@ -659,6 +662,10 @@ invite > button.send-invitations-btn {
   font-size: 100%;
   margin-top: 22px; }
 
+#joinBtn {
+  margin-top: 18px;
+  margin-right: 20px; }
+
 .join {
   display: flex;
   flex-direction: column;
@@ -667,7 +674,10 @@ invite > button.send-invitations-btn {
 
 .user-input {
   text-align: left;
-  width: 500px; }
+  min-width: 400px;
+  max-width: 500px;
+  margin-left: 40px;
+  margin-right: 40px; }
 
 @media screen and (min-width: 750px) {
   /*.btn:hover {*/

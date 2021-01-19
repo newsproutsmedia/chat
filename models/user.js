@@ -17,57 +17,5 @@ module.exports = class User extends Entity {
         this.messageCount = messageCount;
         this.status = status;
     }
-
-    get _username() {
-        return this.username;
-    }
-
-    set _username(value) {
-        this.username = value;
-    }
-
-    get _email() {
-        return this.email;
-    }
-
-    set _email(value) {
-        this.email = value;
-    }
-
-    get _room() {
-        return this.room;
-    }
-
-    set _room(value) {
-        this.room = value;
-    }
-
-    get _type() {
-        return this.type;
-    }
-
-    set _type(value) {
-        this.type = value;
-    }
-
-    get _messageCount() {
-        return this.messageCount;
-    }
-
-    set _messageCount(value) {
-        this.messageCount = value;
-    }
-
-    get _status() {
-        return this.status;
-    }
-
-    /**
-     * @desc set status
-     * @param {string} value
-     */
-    set _status(value) {
-        this.status = value;
-    }
 }
 

@@ -1,16 +1,22 @@
 const io = require('socket.io-client');
-const uuid = require('uuid');
+const generateId = require('../../../utils/generateId');
 const roomService = require('../../../services/room.service');
 const userRepository = require('../../../repositories/user.repository');
+const User = require('../../../models/user');
+const messageRepository = require('../../../repositories/message.repository');
 const LogoutTimer = require('../../../services/logoutTimer.service');
-const MessageHistory = require('../../../services/messageHistory.service');
 const logger = require('../../../loaders/logger');
 const globals = require('../../../loaders/globals');
+const validation = require('../../../security/validation');
 
 const PORT = process.env.PORT || 3000;
 const socketURL = `http://localhost:${PORT}`;
 const appName = globals.getAppName();
 const roomRepository = require('../../../repositories/room.repository');
+
+let { users } = require('../../../data/users.data');
+let { rooms } = require('../../../data/rooms.data');
+let { messages } = require('../../../data/messages.data');
 
 let options = {
         transports: ['websocket'],
@@ -25,29 +31,42 @@ let client1;
 let client2;
 
 const uniqueRoomId = '76b27bed-cfe5-4a2f-9615-90533a8942d8';
-// mock entire uuid module, but only allow overwriting of v4 function
-jest.mock("uuid", () => ({
-    ...jest.requireActual("uuid"),
-    v4: jest.fn()
-}));
 
 describe("Socket.IO Server-Side Events", () => {
+
+    function zeroOutData() {
+        users = [];
+        rooms = [];
+        messages = [];
+    }
+
+    function bootstrapData() {
+        users = [{id: 'ABCDEFGH', username: 'Tom', email: 'tom@tom.com', room: uniqueRoomId, status: 'INVITED', type: 'admin', messageCount: 0}];
+        rooms = [uniqueRoomId];
+        messages = [];
+    }
 
 
 
     describe("joinRoom", () => {
         let server;
         let roomFullSpy;
+        let createRoomIdSpy;
+        let validationSpy;
 
         beforeEach(done => {
-            chatUser1 = {username: 'Tom', email: 'tom@tom.com'};
-            chatUser2 = {username: 'Sally', email: 'sally@sally.com'};
+            chatUser1 = {username: 'Tom', email: 'tom@tom.com', room: '76b27bed-cfe5-4a2f-9615-90533a8942d8'};
+            chatUser2 = {username: 'Sally', email: 'sally@sally.com', room: uniqueRoomId};
             roomFullSpy = jest.spyOn(roomService, 'roomIsFull').mockImplementation(() => false);
+            validationSpy = jest.spyOn(validation, 'validateOnConnect').mockImplementation(() => true);
+            createRoomIdSpy = jest.spyOn(generateId, 'createRoomId').mockImplementation(() => uniqueRoomId);
             server = require('../../../server').server;
             done();
         });
 
         afterEach(done => {
+            zeroOutData();
+            createRoomIdSpy.mockRestore();
             roomFullSpy.mockRestore();
             setTimeout(() => done(), 2000);
         })
@@ -57,8 +76,7 @@ describe("Socket.IO Server-Side Events", () => {
         }
 
         it('should emit welcome message to new user when they join a room', done => {
-            let roomId = 'f930702a-687c-4d0b-bdad-ccbb04eebdbd';
-            uuid.v4.mockReturnValue(roomId);
+            bootstrapData();
             client1 = io.connect(socketURL, options);
 
             client1.once('connect', () => {
@@ -631,7 +649,7 @@ describe("Socket.IO Server-Side Events", () => {
         it('should destroy room after user disconnect times out', () => {
             const disconnectTimeoutSpy = jest.spyOn(globals, "getDisconnectTimeout").mockImplementation(() => 50);
             const destroyRoomSpy = jest.spyOn(roomService, "destroyRoom");
-            const messageHistorySpy = jest.spyOn(MessageHistory, "deleteRoomMessages");
+            const messageHistorySpy = jest.spyOn(messageRepository, "deleteMessagesByRoom");
             const deleteRoomUsersSpy = jest.spyOn(userRepository, "deleteAllUsersFromRoom");
             const deleteRoomSpy = jest.spyOn(roomRepository, "deleteRoom");
 

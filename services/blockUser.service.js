@@ -3,13 +3,13 @@ const userService = require('../services/user.service');
 const logger = require('../loaders/logger');
 
 function blockUser({socket, io, id}) {
+    logger.info('[service.blockUser.blockUser]', {message: 'Attempting to block user', socket: socket.id, userID: id});
     const socketIO = {socket, io};
-    const blockedUserId = id;
+    const user = userRepository.getCurrentUserById(id);
     const message = "userBlocked";
-    userRepository.setUserBlocked(blockedUserId);
-    const user = userRepository.getCurrentUserById(blockedUserId);
+    userRepository.setUserBlocked(user.socket);
 
-    if(this.io.sockets.sockets[blockedUserId] === undefined) {
+    if(io.sockets.sockets[user.socket] === undefined) {
         logger.info('[service.blockUser.blockUser]', {message: 'User socket is undefined. User already disconnected.'});
         return userService.sendRoomUsers(user.room, socketIO);
     }
@@ -37,8 +37,7 @@ function userIsBlocked(socket) {
  */
 function cleanUpAfterBlockedUserDisconnected(socketIO) {
     logger.info('[service.blockUser.blockUser]', {message: 'Cleaning up after blocked user disconnected.'});
-    const {socket: {id}, io} = socketIO;
-    const currentUser = userRepository.getUserBySocketId(id);
+    const currentUser = userRepository.getUserBySocketId(socketIO.socket.id);
     userService.emitUserHasLeft(currentUser, socketIO);
     userService.sendRoomUsers(currentUser.room, socketIO);
 }

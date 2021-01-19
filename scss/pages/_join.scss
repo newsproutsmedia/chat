@@ -7,6 +7,9 @@
 
 .user-input {
   text-align: left;
-  width: 500px;
+  min-width: 400px;
+  max-width: 500px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 

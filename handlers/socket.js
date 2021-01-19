@@ -1,7 +1,8 @@
 const {validateOnConnect, validateUserDisconnected} = require("../security/validation");
 const socketio = require('socket.io');
 const roomService = require('../services/room.service');
-const Message = require('../services/message.service');
+const messageService = require('../services/message.service');
+const Message = require('../models/message');
 const Mail = require('../services/mail.service');
 const userService = require('../services/user.service');
 const {blockUser, userIsBlocked, cleanUpAfterBlockedUserDisconnected} = require('../services/blockUser.service');
@@ -41,7 +42,9 @@ module.exports = function(server) {
         // listen for chatMessage
         socket.on('chatMessage', message => {
             logger.info("[socket.connection.event.chatMessage]", {message: "Attempting to send chat message", messageText: message.text});
-            new Message({...message, ...socketIO}).send();
+            const chatMessage = new Message({...message, ...socketIO});
+
+            messageService.send({...chatMessage, ...socketIO});
         });
 
         // listen for email invitations

@@ -1,9 +1,10 @@
 const logger = require('../loaders/logger');
-const MessageHistory = require('./messageHistory.service');
 const Room = require('../models/room');
 const userService = require('../services/user.service');
 const userRepository = require('../repositories/user.repository');
 const roomRepository = require('../repositories/room.repository');
+const messageService = require('../services/message.service');
+const messageRepository = require('../repositories/message.repository');
 const EventEmitter = require('events');
 const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
@@ -33,13 +34,13 @@ function join({email, room, socket, io}) {
     // broadcast to everyone (except user) when user connects
     broadcastJoinedMessage(user, socketIO);
     // set up admin tools
-    if(user.type === 'admin') emitSetupAdmin(user, socketIO);
+    emitSetupAdmin(user, socketIO);
     userRepository.setUserSocket(userIndex, socket.id);
     userRepository.setUserStatus(userIndex, "ONLINE");
     // send users and room info to front end
     userService.sendRoomUsers(room, socketIO);
     // send message history to front end
-    new MessageHistory().sendMessageHistoryToUser(room, socketIO);
+    messageService.sendMessageHistoryToUser(room, socketIO);
 
 }
 
@@ -69,13 +70,13 @@ function reconnect({email, room, socket, io}) {
     broadcastReconnectMessage(user, socketIO);
 
     // set up admin tools
-    if(user.type === 'admin') emitSetupAdmin(user, socketIO);
+    emitSetupAdmin(user, socketIO);
 
     // send users and room info to front end
     userService.sendRoomUsers(room, socketIO);
 
     // send message history to front end
-    new MessageHistory().sendMessageHistoryToUser(room, socketIO);
+    messageService.sendMessageHistoryToUser(room, socketIO);
 }
 
 
@@ -98,7 +99,7 @@ function roomIsFull(roomId) {
  */
 function destroyRoom({socket, io}, room) {
     logger.info('[service.room.destroyRoom]', {message: 'performing room cleanup', room});
-    MessageHistory.deleteRoomMessages(room);
+    messageRepository.deleteMessagesByRoom(room);
     userRepository.deleteAllUsersFromRoom(room);
     roomRepository.deleteRoom(room);
 }
