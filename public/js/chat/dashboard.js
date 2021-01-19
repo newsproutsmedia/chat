@@ -6,12 +6,12 @@ const roomIcon = {id: "roomIcon", fontAwesome: "fa-door-closed", section: "room"
 const usersIcon = {id: "usersIcon", fontAwesome: "fa-user-friends", section: "users"};
 const inviteIcon = {id: "inviteIcon", fontAwesome: "fa-paper-plane", section: "invite"};
 
-export function outputDashboardMenu() {
+export function setupDashboardMenu() {
 
-    outputMenuIcon(chatIcon, true);
-    outputMenuIcon(roomIcon, false);
-    outputMenuIcon(usersIcon, true);
-    if(getIsAdmin()) outputMenuIcon(inviteIcon, true);
+    addMenuIconListener(chatIcon.id);
+    addMenuIconListener(roomIcon.id);
+    addMenuIconListener(usersIcon.id);
+    if(getIsAdmin()) addMenuIconListener(inviteIcon.id);
 
 }
 
@@ -29,7 +29,7 @@ export function outputMenuIcon({id, fontAwesome, section}, isSelected) {
     menuIcon.id = id;
     menuIcon.classList.add("view-menu-item");
     if(isSelected) menuIcon.classList.add("selected");
-    menuIcon.innerHTML = `<i id="${id}-image" class="fas ${fontAwesome} fa-lg"></i>`;
+    menuIcon.innerHTML = `<i id="${id}-image" class="fas ${fontAwesome} fa-md"></i>`;
     menuIcon.setAttribute("section", section);
     menu.appendChild(menuIcon);
     addMenuIconListener(id);

@@ -1,0 +1,15 @@
+.join {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.user-input {
+  text-align: left;
+  min-width: 400px;
+  max-width: 500px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+

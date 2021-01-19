@@ -1,10 +1,11 @@
-const MessageHistory = require('../../../services/messageHistory');
+const messageRepository = require('../../../repositories/message.repository');
+const messageService = require('../../../services/message.service');
 
 describe('messageHistory', ()=> {
 
     test('it should return false if no existing messages', done => {
-        jest.spyOn(MessageHistory, 'getRoomMessages').mockImplementation(() => {});
-        const rooms = new MessageHistory().sendMessageHistoryToUser('test', {socket: "test", io: "test"});
+        jest.spyOn(messageRepository, 'getMessagesByRoom').mockImplementation(() => {});
+        const rooms = messageService.sendMessageHistoryToUser('test', {socket: "test", io: "test"});
         expect(rooms).toBeFalsy();
         done();
     });
@@ -36,9 +37,9 @@ describe('messageHistory', ()=> {
                 },
                 text: "test message room 2"
             };
-        MessageHistory.addMessageToHistory(room1Message);
-        MessageHistory.addMessageToHistory(room2Message);
-        expect(MessageHistory.deleteRoomMessages("room2")).toEqual(
+        messageRepository.addMessageToHistory(room1Message);
+        messageRepository.addMessageToHistory(room2Message);
+        expect(messageRepository.deleteMessagesByRoom("room2")).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({text: "test message room 1"})
             ])

@@ -30,6 +30,10 @@ p {
 .spread {
   justify-content: space-between; }
 
+.break-after::after {
+  content: '\A';
+  white-space: pre; }
+
 .h-hidden {
   display: none !important;
   visibility: hidden;
@@ -83,6 +87,12 @@ p {
 
 .online {
   background-color: #61D9FA; }
+
+.invited {
+  background-color: #5cb85c; }
+
+.blocked {
+  background-color: red; }
 
 .btn {
   border-radius: 30px;
@@ -138,6 +148,43 @@ button:focus {
 
 input:focus {
   outline: none; }
+
+.error-message {
+  color: red;
+  font-size: 1em;
+  margin-bottom: 0px; }
+
+.input-label {
+  color: #ffffff;
+  margin-top: 0.5em; }
+
+.input-label::before {
+  content: '\A';
+  white-space: pre; }
+
+.input-label::after {
+  content: '\A';
+  white-space: pre; }
+
+.form-input, .form-input-rounded {
+  color: #ffffff;
+  font-weight: 100; }
+  .form-input-rounded {
+    color: black;
+    font-weight: 100;
+    background-color: white;
+    border-radius: 40px;
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    outline: none;
+    padding-bottom: 6px;
+    padding-top: 8px;
+    padding-left: 20px;
+    text-align: left;
+    width: 100%;
+    font-size: 80%;
+    letter-spacing: 3px;
+    margin-bottom: 20px; }
 
 .a-btn {
   border-radius: 30px;
@@ -582,9 +629,6 @@ invite > button.send-invitations-btn {
     color: #ffffff;
     font-weight: 100; }
   .login .username-input {
-    color: #ffffff;
-    font-weight: 100; }
-  .login input {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid #ffffff;
@@ -594,10 +638,8 @@ invite > button.send-invitations-btn {
     width: 400px;
     max-width: 80%;
     font-size: 200%;
-    letter-spacing: 3px; }
-  .login label {
-    color: #ffffff;
-    margin-top: 0.5em; }
+    letter-spacing: 3px;
+    color: white; }
   .login button {
     margin-top: 2em; }
   .login-email-buttons {
@@ -619,6 +661,23 @@ invite > button.send-invitations-btn {
 #emailInput {
   font-size: 100%;
   margin-top: 22px; }
+
+#joinBtn {
+  margin-top: 18px;
+  margin-right: 20px; }
+
+.join {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap; }
+
+.user-input {
+  text-align: left;
+  min-width: 400px;
+  max-width: 500px;
+  margin-left: 40px;
+  margin-right: 40px; }
 
 @media screen and (min-width: 750px) {
   /*.btn:hover {*/

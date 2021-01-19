@@ -13,6 +13,15 @@ module.exports = class SocketEmitter {
     }
 
     /**
+     * @desc emit an event to all connected sockets
+     * @param {string} eventType
+     * @param {string} message
+     */
+    emitToAllConnectedClients(eventType, message) {
+         this.io.emit(eventType, message);
+    }
+
+    /**
      * @desc emit an event and object back to the current user
      * @param {string} eventType - The type of event to be passed (eg 'message')
      * @param {any} object - The object to be passed with the event

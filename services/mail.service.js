@@ -1,8 +1,7 @@
 const logger = require('../loaders/logger');
 const nodemailer = require('nodemailer');
-const User = require('./user');
-const Invitations = require('./invitations');
-const MessageEmitter = require('../emitters/messageEmitter');
+const userRepository = require('../repositories/user.repository');
+const userService = require('../services/user.service');
 const SocketEmitter = require('../emitters/socketEmitter');
 
 const { google } = require("googleapis");
@@ -19,7 +18,7 @@ module.exports = class Mail {
         this.io = io;
         this.socketIO = {socket, io};
         this.recipients = recipients;
-        this.user = User.getCurrentUserById(this.socket.id);
+        this.user = userRepository.getUserBySocketId(this.socket.id);
         this.sender = {
             username: this.user.username,
             email: this.user.email,
@@ -47,7 +46,7 @@ module.exports = class Mail {
                 }
 
                 logger.info("[service.mail.sendAll.forEach.recipient.sendMail.inviteSendSuccess]", {"info": info.response});
-                Invitations.addEmailToInvitationList(this.user.room, recipient.email);
+                userService.createUser({username: mailRecipient.email, email: mailRecipient.email, room: this.sender.room, type: "user"});
                 this._emitInviteSendSuccess(mailRecipient);
             });
         });
@@ -67,11 +66,8 @@ module.exports = class Mail {
     _emitInviteSendSuccess(recipient) {
         logger.info("[service.mail.emitInviteSendSuccess]", {"message": "send successful"});
         new SocketEmitter(this.socketIO).emitEventToSender('inviteSendSuccess', recipient);
+        userService.sendRoomUsers(this.sender.room, this.socketIO);
     }
-
-
-
-
 
     // create reusable transporter object using the default SMTP transport
     _getMailTransporter = async () => {
@@ -109,13 +105,12 @@ module.exports = class Mail {
             from: process.env.EMAIL, // sender address
             to: sender.to, // message recipient (could be an array)
             subject: "ChatApp Invite", // Subject line
-            text: "You received this from ChatApp" // plain text body
-            //html: //TODO Add Sasquatch Chat logo to top of email
-                //"<h1>You're invited to join a Chat</h1>" +
-                //"<p>Follow these steps to join the chat:</p>" +
-                //"<ul><li>1. Click on the link below<li>2. Paste the encrypted message into the message box<li>3. Use your pre-arranged passcode to decrypt your chatroom id and room password.</ul>" +
-                //"<h2><u>Your ChatApp Invitation</u></h2>" +
-                //`<p>Room ID: ${sender.room}</p>`
+            //text: "You received this from ChatApp" // plain text body
+            html: //TODO Add Sasquatch Chat logo to top of email
+                `<h1>${this.sender.username} invited you to join a Chat</h1>` +
+                `<p>Click on the link below, then enter a nickname to join the chat:</p>` +
+                `<p><a href="http://localhost:3000/join/${sender.room}/${sender.to}">http://localhost:3000/join/${sender.room}/${sender.to}</a></p>` +
+                `<p>Room ID: ${sender.room}</p>`
             //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
             //TODO Create Option to Decline Invitation
         }

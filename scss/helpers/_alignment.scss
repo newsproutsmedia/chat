@@ -10,3 +10,8 @@
 .spread {
   justify-content: space-between;
 }
+
+.break-after::after {
+  content: '\A';
+  white-space: pre;
+}

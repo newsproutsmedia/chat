@@ -1,0 +1,65 @@
+<div id="app">
+    <header id="header" class="header-content">
+        <h1 id="logo" class="logo"><b>Chat</b>App!</h1>
+        <div class="header-menu">
+            <span id="showMenu" class="menu-item"><a class="site-menu"><i class="fas fa-th fa-lg"></i></a></span>
+            <span id="hideMenu" class="menu-item-selected h-hidden"><a class="site-menu"><i class="fas fa-times fa-lg"></i></a></span>
+        </div>
+    </header>
+    <nav id="navMenu" class="nav sidebar">
+        <dashmenu id="dashMenu">
+            <view class="dash-section">
+                <span id="viewMenu" class="">
+                    <span id="chatIcon" class="view-menu-item selected" section="messagePanel"><i id="chatIcon-image" class="fas fa-comments fa-md"></i></span>
+                    <span id="roomIcon" class="view-menu-item" section="room"><i id="roomIcon-image" class="fas fa-door-closed fa-md"></i></span>
+                    <span id="usersIcon" class="view-menu-item selected" section="users"><i id="usersIcon-image" class="fas fa-user-friends fa-md"></i></span>
+                    {{#when this.type 'eq' 'admin'}}
+                    <span id="inviteIcon" class="view-menu-item selected" section="invite"><i id="inviteIcon-image" class="fas fa-paper-plane fa-md"></i></span>
+                    {{/when}}
+                </span>
+            </view>
+            <room id="room" class="dash-section h-hidden">
+                <h4>Room</h4>
+                <p id="roomName">{{ this.room }}</p>
+                <button id="logoutBtn" class="btn dash-btn">Leave Room</button>
+            </room>
+
+            <users id="users" class="dash-section">
+                <h4>Users</h4>
+                <div id="usersList">
+
+                </div>
+
+                <div id="invitedList">
+                </div>
+
+            </users>
+            {{#when this.type 'eq' "admin"}}
+            <invite id="invite" class="dash-section">
+                <div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i class="fas fa-plus-circle fa-lg"></i></a></div>
+                <div id="recipients"></div>
+                <button id="sendInvitations" class="btn dash-btn h-hidden">Send Invites</button>
+            </invite>
+            {{/when}}
+        </dashmenu>
+    </nav>
+    <main id="main" class="main-content">
+        <messages id="messagePanel" class="chat-messages">
+        </messages>
+    </main>
+    <footer id="footer" class="footer-content">
+
+        <div class="message-input-align">
+            <form id="messageForm" class="message-form" action="http://localhost:3000/chat">
+                <input name="message" id="msg" type="text">
+            </form>
+            <a href="#messageSubmitBtn" id="messageSubmitBtn" class="btn submit-message link-disabled"><i id="messageBtnIcon" class="fas default-message-btn-icon"></i></a>
+        </div>
+    </footer>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.min.js" integrity="sha512-BHtomM5XDcUy7tDNcrcX1Eh0RogdWiMdXl3wJcKB3PFekXb3l5aDzymaTher61u6vEZySnoC/SAj2Y/p918Y3w==" crossorigin="anonymous"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/main.js"></script>

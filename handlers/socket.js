@@ -1,45 +1,50 @@
-const {validateUserOnConnect, validateRoomIdOnConnect} = require("../security/validation");
+const {validateOnConnect, validateUserDisconnected} = require("../security/validation");
 const socketio = require('socket.io');
-const Room = require('../services/room');
-const Message = require('../services/message');
-const Mail = require('../services/mail');
-const User = require('../services/user');
-const BlockUser = require('../services/blockUser');
-const LogoutTimer = require('../services/logoutTimer');
+const roomService = require('../services/room.service');
+const messageService = require('../services/message.service');
+const Message = require('../models/message');
+const Mail = require('../services/mail.service');
+const userService = require('../services/user.service');
+const {blockUser, userIsBlocked, cleanUpAfterBlockedUserDisconnected} = require('../services/blockUser.service');
+const LogoutTimer = require('../services/logoutTimer.service');
+const SocketEmitter = require('../emitters/socketEmitter');
 const logger = require('../loaders/logger');
 
 module.exports = function(server) {
     const io = socketio(server, {
         pingTimeout: 30000
     });
-
+    const logoutTimer = new LogoutTimer(false);
     // Run when client connects
     io.on('connection', socket => {
         const socketIO = {socket, io};
-        const logoutTimer = new LogoutTimer();
         logger.info("[socket.connection.event.connection]", {message: "Socket connected", socketID: socket.id});
         // Get username and room when user joins room
         socket.on('joinRoom', currentUser => {
 
-            logger.info("[socket.connection.event.joinRoom]", {message: "Validating Room Id", currentUser});
-            validateRoomIdOnConnect(socketIO, currentUser);
+            logger.info("[socket.connection.event.joinRoom]", {message: "Validating Current User", currentUser});
+            if(!validateOnConnect(currentUser)) {
+                return new SocketEmitter(socketIO).emitEventToSender('invalidUser', currentUser);
+            }
 
             logger.info("[socket.connection.event.joinRoom]", {message: "Attempting to join room", currentUser});
 
-            if(validateUserOnConnect(socketIO, currentUser)) {
-                logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User validated, attempting to reconnect", currentUser});
-                logoutTimer.stopLogoutTimer();
-                return new Room({...currentUser, ...socketIO}).reconnect();
+            if(validateUserDisconnected(currentUser)) {
+                logger.info("[socket.connection.event.joinRoom.validateUserOnConnect]", {message: "User invited, attempting to reconnect", currentUser});
+                logoutTimer.stop();
+                return roomService.reconnect({...currentUser, ...socketIO});
             }
 
             // if room and/or user don't exist
-            new Room({...currentUser, ...socketIO}).join();
+            roomService.join({...currentUser, ...socketIO});
         });
 
         // listen for chatMessage
         socket.on('chatMessage', message => {
             logger.info("[socket.connection.event.chatMessage]", {message: "Attempting to send chat message", messageText: message.text});
-            new Message({...message, ...socketIO}).send();
+            const chatMessage = new Message({...message, ...socketIO});
+
+            messageService.send({...chatMessage, ...socketIO});
         });
 
         // listen for email invitations
@@ -52,13 +57,19 @@ module.exports = function(server) {
 
         // listen for block user event
         socket.on('blockUser', id => {
-          new BlockUser({...socketIO, id}).blockUser();
+            logger.info("[socket.connection.event.blockUser]", {message: "Block user event for user: ", id});
+            blockUser({...socketIO, id});
         });
 
         // Runs when client is disconnected
         socket.on('disconnect', reason => {
             logger.info("[socket.connection.event.disconnect]", {message: "User disconnected", reason});
-            BlockUser.userIsBlocked(socket) ? BlockUser.cleanUpAfterBlockedUserDisconnected(socketIO) : User.userDisconnected(socketIO, logoutTimer);
+            userIsBlocked(socket) ? cleanUpAfterBlockedUserDisconnected(socketIO) : userService.userDisconnected(socketIO, logoutTimer);
+        });
+
+        process.on('exit', (code) => {
+            logger.info("[socket.connection.event.process.exit]", {message: "NodeJs Shutting Down", code});
+            new SocketEmitter(socketIO).emitToAllConnectedClients('systemCrash', 'systemCrash');
         });
 
     });

@@ -1,9 +1,9 @@
-const User = require('../../../services/user');
+const userRepository = require('../../../repositories/user.repository');
 
 describe('test user', () => {
 
     test('should return "user" if type not valid', done => {
-        const userType = User.setUserType('test');
+        const userType = userRepository.setType('test');
         expect(userType).toBe('user');
         done();
     });
