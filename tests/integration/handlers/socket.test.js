@@ -6,6 +6,7 @@ const messageRepository = require('../../../repositories/message.repository');
 const LogoutTimer = require('../../../services/logoutTimer.service');
 const logger = require('../../../loaders/logger');
 const globals = require('../../../loaders/globals');
+const DataRecovery = require('../../../handlers/dataRecovery');
 
 const PORT = process.env.PORT || 4000;
 const socketURL = `http://localhost:${PORT}`;
@@ -46,6 +47,7 @@ describe("Socket.IO Server-Side Events", () => {
         server = require('../../../server');
         server.listen(PORT, () => {
             logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
+            new DataRecovery().onStartup();
         });
     });
 

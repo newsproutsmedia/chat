@@ -43,10 +43,6 @@ app.engine('hbs', handlebars({
     defaultLayout: 'index'
 }));
 
-// Set up handler to manage data recovery
-// in case of unexpected Node shutdown
-new DataRecovery(app);
-
 require('./loaders/handlebars');
 
 // Server
@@ -55,6 +51,9 @@ const server = http.createServer(app);
 if (process.env.NODE_ENV !== "test") {
         server.listen(PORT, () => {
             logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
+            // Set up handler to manage data recovery
+            // in case of unexpected Node shutdown
+            new DataRecovery().onStartup();
         });
 }
 
