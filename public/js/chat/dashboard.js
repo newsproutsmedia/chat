@@ -24,7 +24,9 @@ export function toggleMenuIcon(event) {
     const menuItem = event.target.parentNode;
     if(menuItem.classList.contains("selected")) {
         menuItem.classList.remove("selected");
+        menuItem.classList.add("default");
     } else {
+        menuItem.classList.remove("default");
         menuItem.classList.add("selected");
     }
     toggleSection(menuItem.getAttribute("section"));

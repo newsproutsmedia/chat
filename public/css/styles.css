@@ -541,11 +541,13 @@ body > dashboard > button.leave-room {
   flex-direction: row;
   justify-content: space-around; }
 
-.view-menu-item, .view-menu-item.selected, .view-menu-item:hover {
+.view-menu-item, .view-menu-item.selected, .view-menu-item.default, .view-menu-item:hover {
   font-size: 2em;
   color: #333333; }
   .selected.view-menu-item {
     color: #61D9FA; }
+  .default.view-menu-item {
+    color: #333333; }
   .view-menu-item:hover {
     color: #61D9FA;
     cursor: pointer; }
@@ -680,10 +682,6 @@ invite > button.send-invitations-btn {
   margin-right: 40px; }
 
 @media screen and (min-width: 750px) {
-  /*.btn:hover {*/
-  /*    background-color: #ffffff;*/
-  /*    color: #000000;*/
-  /*}*/
   .default-message-btn-icon:before {
     content: "\f1d8"; }
   .send-message-btn-icon:before {
