@@ -19,19 +19,23 @@ export function setupDashboardMenu() {
 export function addMenuIconListener(id) {
     let listener = document.getElementById(id);
     if(userAgentIsMobile()) {
+        console.log('mobile detected, using touchend');
         listener.addEventListener('touchend', toggleMenu);
     } else {
+        console.log('desktop detected, using click');
         listener.addEventListener('click', toggleMenu);
     }
 }
 
 export function toggleMenu(event) {
+    console.log('toggling menu item');
     toggleMenuIcon(event);
     toggleSection(event);
 }
 
 export function toggleMenuIcon(event) {
     const menuItem = event.target.parentNode;
+    console.log("menu icon target: ", menuItem);
     if(menuItem.classList.contains("selected")) {
         menuItem.classList.remove("selected");
         menuItem.classList.add("default");
