@@ -1,5 +1,5 @@
 import {getIsAdmin} from "./admin.js";
-import {removeDisconnectUserButtonListeners, addDisconnectUserButtonListener} from "./listeners/userItemMenuListeners.js";
+import {addDisconnectUserButtonListener} from "./listeners/userItemMenuListeners.js";
 
 let maxUsers = 1;
 let connectedUsers = [];

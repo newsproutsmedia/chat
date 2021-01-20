@@ -1,6 +1,5 @@
 import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages.js";
 
-const initHeight = window.innerHeight;
 const messageInput = document.getElementById('msg');
 const messageForm = document.getElementById('messageForm');
 const messageSubmitBtn = document.getElementById('messageSubmitBtn');

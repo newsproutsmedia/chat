@@ -33,10 +33,9 @@ class Logger {
         })
     }
 
-    // Uncomment to implement various log levels
-/*    debug(log, metadata) {
+    debug(log, metadata) {
         this.logger.debug(log, metadata);
-    }*/
+    }
 
     info(log, metadata) {
         this.logger.info(log, metadata);
@@ -49,20 +48,7 @@ class Logger {
     error(log, metadata) {
         this.logger.error(log, metadata);
     }
-
-/*    log(level, log, metadata) {
-        const metadataObject = {}
-        if (metadata) metadataObject.metadata = metadata
-
-        this.logger[level](log, metadataObject)
-    }*/
 }
 
 // Logger has a name
 module.exports = new Logger(process.env.APP_NAME || "ChatApp");
-
-// Uncomment to expose a function if we want
-// to use the logger with custom parameters
-/*module.getLogger = (name) => {
-    return new Logger(name);
-}*/

@@ -1,4 +1,4 @@
-let rooms = require('../data/rooms.data');
+let {rooms} = require('../data/data');
 
 function addRoom(roomId) {
     rooms.push(roomId);

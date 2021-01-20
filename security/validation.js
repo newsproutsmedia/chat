@@ -7,7 +7,6 @@ const roomRepository = require('../repositories/room.repository');
  * @param {Object} currentUser - room, email, username
  */
 function validateOnConnect(currentUser) {
-    // check if roomID is valid
     return userStatusIsValid(currentUser) && roomIsValid(currentUser) && roomUserIsValid(currentUser);
 }
 
@@ -46,7 +45,6 @@ function validateUserDisconnected(currentUser) {
 }
 
 function userRoomIdExists(currentUser) {
-    // check if room with that id exists
     if(roomRepository.roomExists(currentUser.room)) {
         logger.info("[security.validation.roomIdExists]", {roomExists: true});
         return true;
@@ -61,7 +59,6 @@ function userRoomIdExists(currentUser) {
  * @param {Object} currentUser - room and email
  */
 function userExistsInRoom(currentUser) {
-    // check if user exists in room
     if(userRepository.getUsersByEmailAndRoom(currentUser.room, currentUser.email).length > 0) {
         logger.info("[security.validation.userExistsInRoom]", {userExists: true});
         return true;
@@ -89,7 +86,6 @@ function usernameMatches(currentUser) {
  * @param {Object} currentUser - room and email
  */
 function userDisconnected({room, email}) {
-    // if user exists, check that their status is set to "DISCONNECTED"
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
     if(user && user.status === "DISCONNECTED") {
         logger.info("[security.validation.userDisconnected]", {userDisconnected: true});
@@ -105,7 +101,6 @@ function userDisconnected({room, email}) {
  */
 function userInvited({room, email}) {
     logger.info("[security.validation.userInvited]", {room, email});
-    // if user exists, check that their status is set to "INVITED"
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
     if(user && user.status === "INVITED") {
         logger.info("[security.validation.userInvited]", {userInvited: true});

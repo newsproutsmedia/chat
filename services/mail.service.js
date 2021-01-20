@@ -69,7 +69,6 @@ module.exports = class Mail {
         userService.sendRoomUsers(this.sender.room, this.socketIO);
     }
 
-    // create reusable transporter object using the default SMTP transport
     _getMailTransporter = async () => {
         const oauth2Client = new OAuth2(
             process.env.CLIENT_ID,
@@ -99,20 +98,15 @@ module.exports = class Mail {
     }
 
     _formatMail(sender) {
-        //let recipients = sender.recipients.join(', ');
         return {
-            // from: `"${sender.username}" <${sender.email}>`, // sender address
-            from: process.env.EMAIL, // sender address
-            to: sender.to, // message recipient (could be an array)
-            subject: "ChatApp Invite", // Subject line
-            //text: "You received this from ChatApp" // plain text body
+            from: process.env.EMAIL,
+            to: sender.to,
+            subject: "ChatApp Invite",
             html: //TODO Add Sasquatch Chat logo to top of email
                 `<h1>${this.sender.username} invited you to join a Chat</h1>` +
                 `<p>Click on the link below, then enter a nickname to join the chat:</p>` +
                 `<p><a href="http://localhost:3000/join/${sender.room}/${sender.to}">http://localhost:3000/join/${sender.room}/${sender.to}</a></p>` +
                 `<p>Room ID: ${sender.room}</p>`
-            //TODO password protect rooms `<p>Password: ${sender.room.password}</p>` // html body
-            //TODO Create Option to Decline Invitation
         }
     }
 

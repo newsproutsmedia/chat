@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const UncaughtException = require('./handlers/uncaughtException');
+const DataRecovery = require('./handlers/dataRecovery');
 const handlebars = require('express-handlebars');
 
 // load route modules
@@ -41,6 +42,10 @@ app.engine('hbs', handlebars({
     extname: 'hbs',
     defaultLayout: 'index'
 }));
+
+// Set up handler to manage data recovery
+// in case of unexpected Node shutdown
+new DataRecovery(app);
 
 require('./loaders/handlebars');
 

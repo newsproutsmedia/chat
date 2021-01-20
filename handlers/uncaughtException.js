@@ -1,5 +1,4 @@
 const logger = require('../loaders/logger');
-const SocketEmitter = require('../emitters/socketEmitter');
 
 /**
  * @desc construct a new uncaught exception handler

@@ -1,4 +1,4 @@
-let { users } = require('../data/users.data');
+let { users } = require('../data/data');
 const logger = require('../loaders/logger');
 const {getUserTypes} = require('../loaders/globals');
 

@@ -47,18 +47,7 @@ export function removeInviteField(id) {
     document.getElementById("inviteWrapper_" + id).parentNode.removeChild(inviteField);
 }
 
-/**
- * @description add invite section to DOM
- */
 export function setupInviteSection() {
-/*    if(document.getElementsByTagName('invite').length > 0) return;
-    const inviteSection = document.createElement('invite');
-    inviteSection.id = "invite";
-    inviteSection.className = "dash-section";
-    inviteSection.innerHTML = `<div class="flex-row align-center spread mb-2"><h4>Invite</h4><a id="addMember"><i id="addMemberIcon" class="fas fa-plus-circle fa-lg"></i></a></div>
-                            <div id="recipients"></div>
-                <button id="sendInvitations" class="btn dash-btn h-hidden">Send Invites</button>`;
-    document.querySelector('#dashMenu').appendChild(inviteSection);*/
     new InviteListeners();
 }
 
@@ -89,13 +78,6 @@ export function outputAllInvitedUsers(inviteListElement, users) {
             outputInvitedUser(inviteListElement, email.email);
         });
     }
-}
-
-/**
- * @description empty invited user list
- */
-export function clearInvitedList() {
-    document.getElementById('invitedList').innerHTML = '';
 }
 
 /**

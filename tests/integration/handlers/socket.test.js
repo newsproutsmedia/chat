@@ -12,9 +12,7 @@ const socketURL = `http://localhost:${PORT}`;
 const appName = globals.getAppName();
 const roomRepository = require('../../../repositories/room.repository');
 
-let { users } = require('../../../data/users.data');
-let { rooms } = require('../../../data/rooms.data');
-let { messages } = require('../../../data/messages.data');
+let { users, rooms, messages } = require('../../../data/data');
 
 let options = {
         transports: ['websocket'],

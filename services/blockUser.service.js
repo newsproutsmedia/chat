@@ -26,7 +26,6 @@ function blockUser({socket, io, id}) {
 function userIsBlocked(socket) {
     logger.info('[service.blockUser.userIsBlocked]', {message: 'Checking if user is blocked'});
     const user = userRepository.getUserBySocketId(socket.id);
-    // check that user exists, in case client was denied access to room and user never created
     if(user) return user.status === "BLOCKED";
     return false;
 }

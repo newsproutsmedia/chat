@@ -6,7 +6,6 @@ const { roomExists } = require('../repositories/room.repository');
 const { usernameExistsInRoom, updateUsername } = require('../repositories/user.repository');
 const { userDisconnected, userInvited } = require('../security/validation');
 
-// Include Express Validator Functions
 const { check, validationResult } = require('express-validator');
 
 router.post('/', async (req, res) => {

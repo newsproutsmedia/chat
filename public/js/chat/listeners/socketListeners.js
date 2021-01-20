@@ -1,9 +1,8 @@
 // socket listeners
 import {logout} from "../utils/logout.js";
-import {outputRoomName, updateUrlRoom} from "../rooms.js";
+import {updateUrlRoom} from "../rooms.js";
 import {incrementMaxUsers, outputUsers} from "../users.js";
 import {
-    outputInvitedUser,
     outputSendErrorMessage,
     outputSendFailureMessage,
     setInviteButtonStateAfterSend,
@@ -196,16 +195,11 @@ export class SocketListeners {
     onDisconnect() {
         socket.on('disconnect', reason => {
            console.log('User disconnected: ' + reason);
-           // display fullscreen overlay showing disconnect notice with "attempting to reconnect"
-            // update number of attempts
-            // show disconnect countdown "disconnecting in X" -- start timer
-           // attempt to reconnect
         });
     }
     onReconnectAttempt() {
         socket.on('reconnect_attempt', attemptNumber => {
             console.log('Attempting to reconnect...');
-            // update reconnect number on overlay
         })
     }
 

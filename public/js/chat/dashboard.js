@@ -15,26 +15,6 @@ export function setupDashboardMenu() {
 
 }
 
-/**
- * @desc output icon to dashboard menu
- * @param {object} icon - id, fontAwesome, section
- * @param {string} icon.id - identifier to be used for icon id
- * @param {string} icon.fontAwesome - font awesome icon tag
- * @param {string} icon.section - id of menu section to be toggled by icon
- * @param {boolean} isSelected - is icon selected by default
-
- */
-export function outputMenuIcon({id, fontAwesome, section}, isSelected) {
-    let menuIcon = document.createElement('span');
-    menuIcon.id = id;
-    menuIcon.classList.add("view-menu-item");
-    if(isSelected) menuIcon.classList.add("selected");
-    menuIcon.innerHTML = `<i id="${id}-image" class="fas ${fontAwesome} fa-md"></i>`;
-    menuIcon.setAttribute("section", section);
-    menu.appendChild(menuIcon);
-    addMenuIconListener(id);
-}
-
 export function addMenuIconListener(id) {
     let listener = document.getElementById(id);
     listener.addEventListener('click', toggleMenuIcon);

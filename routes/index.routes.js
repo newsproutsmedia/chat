@@ -4,7 +4,6 @@ const router = express.Router();
 const logger = require('../loaders/logger');
 const { createRoom } = require('../services/room.service');
 const { getAllRooms } = require('../repositories/room.repository');
-// Include Express Validator Functions
 const { check, validationResult } = require('express-validator');
 const { createUser } = require('../services/user.service');
 
@@ -16,7 +15,6 @@ router.post('/', async (req, res) => {
     const username = req.body.username;
     const email = req.body.email;
 
-    // check that username and email are valid
     logger.info('[routes.index.post]', {message: "Validating request", username, email});
 
     await check('username').notEmpty().withMessage('Nickname cannot be blank')
@@ -38,7 +36,6 @@ router.post('/', async (req, res) => {
     } else {
         logger.info('[routes.index.post]', {message: "No errors found, redirecting to chat page"});
 
-        // create room
         const room = createRoom();
         logger.info('[routes.index.post]', {rooms: getAllRooms()});
 
