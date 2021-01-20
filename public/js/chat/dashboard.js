@@ -1,4 +1,5 @@
 import {getIsAdmin} from "./admin.js";
+import {userAgentIsMobile} from "./utils/detectUserAgent.js";
 
 const menu = document.getElementById('viewMenu');
 const chatIcon = {id: "chatIcon", fontAwesome: "fa-comments", section: "messagePanel"};
@@ -17,7 +18,16 @@ export function setupDashboardMenu() {
 
 export function addMenuIconListener(id) {
     let listener = document.getElementById(id);
-    listener.addEventListener('click', toggleMenuIcon);
+    if(userAgentIsMobile()) {
+        listener.addEventListener('touchend', toggleMenu);
+    } else {
+        listener.addEventListener('click', toggleMenu);
+    }
+}
+
+export function toggleMenu(event) {
+    toggleMenuIcon(event);
+    toggleSection(event);
 }
 
 export function toggleMenuIcon(event) {
