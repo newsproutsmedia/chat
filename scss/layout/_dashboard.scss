@@ -72,6 +72,11 @@ body > dashboard > button.leave-room {
     color: $accent;
   }
 
+  &.default {
+    @extend .view-menu-item;
+    color: $primary;
+  }
+
   &:hover {
     @extend .view-menu-item;
     color: $accent;
