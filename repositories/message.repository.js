@@ -1,4 +1,4 @@
-let { messages } = require('../data/messages.data');
+let { messages } = require('../data/data');
 const logger = require('../loaders/logger');
 
 /**

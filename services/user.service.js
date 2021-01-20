@@ -24,18 +24,14 @@ function userDisconnected({socket, io}, logoutTimer) {
     const currentUser = userRepository.getUserBySocketId(socket.id);
     logger.info('[service.user.userDisconnected]', {message: `User (${currentUser.username}) leaving room`, room: currentUser.room});
 
-    // notify other chat participants that user has left
     emitUserHasLeft(currentUser, socketIO);
 
-    // set user status to DISCONNECTED
     const index = userRepository.getUserIndexById(currentUser.id);
     userRepository.setUserStatus(index,"DISCONNECTED");
     logger.info("[service.user.userDisconnected]", {message: "Status Changed", userStatus: currentUser.status});
 
-    // send updated users and room info
     sendRoomUsers(currentUser.room, socketIO);
 
-    // check if current user is the last one in the room and destroy the room if it is
     destroyRoomOnLastUserDisconnected(socketIO, logoutTimer);
 }
 

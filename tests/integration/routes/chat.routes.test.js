@@ -3,9 +3,7 @@ const supertest = require('supertest');
 const roomService = require('../../../services/room.service');
 const userService = require('../../../services/user.service');
 
-let { users } = require('../../../data/users.data');
-let { rooms } = require('../../../data/rooms.data');
-let { messages } = require('../../../data/messages.data');
+let { users, rooms, messages } = require('../../../data/data');
 
 describe('chat /', () => {
     let server;

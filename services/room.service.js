@@ -29,55 +29,42 @@ function join({email, room, socket, io}) {
     userRepository.setUserSocket(userIndex, socket.id);
     userRepository.setUserStatus(userIndex, "ONLINE");
 
-    // welcome current user
     emitWelcome(user, socketIO);
 
-    // broadcast to everyone (except user) when user connects
     broadcastJoinedMessage(user, socketIO);
 
-    // set up admin tools
     emitSetupAdmin(user, socketIO);
 
-    // send users and room info to front end
     userService.sendRoomUsers(room, socketIO);
 
-    // send message history to front end
     messageService.sendMessageHistoryToUser(room, socketIO);
 
 }
 
 function reconnect({email, room, socket, io}) {
     const socketIO = {socket, io};
-    // stop disconnect countdown
+
     const stopTimerEmitter = new EventEmitter();
     stopTimerEmitter.emit("stopTimer");
 
-    // update userID
     const user = userRepository.getCurrentUserByRoomAndEmail(room, email);
     const userIndex = userRepository.getUserIndexById(user.id);
     logger.info("[service.room.reconnect]", {user});
     userRepository.setUserSocket(userIndex, socket.id);
 
-    // update connection status
     userRepository.setUserStatus(userIndex, "ONLINE");
 
-    // rejoin room
     logger.info("[service.room.reconnect]", {room: room});
     socket.join(room);
 
-    // emit reconnect event
     emitReconnect(user, socketIO);
 
-    // broadcast to everyone (except user) when user connects
     broadcastReconnectMessage(user, socketIO);
 
-    // set up admin tools
     emitSetupAdmin(user, socketIO);
 
-    // send users and room info to front end
     userService.sendRoomUsers(room, socketIO);
 
-    // send message history to front end
     messageService.sendMessageHistoryToUser(room, socketIO);
 }
 

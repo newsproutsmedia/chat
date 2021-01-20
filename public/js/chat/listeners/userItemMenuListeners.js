@@ -5,13 +5,6 @@ import {emitBlockUser} from "../emitters/socketEmitters.js";
         disconnectUserButton.addEventListener('click', kickOutUser);
     }
 
-    export function removeDisconnectUserButtonListeners(users) {
-        users.forEach(user => {
-            const disconnectButton = document.getElementById(`${user.id}-disconnect`);
-            disconnectButton.removeEventListener('click', kickOutUser);
-        });
-    }
-
     function kickOutUser(evt) {
         const socketId = evt.currentTarget.getAttribute('data-value');
         const username = evt.currentTarget.getAttribute('data-username');

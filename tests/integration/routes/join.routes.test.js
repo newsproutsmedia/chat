@@ -1,17 +1,9 @@
 const supertest = require('supertest');
 
 const roomService = require('../../../services/room.service');
-const userRepository = require('../../../repositories/user.repository');
 const userService = require('../../../services/user.service');
-const messageRepository = require('../../../repositories/message.repository');
-const logger = require('../../../loaders/logger');
-const globals = require('../../../loaders/globals');
 
-const roomRepository = require('../../../repositories/room.repository');
-
-let { users } = require('../../../data/users.data');
-let { rooms } = require('../../../data/rooms.data');
-let { messages } = require('../../../data/messages.data');
+let { users, rooms, messages } = require('../../../data/data');
 
 describe('join /', () => {
     let server;

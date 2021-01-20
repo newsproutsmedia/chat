@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const UncaughtException = require('./handlers/uncaughtException');
+const DataRecovery = require('./handlers/dataRecovery');
 const handlebars = require('express-handlebars');
 
 // load route modules
@@ -50,6 +51,9 @@ const server = http.createServer(app);
 if (process.env.NODE_ENV !== "test") {
         server.listen(PORT, () => {
             logger.info(`Server is running!`, {port: `${PORT}`, mode: `${process.env.NODE_ENV}`});
+            // Set up handler to manage data recovery
+            // in case of unexpected Node shutdown
+            new DataRecovery().onStartup();
         });
 }
 

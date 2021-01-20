@@ -7,7 +7,6 @@ export const messageBtnIconId = 'messageBtnIcon';
 export const messageBtnDefault = {id: messageBtnId, style: 'btn-default', icon: {id: messageBtnIconId, style: 'default-message-btn-icon'}};
 export const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: messageBtnIconId, style: 'send-message-btn-icon'}};
 export const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
-const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('msg');
 
 /**

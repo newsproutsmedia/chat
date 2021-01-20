@@ -1,10 +1,7 @@
 import {loremIpsum} from "./utils/loremIpsum.js";
 
-const header = document.getElementById('header');
 const nav = document.getElementById('navMenu');
-const main = document.getElementById('main');
 const lorem = document.getElementById('lorem');
-const footer = document.getElementById('footer');
 const loremBtn = document.getElementById('loadLoremBtn');
 const showMenuBtn = document.getElementById('showMenu');
 const hideMenuBtn = document.getElementById('hideMenu');
