@@ -11,7 +11,7 @@ router.get(['/', '/index', 'index.html', 'home', 'home.html'],  (req, res) => {
     res.status(200).render('home');
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
     const username = req.body.username;
     const email = req.body.email;
 
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
 
     if (errors.length > 0) {
         logger.info('[routes.index.post]', {message: "Errors found", errors});
-        res.sendStatus(400).render('home', {
+        res.render('home', {
             errors: errors
         });
     } else {

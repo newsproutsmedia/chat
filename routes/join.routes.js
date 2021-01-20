@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 
     if (errors.length > 0) {
         logger.info('[routes.join.validate]', {message: "Errors found", errors});
-        res.sendStatus(403).render('join', {
+        res.render('join', {
             errors: errors,
             layout: 'index',
             username: username,
@@ -57,7 +57,7 @@ router.get(['/', '/:room/:email/:username', '/:room/:email'],  (req, res) => {
     const room = req.params.room;
     const username = req.params.username;
 
-    res.sendStatus(200).render('join', {
+    res.render('join', {
         layout: 'index',
         email: email,
         room: room,
