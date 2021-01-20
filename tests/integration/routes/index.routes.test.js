@@ -35,11 +35,11 @@ describe('home /', () => {
             .expect(302)
     });
 
-    it('returns 400 when user data is NOT valid', async () => {
+    it('returns 200 when user data is NOT valid', async () => {
 
         await supertest(server)
             .post('/')
             .send(chatUser2)
-            .expect(400)
+            .expect(200)
     });
 })

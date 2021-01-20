@@ -55,7 +55,7 @@ describe('join /', () => {
             .expect(302)
     });
 
-    it('returns 403 when user data is invalid', async () => {
+    it('returns 200 when user data is invalid', async () => {
         zeroOutData();
         const {id: roomId} = roomService.createRoom();
         chatUser1 = connectUser(chatUser1, roomId, "admin");
@@ -64,6 +64,6 @@ describe('join /', () => {
         await supertest(server)
             .post('/join')
             .send(chatUser3)
-            .expect(403)
+            .expect(200)
     });
 })
