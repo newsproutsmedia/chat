@@ -67,13 +67,11 @@ body > dashboard > button.leave-room {
   font-size: 2em;
   color: $primary;
 
-  &.selected {
-    @extend .view-menu-item;
+  > i.selected {
     color: $accent;
   }
 
-  &.default {
-    @extend .view-menu-item;
+  > i.default {
     color: $primary;
   }
 

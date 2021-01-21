@@ -541,12 +541,12 @@ body > dashboard > button.leave-room {
   flex-direction: row;
   justify-content: space-around; }
 
-.view-menu-item, .view-menu-item.selected, .view-menu-item.default, .view-menu-item:hover {
+.view-menu-item, .view-menu-item:hover {
   font-size: 2em;
   color: #333333; }
-  .selected.view-menu-item {
+  .view-menu-item > i.selected {
     color: #61D9FA; }
-  .default.view-menu-item {
+  .view-menu-item > i.default {
     color: #333333; }
   .view-menu-item:hover {
     color: #61D9FA;
