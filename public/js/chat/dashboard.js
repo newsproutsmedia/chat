@@ -18,13 +18,8 @@ export function setupDashboardMenu() {
 
 export function addMenuIconListener(id) {
     let listener = document.getElementById(id);
-    if(userAgentIsMobile()) {
-        console.log('mobile detected, using touchend');
-        listener.addEventListener('touchend', toggleMenu);
-    } else {
         console.log('desktop detected, using click');
         listener.addEventListener('click', toggleMenu);
-    }
 }
 
 export function toggleMenu(event) {
