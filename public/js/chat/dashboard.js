@@ -1,5 +1,4 @@
 import {getIsAdmin} from "./admin.js";
-import {userAgentIsMobile} from "./utils/detectUserAgent.js";
 
 const menu = document.getElementById('viewMenu');
 const chatIcon = {id: "chatIcon-image", fontAwesome: "fa-comments", section: "messagePanel"};
