@@ -52,13 +52,11 @@ export class MenuListeners {
     static showShowMenuBtn() {
         hideMenuBtn.classList.add('h-hidden');
         showMenuBtn.classList.remove('h-hidden');
-        logo.classList.remove('logo-border-bottom');
     }
 
     static showHideMenuBtn() {
         hideMenuBtn.classList.remove('h-hidden');
         showMenuBtn.classList.add('h-hidden');
-        logo.classList.add('logo-border-bottom');
     }
 
     static toggleMenuPosition() {

@@ -13,12 +13,19 @@ h4,
 h5 {
   font-family: "Montserrat", sans-serif; }
 
+h1 {
+  font-size: 200%; }
+
 h2 {
   font-weight: 200; }
 
 p {
   font-family: "Open Sans", sans-serif;
   font-weight: 100; }
+
+@media screen and (min-width: 750px) {
+  h1 {
+    font-size: 250%; } }
 
 .flex-row {
   display: flex;
@@ -340,7 +347,8 @@ header {
 .header-menu {
   align-self: flex-end;
   height: 65%;
-  display: flex; }
+  display: flex;
+  margin-bottom: -1px; }
   .header-menu-item {
     margin-left: 2em; }
 
@@ -481,7 +489,7 @@ messages::-webkit-scrollbar-thumb {
   transition: top 0.6s ease-in-out; }
 
 .slidedown {
-  top: 80px; }
+  top: 81px; }
 
 #loadLoremBtn.btn {
   align-self: center; }
@@ -642,7 +650,8 @@ invite > button.send-invitations-btn {
   min-height: calc(100vh - 160px);
   display: flex;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  padding: 0px 2em; }
   .login .form-control {
     background-color: transparent;
     border: transparent;
@@ -650,7 +659,7 @@ invite > button.send-invitations-btn {
     text-align: center; }
   .login .title {
     margin-bottom: 1rem;
-    font-size: 200%;
+    font-size: 175%;
     color: #ffffff;
     font-weight: 100; }
   .login .username-input {
@@ -660,7 +669,6 @@ invite > button.send-invitations-btn {
     outline: none;
     padding-bottom: 6px;
     text-align: center;
-    width: 400px;
     max-width: 80%;
     font-size: 200%;
     letter-spacing: 3px;
@@ -688,8 +696,17 @@ invite > button.send-invitations-btn {
   margin-top: 22px; }
 
 #joinBtn {
-  margin-top: 18px;
-  margin-right: 20px; }
+  margin-top: 29px;
+  margin-right: 20px;
+  padding: 5px 20px;
+  font-size: 80%; }
+
+@media screen and (min-width: 750px) {
+  .login .title {
+    font-size: 200%;
+    width: 400px; }
+  #joinBtn {
+    font-size: 100%; } }
 
 .join {
   display: flex;
@@ -699,7 +716,7 @@ invite > button.send-invitations-btn {
 
 .user-input {
   text-align: left;
-  min-width: 400px;
+  min-width: 292px;
   max-width: 500px;
   margin-left: 40px;
   margin-right: 40px; }
