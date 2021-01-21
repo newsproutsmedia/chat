@@ -2,10 +2,10 @@ import {getIsAdmin} from "./admin.js";
 import {userAgentIsMobile} from "./utils/detectUserAgent.js";
 
 const menu = document.getElementById('viewMenu');
-const chatIcon = {id: "chatIcon", fontAwesome: "fa-comments", section: "messagePanel"};
-const roomIcon = {id: "roomIcon", fontAwesome: "fa-door-closed", section: "room"};
-const usersIcon = {id: "usersIcon", fontAwesome: "fa-user-friends", section: "users"};
-const inviteIcon = {id: "inviteIcon", fontAwesome: "fa-paper-plane", section: "invite"};
+const chatIcon = {id: "chatIcon-image", fontAwesome: "fa-comments", section: "messagePanel"};
+const roomIcon = {id: "roomIcon-image", fontAwesome: "fa-door-closed", section: "room"};
+const usersIcon = {id: "usersIcon-image", fontAwesome: "fa-user-friends", section: "users"};
+const inviteIcon = {id: "inviteIcon-image", fontAwesome: "fa-paper-plane", section: "invite"};
 
 export function setupDashboardMenu() {
 
@@ -29,12 +29,13 @@ export function addMenuIconListener(id) {
 
 export function toggleMenu(event) {
     console.log('toggling menu item');
+    const menuItem = event.target.parentNode;
     toggleMenuIcon(event);
-    toggleSection(event);
+    toggleSection(menuItem.getAttribute("section"));
 }
 
 export function toggleMenuIcon(event) {
-    const menuItem = event.target.parentNode;
+    const menuItem = event.target;
     console.log("menu icon target: ", menuItem);
     if(menuItem.classList.contains("selected")) {
         menuItem.classList.remove("selected");
