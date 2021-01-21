@@ -1,4 +1,5 @@
 import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages.js";
+import {userAgentIsMobile} from "../utils/detectUserAgent";
 
 const messageInput = document.getElementById('msg');
 const messageForm = document.getElementById('messageForm');
@@ -11,6 +12,7 @@ export class MessageInputListeners {
         this.messageSubmitButtonClickListener();
         this.messageInputEnterListener();
         this.messageSubmitButtonEnterListener();
+        this.messageInputClickListener();
     }
 
     messageInputBlurListener() {
@@ -62,5 +64,13 @@ export class MessageInputListeners {
             }
         });
 
+    }
+
+    messageInputClickListener() {
+        if(userAgentIsMobile()) {
+            messageInput.addEventListener('touchend', ()=> {
+                messageInput.focus();
+            })
+        }
     }
 }
