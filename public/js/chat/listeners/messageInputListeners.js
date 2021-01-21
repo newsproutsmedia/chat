@@ -1,5 +1,4 @@
 import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages.js";
-import {userAgentIsMobile} from "../utils/detectUserAgent";
 
 const messageInput = document.getElementById('msg');
 const messageForm = document.getElementById('messageForm');
@@ -45,7 +44,6 @@ export class MessageInputListeners {
             console.log('message submit keyup');
             if (event.code === 'Enter') {
                 return false;
-                messageSubmitBtn.click();
             }
         });
     };
