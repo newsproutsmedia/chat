@@ -68,6 +68,12 @@ p {
 .opacity-100 {
   opacity: 1; }
 
+.zz-top {
+  z-index: 101; }
+
+.zz-bottom {
+  z-index: 1; }
+
 .badge {
   font-size: 65%;
   padding: .5em 1em .6em 1em;
