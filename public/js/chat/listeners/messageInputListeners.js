@@ -25,20 +25,22 @@ export class MessageInputListeners {
     };
 
     messageInputFocusListener() {
-        messageInput.addEventListener('focus', () => {
-            console.log('focus: input field in focus')
-            setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
-        });
         if(userAgentIsMobile()) {
             messageInput.addEventListener('click', () => {
                 console.log('click: input field in focus');
                 messageInput.focus();
                 setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
             });
+        } else {
+            messageInput.addEventListener('focus', () => {
+                console.log('focus: input field in focus')
+                setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
+            });
         }
     };
 
     messageSubmitButtonClickListener() {
+        console.log('click: submit button');
         messageSubmitBtn.addEventListener('click', submitMessage);
     };
 
