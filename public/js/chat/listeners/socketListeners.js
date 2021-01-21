@@ -9,7 +9,7 @@ import {
     removeInviteField,
     outputAllInvitedUsers
 } from "../invitations.js";
-import {outputMessage, outputUpdatedMessageCount} from "../messages.js";
+import {clearMessages, outputMessage, outputUpdatedMessageCount} from "../messages.js";
 import {setupAdmin} from "../admin.js";
 import {emitIncrementMessageCount, emitJoinRoom} from "../emitters/socketEmitters.js";
 import {redirectToError} from "../errors.js";
@@ -74,6 +74,7 @@ export class SocketListeners {
     onConnect() {
         socket.on('connect', () => {
             console.log('client connected');
+            clearMessages();
             emitJoinRoom(currentUser);
         });
     }
