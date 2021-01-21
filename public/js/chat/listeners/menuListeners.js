@@ -8,8 +8,18 @@ const nav = document.getElementById('navMenu');
 
 export class MenuListeners {
     constructor() {
+        this.initializeMenu();
         this.addShowHideMenuListeners();
+        this.addMenuResizeListener();
         this.logoutButtonListener();
+    }
+
+    initializeMenu() {
+        if(document.documentElement.scrollWidth < 749) {
+            nav.classList.add('menu');
+            nav.classList.add('zz-middle');
+            nav.classList.add('slideup');
+        }
     }
 
     addShowHideMenuListeners() {
@@ -17,34 +27,65 @@ export class MenuListeners {
         hideMenuBtn.addEventListener('click', MenuListeners.hideMenu);
     }
 
-    static addMenuResizeListener() {
+    addMenuResizeListener() {
         console.log('adding resize listener');
-        window.addEventListener('resize', MenuListeners.closeMenuOnResize);
+        window.addEventListener('resize', MenuListeners.toggleMenuOnResize);
     }
 
     static removeMenuResizeListener() {
-        window.removeEventListener('resize', MenuListeners.closeMenuOnResize);
+        window.removeEventListener('resize', MenuListeners.toggleMenuOnResize);
     }
 
     static showMenu() {
-        showMenuBtn.classList.add('h-hidden');
-        hideMenuBtn.classList.remove('h-hidden');
-        logo.classList.add('logo-border-bottom');
-        nav.classList.add('menu');
-        MenuListeners.addMenuResizeListener();
+        console.log('showMenu triggered');
+        MenuListeners.toggleMenuPosition();
+        MenuListeners.showHideMenuBtn();
     }
 
     static hideMenu() {
+        console.log('hideMenu triggered');
+        MenuListeners.toggleMenuPosition();
+        MenuListeners.showShowMenuBtn();
+
+    }
+
+    static showShowMenuBtn() {
         hideMenuBtn.classList.add('h-hidden');
         showMenuBtn.classList.remove('h-hidden');
         logo.classList.remove('logo-border-bottom');
-        nav.classList.remove('menu');
-        MenuListeners.removeMenuResizeListener();
     }
 
-    static closeMenuOnResize() {
+    static showHideMenuBtn() {
+        hideMenuBtn.classList.remove('h-hidden');
+        showMenuBtn.classList.add('h-hidden');
+        logo.classList.add('logo-border-bottom');
+    }
+
+    static toggleMenuPosition() {
+        if(nav.classList.contains('slideup')) {
+            console.log('sliding down!');
+            nav.classList.remove('slideup');
+            nav.classList.add('slidedown');
+        } else if(nav.classList.contains('slidedown')) {
+            console.log('sliding up!');
+            nav.classList.remove('slidedown');
+            nav.classList.add('slideup');
+        } else {
+            nav.classList.add('slidedown');
+        }
+    }
+
+    static toggleMenuOnResize() {
         if(document.documentElement.scrollWidth > 749) {
-            MenuListeners.hideMenu();
+            nav.classList.remove('menu');
+            nav.classList.remove('zz-middle');
+            nav.classList.remove('slideup');
+            nav.classList.remove('slidedown');
+            MenuListeners.showShowMenuBtn();
+        } else {
+            nav.classList.add('menu');
+            nav.classList.add('zz-middle');
+            nav.classList.add('slideup');
         }
     }
 
