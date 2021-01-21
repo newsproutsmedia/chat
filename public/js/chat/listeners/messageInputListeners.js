@@ -1,4 +1,5 @@
 import {messageBtnSend, messageBtnDefault, messageBtnId, messageBtnOk, setButtonState, submitMessage} from "../messages.js";
+import {userAgentIsMobile} from "../utils/detectUserAgent.js";
 
 const messageInput = document.getElementById('msg');
 const messageForm = document.getElementById('messageForm');
@@ -25,8 +26,16 @@ export class MessageInputListeners {
 
     messageInputFocusListener() {
         messageInput.addEventListener('focus', () => {
+            console.log('focus: input field in focus')
             setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
         });
+        if(userAgentIsMobile()) {
+            messageInput.addEventListener('click', () => {
+                console.log('click: input field in focus');
+                messageInput.focus();
+                setButtonState(messageBtnId, messageBtnOk, [messageBtnDefault, messageBtnSend], false);
+            });
+        }
     };
 
     messageSubmitButtonClickListener() {
