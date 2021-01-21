@@ -12,7 +12,6 @@ export class MessageInputListeners {
         this.messageSubmitButtonClickListener();
         this.messageInputEnterListener();
         this.messageSubmitButtonEnterListener();
-        this.messageInputClickListener();
     }
 
     messageInputBlurListener() {
@@ -64,13 +63,5 @@ export class MessageInputListeners {
             }
         });
 
-    }
-
-    messageInputClickListener() {
-        if(userAgentIsMobile()) {
-            messageInput.addEventListener('touchend', ()=> {
-                messageInput.focus();
-            })
-        }
     }
 }
