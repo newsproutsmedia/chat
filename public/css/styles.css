@@ -71,6 +71,12 @@ p {
 .zz-top {
   z-index: 101; }
 
+.zz-middle {
+  z-index: 50; }
+
+.zz-10 {
+  z-index: 10; }
+
 .zz-bottom {
   z-index: 1; }
 
@@ -463,8 +469,19 @@ messages::-webkit-scrollbar-thumb {
   background-color: #fafafa;
   width: 100%;
   position: absolute;
-  top: 80px;
-  z-index: 100; }
+  top: -100vh; }
+
+.slideup, .slidedown {
+  position: absolute;
+  top: -100vh;
+  overflow-y: hidden;
+  -webkit-transition: top 0.6s ease-in-out;
+  -moz-transition: top 0.6s ease-in-out;
+  -o-transition: top 0.6s ease-in-out;
+  transition: top 0.6s ease-in-out; }
+
+.slidedown {
+  top: 80px; }
 
 #loadLoremBtn.btn {
   align-self: center; }
