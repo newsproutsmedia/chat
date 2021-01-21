@@ -9,6 +9,10 @@ export const messageBtnSend = {id: messageBtnId, style: 'btn-send', icon: {id: m
 export const messageBtnOk = {id: messageBtnId, style: 'btn-ok', icon: {id: messageBtnIconId, style: 'ok-message-btn-icon'}};
 const messageInput = document.getElementById('msg');
 
+export function clearMessages() {
+    document.querySelector('.chat-messages').innerHTML = "";
+}
+
 /**
  * @description get text from message input and send to back end
  */
