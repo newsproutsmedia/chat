@@ -17,9 +17,10 @@ module.exports = class MessageEmitter extends SocketEmitter {
      * @desc send a message back to the current user
      * @param {Object} user - current user object
      * @param {string} messageText - message text to send
+     * @param {string} time - time message was sent
      */
-    sendMessageToSender(user, messageText) {
-        this.emitEventToSender('message', this._formatMessage(user, messageText));
+    sendMessageToSender(user, messageText, time) {
+        this.emitEventToSender('message', this._formatMessage(user, messageText, time));
     }
 
     /**
@@ -27,22 +28,25 @@ module.exports = class MessageEmitter extends SocketEmitter {
      * @param {Object} user - current user object, must contain room
      * @requires {string} user.room - room id for passed user
      * @param {string} messageText - message text to send
+     * @param {string} time - time message was sent
      */
-    sendMessageToAllOthersInRoom(user, messageText) {
-        this.emitToOthersInRoom('message', user.room, this._formatMessage(user, messageText));
+    sendMessageToAllOthersInRoom(user, messageText, time) {
+        this.emitToOthersInRoom('message', user.room, this._formatMessage(user, messageText, time));
     }
 
     /**
      * @desc format the message to be sent and add timestamp
      * @param {Object} user - current user object
      * @param {string} text - message text to be sent
+     * @param {string} time - time message was sent
      */
-    _formatMessage(user, text) {
+    _formatMessage(user, text, time) {
         let message = {
             user,
-            text
+            text,
+            time
         }
-        return addCurrentTime(message);
+        return message;
     }
 
 }

@@ -2,12 +2,10 @@ const moment = require('moment');
 
 /**
  * @desc takes an object and adds a time parameter with current time
- * @param {Object} object
- * @returns {Object} object - returns object that now includes timestamp param
+ * @returns {string} time - returns object that now includes timestamp param
  */
-function addCurrentTime(object) {
-    object.time = moment().format('h:mm a');
-    return object;
+function getCurrentTime() {
+    return moment().format('h:mm a');
 }
 
-module.exports = addCurrentTime;
+module.exports = { getCurrentTime };

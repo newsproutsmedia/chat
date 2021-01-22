@@ -9,6 +9,7 @@ const EventEmitter = require('events');
 const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
 let {getBot} = require('../loaders/globals');
+const {getCurrentTime} = require('../utils/time');
 
 function createRoom() {
     const room = new Room();
@@ -84,7 +85,7 @@ function emitWelcome({id, email, room}, socketIO) {
     const user = {...getBot(), room};
     const text = 'Welcome to Chat!';
     logger.info("[service.room.emitWelcome]", {id, email, room});
-    new MessageEmitter(socketIO).sendMessageToSender(user, text);
+    new MessageEmitter(socketIO).sendMessageToSender(user, text, getCurrentTime());
 }
 
 function emitReconnect({room}, socketIO) {
@@ -100,14 +101,14 @@ function broadcastJoinedMessage({id, username, email, room}, socketIO) {
     const user = {...getBot(), room};
     const text = `${username} has joined the chat`;
     logger.info("[service.room.emitJoinedMessage]", {id, username, email, room});
-    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text);
+    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text, getCurrentTime());
 }
 
 function broadcastReconnectMessage({id, username, email, room}, socketIO) {
     const user = {...getBot(), room};
     const text = `${username} has rejoined the chat`;
     logger.info("[service.room.emitReconnectMessage]", {id, username, email, room});
-    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text);
+    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text, getCurrentTime());
 }
 
 function emitSetupAdmin(user, socketIO) {

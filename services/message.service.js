@@ -4,15 +4,15 @@ const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
 const messageRepository = require('../repositories/message.repository');
 
-function send({user, text, socket, io}) {
+function send({user, text, time, socket, io}) {
     const socketIO = {socket, io};
-    logger.info("[service.message.sendMessage]", {info: "Sending Message", user, text});
+    logger.info("[service.message.sendMessage]", {info: "Sending Message", user, text, time});
 
-    messageRepository.addMessageToHistory({user, text});
+    messageRepository.addMessageToHistory({user, text, time});
 
-    new MessageEmitter(socketIO).sendMessageToSender(user, text);
+    new MessageEmitter(socketIO).sendMessageToSender(user, text, time);
 
-    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text);
+    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text, time);
     const messageCount = userRepository.incrementUserMessageCount(user.id);
 
     new SocketEmitter(socketIO).emitToAllInRoom('updatedMessageCount', user.room, messageCount);
@@ -27,7 +27,7 @@ function sendMessageHistoryToUser(room, socketIO) {
     }
     logger.info('[service.messageHistory.sendMessageHistoryToUser]', {message: "sending message history"});
     roomMessages.forEach(message => {
-        new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text);
+        new MessageEmitter(socketIO).sendMessageToSender(message.user, message.text, message.time);
     });
 
     return true;
