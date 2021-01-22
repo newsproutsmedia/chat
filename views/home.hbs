@@ -5,7 +5,7 @@
         <div class="header-item"><button id="joinBtn" class="btn" href="/join">Join Chat</button></div>
     </header>
     <div class="login">
-        <form method="post" action="/">
+        <form id="loginForm" method="post" action="/">
         <div id="usernameField" class="form-control">
             <div class="userinput">
                 <h3 class="title">What's your nickname?</h3>
@@ -21,12 +21,12 @@
             <div class="userinput">
                 <h3 class="title">What's your email address?</h3>
                 <input id="emailInput" class="username-input"
-                       type="text"
+                       type="email"
                        name="email"
                        required
                 />
             </div>
-            <div class="login-email-buttons"><button type="submit" id="emailBtn" class="btn">Create New Room</button></div>
+            <div class="login-email-buttons"><button id="emailBtn" class="btn">Create New Room</button></div>
         </div>
         </form>
     </div>

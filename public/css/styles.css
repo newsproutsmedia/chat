@@ -669,7 +669,7 @@ invite > button.send-invitations-btn {
     outline: none;
     padding-bottom: 6px;
     text-align: center;
-    max-width: 80%;
+    width: 100%;
     font-size: 200%;
     letter-spacing: 3px;
     color: white; }
@@ -703,8 +703,7 @@ invite > button.send-invitations-btn {
 
 @media screen and (min-width: 750px) {
   .login .title {
-    font-size: 200%;
-    width: 400px; }
+    font-size: 200%; }
   #joinBtn {
     font-size: 100%; } }
 
