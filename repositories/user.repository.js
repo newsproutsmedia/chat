@@ -2,7 +2,11 @@ let { users } = require('../data/data');
 const logger = require('../loaders/logger');
 const {getUserTypes} = require('../loaders/globals');
 
-
+/**
+ * @desc persist user object
+ * @param {Object} user
+ * @return {Object} user - object containing new user
+ */
 function addUser(user) {
     users.push(user);
     return user;
@@ -65,6 +69,11 @@ function getRoomUsers(room) {
     return users.filter(user => user.room === room);
 }
 
+/**
+ * @desc returns a single user object from socket ID
+ * @param {string} id - socket id
+ * @return {Object} user
+ */
 function getUserBySocketId(id) {
     const user = users.filter(user => user.socket === id);
     logger.info('[service.user.getUserBySocketId]', {id});
@@ -137,16 +146,35 @@ function setUserSocket(index, socket) {
     users[index].socket = socket;
 }
 
+/**
+ * @desc get user index by user id
+ * @param {string} id
+ * @returns {number} index
+ */
 function getUserIndexById(id) {
     return users.findIndex(user => user.id === id);
 }
 
+/**
+ * @desc does username exist in room
+ * @param {string} roomId
+ * @param {string} username
+ * @returns {boolean} userExists
+ */
 function usernameExistsInRoom(roomId, username) {
     const user = users.filter(user => user.room === roomId && user.username === username);
     return !!user.length;
 
 }
 
+/**
+ * @desc update username in room
+ * @typedef {Object} user
+ * @param {string} username
+ * @param {string} room
+ * @param {string} email
+ * @returns {boolean} userExists
+ */
 function updateUsername({username, room, email}) {
     const user = getCurrentUserByRoomAndEmail(room, email);
     const index = getUserIndexById(user.id);

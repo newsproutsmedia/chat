@@ -54,7 +54,7 @@ module.exports = function(server) {
 
         socket.on('blockUser', id => {
             logger.info("[socket.connection.event.blockUser]", {message: "Block user event for user: ", id});
-            blockUser({...socketIO, id});
+            blockUser({id, ...socketIO});
         });
 
         socket.on('disconnect', reason => {

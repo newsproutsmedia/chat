@@ -1,6 +1,5 @@
 // socket listeners
 import {logout} from "../utils/logout.js";
-import {updateUrlRoom} from "../rooms.js";
 import {incrementMaxUsers, outputUsers} from "../users.js";
 import {
     outputSendErrorMessage,
@@ -54,7 +53,6 @@ export class SocketListeners {
         this.onConnect();
         this.onDestroyRoom();
         this.onLogoutUser();
-        this.onRoomCreated();
         this.onRoomUsers();
         this.onMessage();
         this.onUpdatedMessageCount();
@@ -104,13 +102,6 @@ export class SocketListeners {
         socket.on('accessDenied', message => {
             console.log('access denied: ' + message.message);
             logout(message.message);
-        });
-    }
-
-    onRoomCreated() {
-        socket.on('roomCreated', room => {
-            console.log('room created');
-            updateUrlRoom(room);
         });
     }
 

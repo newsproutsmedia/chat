@@ -14,7 +14,7 @@ let invitationsToProcess = 0;
 let allInvitesSuccessful = true;
 
 /**
- * @description listener callback - add a new invitation field to DOM
+ * @desc listener callback - add a new invitation field to DOM
  */
 export function outputInviteField() {
     console.log("Add Chat Member Clicked");

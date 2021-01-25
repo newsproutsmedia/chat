@@ -35,8 +35,6 @@ export function submitMessage() {
 
     // Scroll to top of page
     window.scrollTo(0, 0);
-    // disable button
-    //setButtonState(messageBtnId, messageBtnDefault, [messageBtnSend, messageBtnOk], true);
 }
 
 /**

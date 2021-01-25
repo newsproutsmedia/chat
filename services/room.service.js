@@ -11,6 +11,10 @@ const SocketEmitter = require('../emitters/socketEmitter');
 let {getBot} = require('../loaders/globals');
 const {getCurrentTime} = require('../utils/time');
 
+/**
+ * @desc create a new room
+ * @returns {Object} room
+ */
 function createRoom() {
     const room = new Room();
     roomRepository.addRoom(room.getId());
@@ -18,6 +22,14 @@ function createRoom() {
     return room;
 }
 
+/**
+ * @desc join user to room socket and room
+ * @typedef {Object} user
+ * @property {string} email
+ * @property {string} room
+ * @property {Object} socket
+ * @property {Object} io
+ */
 function join({email, room, socket, io}) {
 
     const socketIO = {socket, io};
@@ -42,6 +54,14 @@ function join({email, room, socket, io}) {
 
 }
 
+/**
+ * @desc reconnect user to socket and room
+ * @typedef {Object} user
+ * @property {string} email
+ * @property {string} room
+ * @property {Object} socket
+ * @property {Object} io
+ */
 function reconnect({email, room, socket, io}) {
     const socketIO = {socket, io};
 
@@ -71,46 +91,80 @@ function reconnect({email, room, socket, io}) {
 
 /**
  * @desc remove all clients and destroy room
- * @param {Object} socketIO - socket and io params
  * @param {string} room - id of room
  */
-function destroyRoom({socket, io}, room) {
+function destroyRoom(room) {
     logger.info('[service.room.destroyRoom]', {message: 'performing room cleanup', room});
     messageRepository.deleteMessagesByRoom(room);
     userRepository.deleteAllUsersFromRoom(room);
     roomRepository.deleteRoom(room);
 }
 
-function emitWelcome({id, email, room}, socketIO) {
-    const user = {...getBot(), room};
+/**
+ * @desc send welcome message after user connects
+ * @param {Object} user
+ * @property {string} user.id
+ * @property {string} user.email
+ * @property {string} user.room
+ * @param {Object} socketIO - id of room
+ */
+function emitWelcome(user, socketIO) {
+    const sender = {...getBot(), room: user.room};
     const text = 'Welcome to Chat!';
-    logger.info("[service.room.emitWelcome]", {id, email, room});
-    new MessageEmitter(socketIO).sendMessageToSender(user, text, getCurrentTime());
+    logger.info("[service.room.emitWelcome]", {id: user.id, email: user.email, room: user.room});
+    new MessageEmitter(socketIO).sendMessageToSender(sender, text, getCurrentTime());
 }
 
-function emitReconnect({room}, socketIO) {
-    const user = {...getBot(), room};
+/**
+ * @desc emit reconnect event after user reconnects
+ * @param {Object} user
+ * @property {string} user.room
+ * @param {Object} socketIO - id of room
+ */
+function emitReconnect(user, socketIO) {
+    const sender = {...getBot(), room: user.room};
     const text = 'Welcome Back';
-    logger.info("[service.room.emitReconnect.welcomeBack]", {user, text});
-    new MessageEmitter(socketIO).sendMessageToSender(user, text);
-    logger.info("service.room.emitReconnect.reconnect", {room});
+    logger.info("[service.room.emitReconnect.welcomeBack]", {sender, text});
+    new MessageEmitter(socketIO).sendMessageToSender(sender, text, getCurrentTime());
+    logger.info("service.room.emitReconnect.reconnect", {room: user.room});
     new SocketEmitter(socketIO).emitEventToSender('reconnect', {message: text});
 }
 
-function broadcastJoinedMessage({id, username, email, room}, socketIO) {
-    const user = {...getBot(), room};
-    const text = `${username} has joined the chat`;
-    logger.info("[service.room.emitJoinedMessage]", {id, username, email, room});
-    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text, getCurrentTime());
+/**
+ * @desc send "user has joined" notification to all other room members
+ * @param {Object} user
+ * @property {string} user.id
+ * @property {string} user.email
+ * @property {string} user.room
+ * @param {Object} socketIO - id of room
+ */
+function broadcastJoinedMessage(user, socketIO) {
+    const sender = {...getBot(), room: user.room};
+    const text = `${user.username} has joined the chat`;
+    logger.info("[service.room.emitJoinedMessage]", {id: user.id, username: user.username, email: user.email, room: user.room});
+    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(sender, text, getCurrentTime());
 }
 
-function broadcastReconnectMessage({id, username, email, room}, socketIO) {
-    const user = {...getBot(), room};
-    const text = `${username} has rejoined the chat`;
-    logger.info("[service.room.emitReconnectMessage]", {id, username, email, room});
-    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(user, text, getCurrentTime());
+/**
+ * @desc send "user has reconnected" message to all others in room
+ * @param {Object} user
+ * @property {string} user.id
+ * @property {string} user.email
+ * @property {string} user.room
+ * @param {Object} socketIO - id of room
+ */
+function broadcastReconnectMessage(user, socketIO) {
+    const sender = {...getBot(), room: user.room};
+    const text = `${user.username} has rejoined the chat`;
+    logger.info("[service.room.emitReconnectMessage]", {id: user.id, username: user.username, email: user.email, room: user.room});
+    new MessageEmitter(socketIO).sendMessageToAllOthersInRoom(sender, text, getCurrentTime());
 }
 
+/**
+ * @desc emit setupAdmin event to client
+ * @param {Object} user
+ * @param {Object} socketIO - id of room
+ */
 function emitSetupAdmin(user, socketIO) {
     logger.info("[service.room.emitSetupAdmin]", {user});
     new SocketEmitter(socketIO).emitEventToSender('setupAdmin', user);

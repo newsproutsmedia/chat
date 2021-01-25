@@ -2,7 +2,13 @@ const userRepository = require('../repositories/user.repository');
 const userService = require('../services/user.service');
 const logger = require('../loaders/logger');
 
-function blockUser({socket, io, id}) {
+/**
+ * @desc eject and block user from room
+ * @property {Object} socket
+ * @property {Object} io
+ * @property {string} id - id of user to be blocked
+ */
+function blockUser({id, socket, io}) {
     logger.info('[service.blockUser.blockUser]', {message: 'Attempting to block user', socket: socket.id, userID: id});
     const socketIO = {socket, io};
     const user = userRepository.getCurrentUserById(id);

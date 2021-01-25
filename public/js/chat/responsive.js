@@ -1,28 +1,11 @@
-import {loremIpsum} from "./utils/loremIpsum.js";
-
 const nav = document.getElementById('navMenu');
-const lorem = document.getElementById('lorem');
-const loremBtn = document.getElementById('loadLoremBtn');
 const showMenuBtn = document.getElementById('showMenu');
 const hideMenuBtn = document.getElementById('hideMenu');
 
 {
-    addLoremButtonEventListener();
     addResizeListener();
     outputPageDimensions();
     addShowHideDashListeners();
-}
-
-function addLoremButtonEventListener() {
-    loremBtn.addEventListener('click', addLorem);
-}
-
-export function addLorem() {
-    lorem.innerHTML = loremIpsum;
-    loremBtn.removeEventListener('click', addLorem);
-    loremBtn.innerText = "Lorem Loaded";
-    loremBtn.setAttribute('disabled', "");
-    hideMenu();
 }
 
 function addResizeListener() {
