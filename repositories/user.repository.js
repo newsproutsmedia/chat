@@ -108,6 +108,7 @@ function setType(type) {
 /**
  * @desc remove all users from array
  * @param {string} room - id of room
+ * @returns array of room users
  */
 function deleteAllUsersFromRoom(room) {
     logger.info('[service.user.deleteRoomUsers]', {message: 'deleting room users', room});

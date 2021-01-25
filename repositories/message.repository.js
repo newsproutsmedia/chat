@@ -13,7 +13,7 @@ function addMessageToHistory(message) {
 /**
  * @desc delete all messages from a room
  * @param {string} room
- * @returns {array}
+ * @returns array of messages
  */
 function deleteMessagesByRoom(room) {
     logger.info('[service.messageHistory.deleteRoomMessages]', {message: 'deleting room messages', room: room, messages: messages});

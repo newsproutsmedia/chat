@@ -22,12 +22,13 @@ function getAllRooms() {
 /**
  * @desc remove room from rooms array
  * @param {string} roomId
- * @returns {array}
+ * @returns array of rooms
  */
 function deleteRoom(roomId) {
     logger.info("[repository.room.deleteRoom]", {message: "deleting room", roomId});
-    rooms = rooms.filter(room => room.id !== roomId);
+    rooms = rooms.filter(room => !room.includes(roomId));
     logger.info("[repository.room.deleteRoom]", {rooms});
+    return rooms;
 }
 
 /**
