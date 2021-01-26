@@ -110,7 +110,7 @@ function destroyRoom(room) {
  */
 function emitWelcome(user, socketIO) {
     const sender = {...getBot(), room: user.room};
-    const text = 'Welcome to Chat!';
+    const text = 'Welcome!';
     logger.info("[service.room.emitWelcome]", {id: user.id, email: user.email, room: user.room});
     new MessageEmitter(socketIO).sendMessageToSender(sender, text, getCurrentTime());
 }

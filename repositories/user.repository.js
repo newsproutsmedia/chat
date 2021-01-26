@@ -185,7 +185,7 @@ function updateUsername({username, room, email}) {
 /**
  * @desc check if user type exists in global userTypes Set
  * @param {string} type
- * @return boolean
+ * @returns boolean
  */
 function validateUserType(type) {
     return getUserTypes().has(type);
@@ -195,5 +195,5 @@ module.exports = { addUser, getUserIndexById,getCurrentUserById,
     getCurrentUserByRoomAndEmail, getRoomUsers, getRoomUsersByUserType, getUsersByEmailAndRoom,
     getUserBySocketId, setUserStatus, setUserSocket, setType, setUserBlocked,
     deleteAllUsersFromRoom, incrementUserMessageCount,
-    usernameExistsInRoom, updateUsername}
+    usernameExistsInRoom, updateUsername, validateUserType }
 
