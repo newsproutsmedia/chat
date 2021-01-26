@@ -108,7 +108,7 @@ module.exports = class Mail {
             html: //TODO Add Sasquatch Chat logo to top of email
                 `<h1>${this.sender.username} invited you to join a Chat</h1>` +
                 `<p>Click on the link below, then enter a nickname to join the chat:</p>` +
-                `<p><a href="http://localhost:3000/join/${sender.room}/${sender.to}">http://localhost:3000/join/${sender.room}/${sender.to}</a></p>` +
+                `<p><a href="${process.env.SCHEME}://${process.env.DOMAIN}/join/${sender.room}/${sender.to}">${process.env.SCHEME}://${process.env.DOMAIN}/join/${sender.room}/${sender.to}</a></p>` +
                 `<p>Room ID: ${sender.room}</p>`
         }
     }
