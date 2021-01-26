@@ -51,6 +51,8 @@ When deploying the application to a serverless platform, you'll utilize the plat
 **REFRESH_TOKEN**=The refresh token from Google. It's gonna be really long.
 **CLIENT_SECRET**=The client secret from Google. Relatively short.
 **CLIENT_ID**=the client ID from Google. Medium length.
+**SCHEME**=http or https (omit the ://)
+**DOMAIN**=your.domain@here.com (don't include the scheme or ://)
 
 ## Running Locally
 
