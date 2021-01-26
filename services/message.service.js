@@ -4,6 +4,15 @@ const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
 const messageRepository = require('../repositories/message.repository');
 
+/**
+ * @desc send message to client
+ * @typedef {Object} message
+ * @property {Object} user
+ * @property {string} text
+ * @property {string} time
+ * @property {Object} socket
+ * @property {Object} io
+ */
 function send({user, text, time, socket, io}) {
     const socketIO = {socket, io};
     logger.info("[service.message.sendMessage]", {info: "Sending Message", user, text, time});
@@ -19,6 +28,12 @@ function send({user, text, time, socket, io}) {
 
 }
 
+/**
+ * @desc send message to client
+ * @param {string} room
+ * @param {Object} socketIO
+ * @returns {boolean}
+ */
 function sendMessageHistoryToUser(room, socketIO) {
     const roomMessages = messageRepository.getMessagesByRoom(room);
     if(!roomMessages) {

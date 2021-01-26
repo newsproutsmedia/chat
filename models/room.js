@@ -5,7 +5,6 @@ const { createRoomId } = require('../utils/generateId');
 
 /**
  * @desc construct a new or existing room
- * @param {Object}
  */
 module.exports = class Room extends Entity {
 

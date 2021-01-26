@@ -26,6 +26,9 @@ module.exports = class Mail {
         };
     }
 
+    /**
+     * @desc send all emails
+     */
     async sendAll() {
 
         if(this.user.type !== 'admin') return this._emitMailNotAllowed();

@@ -4,7 +4,11 @@ const { createShortId } = require('../utils/generateId');
 
 /**
  * @desc construct a new user
- * @param {Object} - User object containing id, username, email, room, type
+ * @typedef {Object} user
+ * @property {string} username
+ * @property {string} email
+ * @property {string} room
+ * @property {string} type
  */
 module.exports = class User extends Entity {
 

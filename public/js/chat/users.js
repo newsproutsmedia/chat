@@ -42,8 +42,6 @@ function addConnectedUser(user) {
 }
 
 export function emailInRoomUsers(email) {
-    // This is not working, always returns false
-    // FIX IT!
     const emailFound = connectedUsers.some(user => user.email === email);
     console.log(`Email (${email}) found in room: ${emailFound}`);
     return emailFound;
@@ -51,16 +49,6 @@ export function emailInRoomUsers(email) {
 
 export function incrementMaxUsers() {
     maxUsers = maxUsers +1;
-}
-
-// Activate user
-function activateUser(id) {
-    document.getElementById(id).classList.remove("inactive");
-}
-
-// Deactivate user
-function deactivateUser(id) {
-    document.getElementById(id).classList.add("inactive");
 }
 
 // User item admin menu

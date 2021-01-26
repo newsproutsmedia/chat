@@ -3,7 +3,6 @@ import {logout} from "../utils/logout.js";
 const showMenuBtn = document.getElementById('showMenu');
 const hideMenuBtn = document.getElementById('hideMenu');
 const logoutButton = document.getElementById('logoutBtn');
-const logo = document.getElementById('logo');
 const nav = document.getElementById('navMenu');
 
 export class MenuListeners {

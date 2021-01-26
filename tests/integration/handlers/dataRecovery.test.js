@@ -13,17 +13,6 @@ const data = {
     rooms: [{test: "roomsTest"}]
 }
 
-function bootstrapFile() {
-    let json = JSON.stringify(data); //convert it back to json
-    fs.writeFileSync('../../../data/data.json', json);
-}
-
-function connectToServer(server) {
-    server.listen(3000, () => {
-        logger.info(`Server is running!`, {port: 3000, mode: `${process.env.NODE_ENV}`});
-    });
-}
-
 describe('chat /', () => {
     let server;
 

@@ -6,7 +6,9 @@ const {getCurrentTime} = require('../utils/time');
 
 /**
  * @desc construct a chat message
- * @param {Object} message, socket, io
+ * @typedef {Object} message
+ * @property {string} text
+ * @property {Object} socket
  */
 module.exports = class Message extends Entity {
 

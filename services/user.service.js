@@ -5,6 +5,14 @@ const MessageEmitter = require('../emitters/messageEmitter');
 const SocketEmitter = require('../emitters/socketEmitter');
 const User = require('../models/user');
 
+/**
+ * @desc set user status to DISCONNECTED and notify other users when user leaves chat
+ * @typedef {Object} user
+ * @property {string} username
+ * @property {string} email
+ * @property {string} room
+ * @property {string} type
+ */
 function createUser({username, email, room, type}) {
     const user = new User({username: username, email: email, room: room, type: type});
     userRepository.addUser(user);
