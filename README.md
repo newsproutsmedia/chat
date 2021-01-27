@@ -48,11 +48,11 @@ When deploying the application to a serverless platform, you'll utilize the plat
 **APP_NAME**=The name of your application (e.g. ChatApp)  
 **EMAIL**=The Google email used for sending invites. It must be the email address associated with your Google token below (e.g. your.email@your-domain.com)  
 **TEST_EMAIL**=The email account that will receive confirmation of successful integration testing of the mail functionality (e.g. your.email@your-domain.com)   
-**REFRESH_TOKEN**=The refresh token from Google. It's gonna be really long.
-**CLIENT_SECRET**=The client secret from Google. Relatively short.
-**CLIENT_ID**=the client ID from Google. Medium length.
-**SCHEME**=http or https (omit the ://)
-**DOMAIN**=your.domain@here.com (don't include the scheme or ://)
+**REFRESH_TOKEN**=The refresh token from Google. It's gonna be quite long.  
+**CLIENT_SECRET**=The client secret from Google. Relatively short.  
+**CLIENT_ID**=the client ID from Google. Medium length.  
+**SCHEME**=http or https (omit the ://)  
+**DOMAIN**=your.domain@here.com (don't include the scheme or ://)  
 
 ## Running Locally
 
