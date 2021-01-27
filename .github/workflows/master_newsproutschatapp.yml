@@ -17,7 +17,7 @@ env:
   TEST_EMAIL: 'newsproutsmedia@gmail.com'
   REFRESH_TOKEN: '1//04Hh7Pmxd_rS6CgYIARAAGAQSNwF-L9IrGcs9G2jno4YOt0VHnvt3ljpGCsPUg0t5dwacRllx-Tn9m3Q8f7BYrR5eCk-q0j_3cQ4'
   CLIENT_SECRET: 'axyZlbcEuKJXywREDyGaUpqS'
-  CLIENT_ID: '32845731290-nnf2al9hbh1p13od2iqfktdpdm7e3usp.apps.googleusercontent.com'
+  CLIENT_ID: '432845731290-nnf2al9hbh1p13od2iqfktdpdm7e3usp.apps.googleusercontent.com'
   SCHEME: 'http'
   DOMAIN: 'chatapp.newsproutsmedia.com'
 
@@ -39,6 +39,7 @@ jobs:
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         npm install
         npm run build --if-present
+        npm run test --if-present
         popd
 
     - name: 'Run Azure Functions Action'
