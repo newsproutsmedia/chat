@@ -43,7 +43,7 @@ If you want to use Gmail, you'll need to [implement server-side authorization](h
 The following environment variables must be set for the app to function. ChatApp utilizes the dotenv module to load environment variables from a .env file into process.env.  
     
 During development, create a file ".env" in the root project directory and include the following environment variables.
-When deploying the application to a serverless platform, you'll utilize the platform's 
+When deploying the application to a serverless platform, utilize that platform's method for adding environment variables.
 
 **APP_NAME**=The name of your application (e.g. ChatApp)  
 **EMAIL**=The Google email used for sending invites. It must be the email address associated with your Google token below (e.g. your.email@your-domain.com)  
