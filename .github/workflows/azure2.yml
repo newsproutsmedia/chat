@@ -57,4 +57,4 @@ jobs:
         app-name: 'newsproutschatapp'
         slot-name: 'production'
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2daa4849ae3e45cfa62b4be3fd319547 }}:  
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_2daa4849ae3e45cfa62b4be3fd319547 }}
