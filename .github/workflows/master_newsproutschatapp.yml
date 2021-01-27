@@ -12,6 +12,14 @@ on:
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x' # set this to the node version to use (supports 8.x, 10.x, 12.x)
+  APP_NAME: 'ChatApp'
+  EMAIL: 'nate@newsproutsmedia.com'
+  TEST_EMAIL: 'newsproutsmedia@gmail.com'
+  REFRESH_TOKEN: '1//04Hh7Pmxd_rS6CgYIARAAGAQSNwF-L9IrGcs9G2jno4YOt0VHnvt3ljpGCsPUg0t5dwacRllx-Tn9m3Q8f7BYrR5eCk-q0j_3cQ4'
+  CLIENT_SECRET: 'axyZlbcEuKJXywREDyGaUpqS'
+  CLIENT_ID: '32845731290-nnf2al9hbh1p13od2iqfktdpdm7e3usp.apps.googleusercontent.com'
+  SCHEME: 'http'
+  DOMAIN: 'chatapp.newsproutsmedia.com'
 
 jobs:
   build-and-deploy:
